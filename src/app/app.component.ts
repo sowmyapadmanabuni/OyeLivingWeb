@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'OyeLivingWeb';
+  title = 'OYESPACE. You Live It. We Manage It';
+  
+  myMenus:boolean=true;
 }

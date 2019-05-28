@@ -1,0 +1,8 @@
+<td>
+  <input type="text" required name="amenityType" id="amenityType" [(ngModel)]="amenityType" #amenityTypecontrol="ngModel" class="form-control" placeholder="Amenity Type" style="font-family: Poppins" pattern="[a-zA-Z]*"/>
+  <p class="alerts" *ngIf="amenityTypecontrol.invalid && amenityTypecontrol.touched"> Valid Amenity type is required</p>
+</td>
+<td>
+  <input type="text" required name="amenityNo" id="amenityNo" [(ngModel)]="amenityNo" #amenityNocontrol="ngModel" class="form-control" placeholder="No of Amenities" style="font-family: Poppins" pattern="[0-9]*"/>
+  <p class="alerts" *ngIf="amenityNocontrol.invalid && amenityNocontrol.touched"> Valid no of amenity is required</p>
+</td>

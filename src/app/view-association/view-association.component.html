@@ -1,0 +1,320 @@
+<div class="row" id="row1">
+  
+    <div class="col-sm-7">
+      <p style="font-family: JOSEFINE SANS">
+         MANAGE YOUR ASSOCIATIONS
+      </p>
+    </div>
+  
+    
+    <div class="col-sm-5">
+         <button class="btn btn-primary" style="margin:12px" id="enroll_btn" (click)="enroll()">Enroll An Association</button>
+         <button class="btn btn-primary" id="join_btn" (click)="join()">Join An Association</button>
+    </div>
+  </div>
+  <!--------------------------------------->
+  <br>
+   <div *ngIf="viewAssociation_Table">
+       <table class="table table-striped">
+         <thead>
+              <tr id="assnTableHead">
+                  <td>S.No.</td>
+                  <td>Association Name</td>
+                  <td>Property Name</td>
+                  <td>Locality</td>
+                  <td>No of Units</td>
+                  <td colspan="2">Action</td>
+              </tr>
+         </thead>
+         <tbody>
+              <tr *ngFor="let association of associations | paginate: { itemsPerPage: 15, currentPage: p }
+              " style="font-family: Poppins;">
+                  <td>{{i+1}}</td>
+                  <td>{{association.asAsnName}}</td>
+                  <td>{{association.asPrpName}}</td>
+                  <td>{{association.asAddress}}</td>
+                  <td>{{association.asNofUnit}}</td>
+                  <td><span class="fa fa-eye"> | </span>  
+                      <span class="fa fa-edit" (click)="openModal(template,view.exid,view.exDesc,view.expAmnt,view.exApplTO,view.exHead,view.exType,view.pmid,view.inNumber)">  </span>
+                  </td>
+              </tr>
+
+         </tbody>
+       </table>
+       <p class="text-center"><pagination-controls (pageChange)="p = $event"></pagination-controls></p>
+   </div>     
+  <!--------------------------------------->
+  <div *ngIf="enrollAssociation">
+    <form class="form-horizontal" name="crtAss" enctype="multipart/form-data">
+     <div class="row" style="border:1px solid #b33951; border-radius: 10px;">
+       <div class="col-sm-12">
+           <br>
+          <h5 style="color:#b33951; font-family: Poppins">Association Details</h5>
+          <br>
+       </div>
+          <div class="col-sm-6">
+            <div class="form-group" >
+              <label id=label1>Association Name <span class="red">*</span></label>
+              <input type="text" required name="ASAsnName" id="input15" autocomplete="off" [(ngModel)]="crtAssn.name" #name="ngModel" class="form-control" placeholder="Association Name" pattern="[A-Za-z\s]+" style="text-transform: uppercase; font-family: Poppins; font-size: 13px;" />
+              <p class="alerts" *ngIf="name.invalid && name.touched"> Valid Association name is required</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group" >
+              <label id=label2>Association Logo <span class="red">*</span></label>
+              <input type="file"  name="ASAsnLogo" [(ngModel)]="crtAssn.logo" #logo="ngModel" class="form-control" style="font-family: Poppins">
+              <small style="color:grey; font-size:12px;">Upload Logo of Max 2MB and formats allowed are: PNG, JPG. JPEG and Resolution of 128x128px</small>
+              <p class="pull-right" style="margin-right:29px;"><button class="btn btn-primary upload"  (click)='onUpLoad()' style="position:absolute; 
+                top:24%"><i class="fa fa-cloud-upload"></i></button></p>
+            </div>
+          </div>
+          <div class="col-sm-6" *ngIf="PANdiv1">
+            <div class="form-group" >
+              <label id=label20>Association PAN No <span class="red">*</span></label>
+              <input type="text"  name="ASPANNum" autocomplete='crtAss.assnPANNo' [(ngModel)]="crtAssn.assnPANNo" #assnPANNo="ngModel" class="form-control" placeholder="Association PAN Name " style="text-transform: uppercase; font-family: Poppins; font-size: 13px;" pattern="^([a-zA-Z]{6}[0-9]{4}[a-zA-Z]{1})+$" minlength=11 maxlength=11/>
+              <small style="color:grey; font-size:12px;">Ex: PAAAAA1234A</small>
+              <p class="alerts" *ngIf="assnPANNo.required && assnPANNo.touched && assnPANNo.invalid"> Valid Association PAN No is required</p>
+              <p class="alerts" *ngIf="assnPANNo.invalid"> PAN no should be in correct format</p>
+            </div>
+          </div>
+          <div class="col-sm-6" *ngIf="PANdiv1">
+            <div class="form-group" >
+              <label id=label21>Association Registration No <span class="red">*</span></label>
+              <input type="text"  name="ASRegrNum" [(ngModel)]="crtAssn.assnRegNo" #assnRegNo="ngModel" class="form-control" style="font-family: Poppins" pattern="[6789][0-9]{9}" minlength=10 maxlength=10>
+              <p class="alerts" *ngIf="assnRegNo.invalid && assnRegNo.touched"> Valid Association Registration No is required</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <!--<div class="form-group" ng-class="{'has-error' : crtAss.country.$invalid && crtAss.country.$touched}">
+                <label id=label3>Country <span class="red">*</span></label>
+                <select class="ui dropdown search methodDropdown form-control" name="ASCountry" [(ngModel)]="crtAssn.country" ng-options="country.coName for country in countryLists" ng-change="selectPostalCode(crtAssn.country)" style="font-family: Poppins" >
+                    <option ng-disabled="true" ng-selected="true" value="">Select Country</option>
+                </select>
+            </div>-->
+            <div class="form-group">
+                <label id=label3>Country <span class="red">*</span></label>
+                <select class="form-control" name="ASCountry" [(ngModel)]="crtAssn.country" #country="ngModel" (change)="openPANfield()" style="font-family: Poppins" >
+                    <option ng-disabled="true" ng-selected="true" [value]="">Select Country</option>
+                    <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>
+                </select>
+                <p class="alerts" *ngIf="country.invalid && country.touched"> Please Select country</p>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <!--<div class="form-group" ng-class="{'has-error' : crtAss.pincode.$invalid && crtAss.pincode.$touched}">
+                <label id=label4>{{crtAssn.country.coFlag}} <span class="red">*</span></label>
+                <label id=label4>Pin/Zip/Postalcode <span class="red">*</span></label>
+                <select class="ui dropdown search methodDropdown form-control" name="postalCode" [(ngModel)]="crtAssn.postalCode" ng-options="postalCode.pcCodes for postalCodes in postalCodeLists" ng-change="selectStateCity(crtAssn.postalCode)"  ng-pattern="/^[0-9]*$/" minlength="5" maxlength="6" style="font-family: Poppins" required>
+                    <option ng-disabled="true" ng-selected="true" value="">Select Postal Code</option>
+                </select>
+                <p class="alerts" ng-if="crtAss.postalCode.$invalid && crtAss.postalCode.$touched"> Only numbers allowed, maximum 6 characters</p> 
+            </div>-->
+            <div class="form-group">
+              <label id=label5>Pin/Zip/Postalcode <span class="red">*</span></label>   
+              <!-- <input type="text"  name="ASRegrNum" [(ngModel)]="crtAssn.assnRegNo" #assnRegNo="ngModel" class="form-control" style="font-family: Poppins" pattern="[0-9]{}" minlength=10 maxlength=10> -->
+              <input type="number" required name="ASPinCode" autocomplete='crtAss.postalCode' [(ngModel)]="crtAssn.postalCode" #postalCode="ngModel" class="form-control" placeholder="Pin/Zip" style="font-family: Poppins" pattern="^[1-9][0-9]{6}*$" minlength="5" maxlength="6"/>
+              <small style="color:grey; font-size:12px;">Ex: 771828</small>
+              <p class="alerts" *ngIf="postalCode.invalid && postalCode.touched"> Valid pincode is required</p>
+            </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+              <label id=label5>State <span class="red">*</span></label>
+              <input type="text" required name="ASState" autocomplete='crtAss.state' [(ngModel)]="crtAssn.state" #state="ngModel" class="form-control" placeholder="State" style="font-family: Poppins" pattern="[a-zA-Z]*" />
+              <p class="alerts" *ngIf="state.invalid && state.touched"> Valid State is required</p>
+          </div>
+      </div>
+      <div class="col-sm-6">
+          <div class="form-group">
+              <label id=label6>City <span class="red">*</span></label>
+              <input type="text" required name="ASCity" autocomplete='crtAss.city' [(ngModel)]="crtAssn.city" #city="ngModel" class="form-control" placeholder="City" style="font-family: Poppins" pattern="[a-zA-Z]*"/>
+              <p class="alerts" *ngIf="city.invalid && city.touched"> Valid City is required</p>
+          </div>					
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+            <label id=label7>Property Type <span class="red">*</span></label>
+            <select class="form-control" name="ASPropType" [(ngModel)]="crtAssn.propertyType" #propertyType="ngModel" style="font-family: Poppins">
+                <option ng-disabled="true" ng-selected="true" [value]="">Select Property Type</option>
+                <option *ngFor="let propertyType of propertyTypes" [value]="propertyType.name">{{propertyType.displayName}}</option>
+            </select>
+            <p class="alerts" *ngIf="propertyType.invalid && propertyType.touched"> Please Select property type</p>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label id=label8>Property Name <span class="red">*</span></label>
+            <input type="text" required name="ASPrpName" autocomplete='crtAss.propertyName' [(ngModel)]="crtAssn.propertyName" #propertyName="ngModel" class="form-control" placeholder="Property Name" style="font-family: Poppins" pattern="[a-zA-Z]*" style="text-transform: uppercase; font-family: Poppins; font-size: 13px;" />
+            <p class="alerts" *ngIf="propertyName.invalid && propertyName.touched">Valid property name is required</p>
+        </div>
+    </div>
+    <div class="col-sm-12">
+      <div class="form-group">
+          <label id=label9>Locality <span class="red">*</span></label>
+          <input type="text" required name="ASAddress" autocomplete='crtAssn.locality' [(ngModel)]="crtAssn.locality" #locality="ngModel" class="form-control" maxlength="255" placeholder="Locality " style="font-family: Poppins" pattern="[a-zA-Z0-9]*" />
+          <p class="alerts" *ngIf="locality.invalid && locality.touched"> Valid locality is required</p>
+          <br>
+      </div>
+  </div>
+  <div class="col-sm-12">
+      <h5 style="color:#b33951; font-family: Poppins;">Block & Unit Details</h5>
+      <br>
+   </div>
+   <div class="col-sm-6">
+      <div class="form-group">
+          <label id=label10>Total No of Blocks <span class="red">*</span></label>
+          <input type="text" required name="totalNoBlocks" autocomplete='crtAss.totalNoBlocks' [(ngModel)]="crtAssn.totalNoBlocks"  #totalNoBlocks="ngModel" class="form-control" placeholder="No Of Blocks" style="font-family: Poppins" pattern="[0-9]*"/>
+          <p class="alerts" *ngIf="totalNoBlocks.invalid && totalNoBlocks.touched"> Valid  blocks no is required</p>
+      </div>
+  </div>
+  <div class="col-sm-6">
+      <div class="form-group">
+          <label id=label11>Total No of Units <span class="red">*</span></label>
+          <input type="text" required name="totalNoUnits" autocomplete='crtAss.totalNoUnits' [(ngModel)]="crtAssn.totalNoUnits" #totalNoUnits="ngModel" class="form-control" placeholder="No Of Units" style="font-family: Poppins" pattern="[0-9]*"/>
+          <p class="alerts" *ngIf="totalNoUnits.invalid && totalNoUnits.touched"> Valid  no units are required</p>
+      </div>
+  </div>
+  
+<div class="col-sm-12">
+ <div class="row" *ngIf="PANdiv1">
+  <div class="col-sm-12">
+    <h5 style="color:#b33951; font-family: Poppins;">PAN & registration Details</h5>
+    <br>
+ </div>
+ <div class="col-sm-4">
+    <div class="form-group">
+        <label id=label12>PAN Number<span class="red">*</span></label>
+        <input type="text" required name="PANNumber" autocomplete='crtAss.PANNumber' [(ngModel)]="crtAssn.PANNumber"  #PANNumber="ngModel" class="form-control" placeholder="Association PAN Number" style="text-transform: uppercase; font-family: Poppins; font-size: 13px;" pattern="^([a-zA-Z]{6}[0-9]{4}[a-zA-Z]{1})+$" minlength=11 maxlength=11 />
+        <small style="color:grey; font-size:12px;">Ex: PAAAAA1234A</small>
+        <p class="alerts" *ngIf="PANNumber.invalid && PANNumber.touched"> Valid PAN number is required</p>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-group">
+        <label id=label13>GST Number <span class="red">*</span></label>
+        <input type="text" required name="GSTNumber" autocomplete='crtAss.GSTNumber' [(ngModel)]="crtAssn.GSTNumber" #GSTNumber="ngModel" class="form-control" placeholder="GST Number" style="text-transform: uppercase; font-family: Poppins; font-size: 13px;" pattern="^([0][1-9]|[1-2][0-9]|[3][0-5])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$" minlegth=15 maxlength=15 />
+        <small style="color:grey; font-size:12px;">Ex:  22AAAAA0000A1Z5</small>
+        <p class="alerts" *ngIf="GSTNumber.invalid && GSTNumber.touched"> Valid GST number is required</p>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-group">
+        <label id=label14>Upload scanned PAN Card<span class="red">*</span></label>
+        <input type="file" name="uploadPANCard" autocomplete='crtAss.uploadPANCard' [(ngModel)]="crtAssn.uploadPANCard" #uploadPANCard="ngModel" class="form-control"  style="font-family: Poppins" />
+        <small style="color:grey; font-size:12px;">Upload Logo of Max 2MB and formats allowed are: PNG, JPG. JPEG and Resolution of 128x128px</small>
+        <p class="pull-right" style="margin-right:29px;"><button class="btn btn-primary upload"  (click)='onUpLoad()' style="position:absolute; 
+            top:24%"><i class="fa fa-cloud-upload"></i></button></p>
+    </div>
+ </div>
+</div>
+
+ <div class="row" *ngIf="PANdiv2">
+        <div class="col-sm-12">
+          <h5 style="color:#b33951; font-family: Poppins;">PAN & registration Details</h5>
+          <br>
+       </div>
+       <div class="col-sm-12">
+            <div class="form-group">
+                <label id=label15>Association Registration Number<span class="red">*</span></label>
+                <input type="text" required name="assnRegisterNo" autocomplete='crtAss.assnRegisterNo' [(ngModel)]="crtAssn.assnRegisterNo" #assnRegisterNo="ngModel" class="form-control"  style="font-family: Poppins" pattern="[a-zA-Z0-9]*"/>
+                <p class="alerts" *ngIf="assnRegisterNo.invalid && assnRegisterNo.touched"> Association Registration number is invalid</p>
+            </div>
+       </div>
+ </div>
+</div>
+  <div class="col-sm-12">
+        <br>
+        <h5 style="color:#b33951; font-family: Poppins;">Other Amenities</h5>
+        <br>
+  </div>
+  <div class="col-sm-12">
+       <table class="table" style="background-color: whitesmoke">
+            <tr id="label16">
+                <td>Amenity Type</td>
+                <td>No of Amenity</td> 
+                <td>Action</td>
+            </tr>
+            <tr *ngFor="let item of amenities; let i = index">
+                <app-new-amenity [amenityType]="item['amenityType']" [amenityNo]="item['amenityNo']"></app-new-amenity> 
+                <td>
+                        <p><span class="fa fa-trash fa-1x" (click)="deleteAmenity(i)"></span></p>
+                    </td>
+                </tr>
+                <tr>
+                     <td>
+                       <input type="text" name="AmenityT" [(ngModel)]='AmenityT' id="AmenityT" #newamenityTypecontrol="ngModel" class="form-control" placeholder="Amenity Type" style="font-family: Poppins" pattern="[a-zA-Z]*"/>
+                       <p class="alerts" *ngIf="newamenityTypecontrol.invalid && newamenityTypecontrol.touched"> Valid Amenity type is required</p>
+                   </td>
+                   <td>
+                       <input type="text" name="AmenityN" [(ngModel)]='AmenityN' id="AmenityN" #newamenityNocontrol="ngModel" class="form-control" placeholder="No of Amenities" style="font-family: Poppins" pattern="[0-9]*"/>
+                       <p class="alerts" *ngIf="newamenityNocontrol.invalid && newamenityNocontrol.touched"> Valid no of amenity is required</p>
+                   </td>
+                   <td>
+                        <p><span class="fa fa-plus-square fa-1x" (click)="addAmenity()"></span></p>
+                   </td>
+                </tr>
+       </table>
+  </div>
+  
+  <div class="col-sm-6"></div>
+        <div class="col-sm-3">
+            <br><br>
+               <button [disabled]="loading" class="btn btn-primary btn-block" (click)="createAssociation()" id="btn_createAssociation">Enroll An Association</button>
+            <br>
+        </div>
+        <div class="col-sm-2">
+                <br><br>
+            <button type="reset" class="btn btn-primary btn-block " id="btn_rest">Reset</button>
+            <br>
+        </div>
+        <div class="col-sm-1"></div>
+       
+     </div>
+   </form>
+</div><!---------ngIf enrollAssociation ends------------>
+
+<div *ngIf="joinAssociation">
+        
+            <div class="row" style="border:1px solid #b33951; border-radius: 10px;">
+                 <div class="col-sm-12">
+                     <br>
+                     <h5 style="color:#b33951; font-family: Poppins;">Join An Association</h5>
+                     <br>
+                 </div>
+                 <div class="col-sm-8">
+                   <div class="form-group" >
+                     <input type="text"  name="searchBox"  class="form-control" [(ngModel)]="searchText" placeholder="Search by Association/ Locality/ Pincode" style="font-family: Poppins"/>
+                   </div>
+                 </div>
+            </div> 
+            <br><br> 
+            <h5 id="assn_list">List of Associations</h5>
+            <table class="table table-striped">
+                <thead>
+                     <tr style="color:#b33951; font-family: Poppins; font-size:18px;">
+                         <td>Association Name</td>
+                         <td>Property Name</td>
+                         <td>Locality</td>
+                         <td>No of Units</td>
+                     </tr>
+                </thead>
+                <tbody>
+                     <tr *ngFor="let association of associations | filter : searchText" style="font-family: Poppins;">
+                         <td>{{association.asAsnName}}</td>
+                         <td>{{association.asPrpName}}</td>
+                         <td>{{association.asAddress}}</td>
+                         <td>{{association.asNofUnit}}</td>
+                     </tr>
+       
+                </tbody>
+              </table> 
+    
+
+</div><!---------ngIf joinAssociation ends------------>
+
+
+
+    
+
+    
+  

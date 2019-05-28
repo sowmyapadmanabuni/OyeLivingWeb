@@ -1,0 +1,324 @@
+<div class="row" id="row1">
+    <div class="col-sm-4">
+      <p style="font-family: JOSEFINE SANS">
+          <span id="currAssn">BLOCKS FOR {{currentAssociationName}}</span>
+      </p>
+    </div>
+  
+    
+    <div class="col-sm-6">
+      <span class="fa fa-search"></span>  <input type="text" id="search_block" name="searchBox" [(ngModel)]="searchText" size="30">
+    </div>
+    <div class="col-sm-2">
+        <button class="btn btn-primary" style="margin:12px" id="addBlock_btn" (click)="addBlockForm()">Add Block</button>  
+    </div>
+  </div>
+  <!--------------------------------------->
+  
+  <div *ngIf="blocksData">
+      <br>
+      <table class="table table-striped">
+           <tr id="blocktablehead">
+                <td>S.No.</td>
+                <td>Block Name</td>
+                <td>Block Type</td>
+                <td>No of Units</td>
+                <td colspan="2">Action</td>
+           </tr>
+           <tr *ngFor="let block of blocks | filter : searchText | paginate: config; let i = index" style="font-family: Poppins;">
+                <td>{{i+1}}</td>
+                <td>{{block.blBlkName}}</td>
+                <td>{{block.blBlkType}}</td>
+                <td>{{block.blNofUnit}}</td>
+                <td>
+                      <button type="button" id="viewBtn" class="smallBtn" data-toggle="modal" data-target="#viewBlock" (click)="viewBlock(block)" ><i class="fa fa-eye"></i></button>
+                       &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;										
+                      <button id="editBtn" class="smallBtn" data-toggle="modal" data-target="#editAssociation" (click)="editUnit()"><i class="fa fa-pencil"></i></button>
+                </td>
+           </tr>
+      </table>
+      <p class="text-center"><pagination-controls (pageChange)="pageChanged($event)"></pagination-controls></p>
+  </div>
+  
+  <!------------------------------------------------>
+  
+  <div *ngIf="addBlock_form">
+    <form class="form-horizontal" name="block" enctype="multipart/form-data">
+      <div class="row" style="border:1px solid #b33951; border-radius: 10px;">
+          <div class="col-sm-12">
+              <br>
+             <h5 style="color:#b33951; font-family: Poppins">Block Details</h5>
+             <br>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group" >
+             <label id=label1>Block Name <span class="red">*</span></label>
+             <input type="text" name="blockname" id="input1" autocomplete='block.blockname' [(ngModel)]="block.blockname" #blockname="ngModel" class="form-control" placeholder="Block Name" pattern="[a-zA-Z0-9-]*" required/>
+             <p class="alerts" *ngIf="blockname.invalid && blockname.touched">Valid name is required</p>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group" >
+             <label id=label2>Block Type <span class="red">*</span></label>
+             <input type="text" name="blocktype" id="input2" autocomplete='block.blocktype' [(ngModel)]="block.blocktype"  #blocktype="ngModel" class="form-control" placeholder="Block Type" pattern="[a-zA-Z]*" required/>
+             <p class="alerts" *ngIf="blocktype.invalid && blocktype.touched">Valid block type is required</p>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group" >
+             <label id=label3>No of Units <span class="red">*</span></label>
+             <input type="text" name="noofunits" id="input3" autocomplete='block.noofunits' [(ngModel)]="block.noofunits" #noofunits="ngModel"  class="form-control" placeholder="No Of Units" pattern="[0-9]*" required/>
+             <p class="alerts" *ngIf="noofunits.invalid && noofunits.touched">No of units are required</p>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <br>
+           <h5 style="color:#b33951; font-family: Poppins">Manager Details</h5>
+           <br>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group" >
+           <label id=label4>Manager Name <span class="red">*</span></label>
+           <input type="text" name="managername" id="input4"  autocomplete='block.managername' [(ngModel)]="block.managername"  #managername="ngModel" class="form-control" placeholder="Manager Name" pattern="[a-zA-Z]*" required/>
+           <p class="alerts" *ngIf="managername.invalid && managername.touched">Manager name is required</p>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group" >
+           <label id=label5>Manager Mobile Number <span class="red">*</span></label>
+           <input type="text" name="managernumber" id="input5" autocomplete='block.managernumber' [(ngModel)]="block.managernumber"  #managernumber="ngModel" class="form-control" placeholder="Manager Mobile Number" minlength=10 maxlength=10 pattern="[0-9]*" required/>
+           <p class="alerts" *ngIf="managernumber.invalid && managernumber.touched">Manager mobile number is required</p>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group" >
+           <label id=label6>Manager Email Id <span class="red">*</span></label>
+           <input type="text" name="manageremail" id="input6" autocomplete='block.manageremail' [(ngModel)]="block.manageremail" #manageremail="ngModel" class="form-control" placeholder="Manager Email Id" pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" required/>
+           <p class="alerts" *ngIf="manageremail.invalid && manageremail.touched">Manager email-id is required</p>
+          </div>
+        </div>
+        
+      
+        <div class="col-sm-12">
+          <br>
+         <h5 style="color:#b33951; font-family: Poppins">Maintenance Details</h5>
+         <br>
+        </div>
+        <div class="col-sm-4 ">
+          <div class="form-group" >
+            <label id=label6>Select Rate <span class="red">*</span></label> <br/>  
+            <input type="checkbox" name="rate" id="input7" [(ngModel)]="block.rate" #rate="ngModel" (change)="checkRate()" value="flatRatevalue" #rate="ngModel" >
+            <label id=label7>Flat Rate Value</label>
+            <p *ngIf="rate.invalid && rate.touched" class="alert alert-danger">Please Select Rate</p>
+            &nbsp;&nbsp;&nbsp;                           
+            <input type="checkbox" name="rate1"  id="input8" [(ngModel)]="block.rate1" #rate1="ngModel" (change)="checkRate()" value="dimension" #rate1="ngModel"/>
+            <label id=label8>Dimension Based</label>  
+            <p *ngIf="rate1.invalid && rate.touched" class="alert alert-danger">Please Select Rate</p>
+          </div>
+        </div>
+        <div class="col-sm-4" *ngIf="flatRatevalue">
+            <div class="form-group" >
+                <label id=label9>Flat Rate Value <span class="red">*</span></label>
+                <input type="text" name="flatRatevalue"  id="input9" [(ngModel)]="block.flatRatevalue" #flatRatevalue="ngModel" class="form-control" #flatRatevalue="ngModel" placeholder="Amount to be Charged "  pattern="[+-]?((\.\d+)|(\d+(\.\d+)?))" required />
+                <a href="" class="question" tooltip-size="large" tooltips tooltip-side="top" tooltip-template="*******************"><i class="fa fa-question-circle"></i></a>
+                <p class="alerts" *ngIf="flatRatevalue.invalid && flatRatevalue.touched"> Flat value is required</p>
+                <!--
+                <p class="alerts" *ngIf="flatRatevalue.error.pattern"> Please Enter Valid Amount</p>
+                -->
+            </div>
+        </div>
+        <div class="col-sm-4" *ngIf="dimensionBasedRate">
+            <div class="form-group" >
+                <label id=label10>Maintenance Value<span class="red">*</span></label>
+            
+                <input type="text" name="maintenanceValue"  id="input10" [(ngModel)]="block.maintenanceValue" #maintenanceValue="ngModel" class="form-control" #maintenanceValue="ngModel" placeholder="Maintenance Rate (SqFt / SqMtr) "  required pattern="[0-9]+(\.[0-9]{1,2})?" />
+                <p class="alerts" *ngIf="maintenanceValue.invalid && maintenanceValue.touched">Maintenance value is required</p>
+                <!--
+                <p class="alerts" *ngIf="block.maintenanceValue.error.pattern"> Please Enter Valid Maintenance Value</p>
+                -->
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group" >
+                <p><label id=label11>Unit of Measurement <span class="red">*</span></label></p>
+                <input type="text" required name="measurement"  id="input11" autocomplete='block.measurement' [(ngModel)]="block.measurement" #measurement="ngModel" class="form-control" placeholder="Measurement Type"/>							
+                <p class="alerts" *ngIf="measurement.invalid && measurement.touched">Measurement unit is required</p>
+            </div>
+          </div>
+        <div class="col-sm-4">
+            <div class="form-group" >
+                <label id=label12>Invoice Creation Frequency <span class="red">*</span></label>
+                <select class="form-control" name="frequency" [(ngModel)]="block.frequency" #frequency="ngModel" required>
+                  <option ng-disabled="true" ng-selected="true" [value]="" style="color:#b33951; font-family: Poppins">Select Invoice Frequency</option>  
+                  <option *ngFor="let frequency of frequencys" [value]="frequency.name" style="font-family: Poppins">{{frequency.displayName}}</option>
+                </select>
+               <p class="alerts" *ngIf="frequency.invalid && frequency.touched"> Please Select Frequency</p>
+            </div>
+        </div>
+        <div class="col-sm-4">                        
+            <div class="form-group" selector="form-control">
+                <label id=label13>Next Invoice Generation Date <span class="red">*</span></label> 
+                <input  type="date" data-date-inline-picker="true" class="form-control" name="invGenDate" id="invoicedatetext" [(ngModel)]="block.billGenerationDate" #billGenerationDate="ngModel"placeholder="dd-mm-yyyy" style="font-family: Poppins" required />
+                <!-----------<datepicker> TAG REMOVED by Barnali to disable the previous dates-------------
+                <datepicker date-format="MM-dd-yyyy" selector="form-control">
+                    <input type="text" class="form-control" name="invGenDate" [(ngModel)]="block.billGenerationDate" placeholder="mm-dd-yyyy" required />
+                </datepicker>---->                                                                						
+           </div>                        
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group" selector="form-control">
+                <label id=label14>Due Date <span class="red">*</span></label>
+                <input  type="date" data-date-inline-picker="true" class="form-control" name="dueDate" id="duedatetext" [(ngModel)]="block.dueDate" #dueDate="ngModel" placeholder="dd-mm-yyyy" style="font-family: Poppins"required />
+                <!-----------<datepicker> TAG REMOVED by Barnali-------------
+                <datepicker date-format="MM-dd-yyyy" selector="form-control">
+                    <input type="text" class="form-control" name="dueDate" [(ngModel)]="block.dueDate" placeholder="mm-dd-yyyy" required />
+                </datepicker>---->
+                <!--<p class="alerts" ng-if="block.dueDate.$invalid && block.dueDate.$touched"> Please Select Due Date</p>-->
+            </div>
+        </div>  
+        <div class="col-sm-4 col-xs-12">
+            <div class="form-group">
+                <label id=label15>Late Payment Charge Type <span class="red">*</span></label>
+                <select class="form-control" name="latePymtChargeType" [(ngModel)]="block.latePymtChargeType"  #latePymtChargeType="ngModel" required>
+                    <option ng-disabled="true" ng-selected="true" [value]="" style="color:#b33951; font-family: Poppins" >Select Late Payment Charge Type</option>
+                    <option *ngFor="let latePymtChargeType of latePaymentChargeTypes" [value]="latePymtChargeType.name" style="font-family: Poppins">{{latePymtChargeType.displayName}}</option>
+                </select>
+                <p class="alerts" *ngIf="latePymtChargeType.invalid && latePymtChargeType.touched"> Please select Charges Type</p>
+              </div>
+          </div>
+          <div class="col-sm-4 col-xs-12">
+              <div class="form-group" >
+                  <label id=label16>Late Payment Charge <span class="red">*</span></label>
+                  <input type="text" name="latePymtCharge"  id="input12" autocomplete='block.latePymtCharge' [(ngModel)]="block.latePymtCharge" #latePymtCharge="ngModel" class="form-control" placeholder="Late Payment charge" pattern="[+-]?((\.\d+)|(\d+(\.\d+)?))" required />
+                  <p class="alerts" *ngIf="latePymtCharge.invalid && latePymtCharge.touched">Valid late payment charge is required</p>
+              </div>
+          </div>
+          <div class="col-sm-4 col-xs-12">
+              <div class="form-group">
+                  <label id=label17>Starts From<span class="red">*</span></label>
+                  <input  type="date" data-date-inline-picker="true" class="form-control" name="startsFrom" id="latePaymentDate" [(ngModel)]="block.startsFrom" #startsFrom="ngModel" placeholder="dd-mm-yyyy" style="font-family: Poppins" required />
+                  <!--
+                  <datepicker date-format="yyyy-MM-dd" selector="form-control">
+                      <input type="text" class="form-control" name="startsFrom" [(ngModel)]="block.startsFrom" placeholder="Starts From" required />
+                  </datepicker>
+                  -->
+                  <p class="alerts" *ngIf="startsFrom.invalid && startsFrom.touched"> Please Select Starts From Date</p>
+              </div>
+          </div>
+          <div class="col-sm-12">
+              <br>
+             <h5 style="color:#b33951; font-family: Poppins">Bank Details</h5>
+             <br>
+          </div>
+          <div class="col-sm-6">
+              <div class="form-group">
+                  <label id="label18">Bank Name <span class="red">*</span></label>
+                  <input type="text" required name="BankName" id="input15" [(ngModel)]="bank.BankName" #BankName="ngModel" class="form-control" placeholder="Bank Name" pattern="[a-zA-Z]*" style="text-transform: uppercase; font-family: Poppins; font-size: 13px;" />
+                  <p class="alerts" *ngIf="BankName.invalid && BankName.touched"> Valid bank name is required</p>
+                  <!--<p class="alerts" *ngIf="BankName{{index}}.invalid && BankName{{index}}.touched"> Bank Name is required</p>
+                  -->
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="form-group">
+                  <label id="label19" style=" font-family: Poppins;">IFSC <span class="red">*</span></label>
+                  <input type="text" name="IFSC" id="input16" class="form-control" [(ngModel)]="bank.IFSC" #IFSC="ngModel" placeholder="IFSC "  required pattern="[A-Za-z0-9]{4}[0-9]{1}[A-Za-z0-9]{6}" minlength="11" ng-minlength="11" style="text-transform: uppercase;font-size: 13px; font-family: Poppins;"  /> 
+                  <p class="alerts" *ngIf="IFSC.invalid && IFSC.touched"> IFSC code is required</p>                              
+                  <small style="color:grey">Ex: PAAA1111111</small>
+                  <!--
+                  <a href="" class="question" tooltip-size="large" tooltips tooltip-side="top" tooltip-template="IFSC of the account, usually found on the cheque book or contact your Bank"><i class="fa fa-question-circle"></i></a>                        
+                 
+                  <p class="alerts" *ngIf="IFSC{{index}}.invalid && IFSC{{index}}.$touched"> IFSC is required</p>
+                
+                  <p class="alerts" *ngIf="IFSC{{index}}.error.pattern || ifscDuplicate"> Please Enter Valid IFSC Code</p>
+                  --> 
+             </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="form-group" >
+                  <label id="label20">Account Number <span class="red">*</span></label>
+                  <input type="text" required name="AccountNumber" id="input17" [(ngModel)]="bank.AccountNumber" #AccountNumber="ngModel" class="form-control" pattern="[A-Za-z0-9]*" placeholder="Account No " ng-maxlength="30" maxlength="30" style="text-transform: uppercase; font-size: 15px;font-family: Poppins;"/>
+                  <p class="alerts" *ngIf="AccountNumber.invalid && AccountNumber.touched"> Valid bank account no is required</p>
+                  <!--
+                  <p class="alerts" *ngIf="AccountNumber{{index}}.invalid && crtAss.AccountNumber{{$index}}.$touched"> Account No is required</p>
+                  <p class="alerts" *ngIf="AccountNumber{{index}}.error.pattern"> Please Enter Valid Account No</p>
+                  -->
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="form-group">
+                  <label id="label21">Account Type <span class="red">*</span></label>
+                  <select class="form-control" name="accountType" id="input18" [(ngModel)]="bank.accountType" #accountType="ngModel" required>
+                      <option ng-disabled="true" ng-selected="true" [value]="" style="color:#b33951">Select Account Type</option>
+                      <option *ngFor="let accountType of accountTypes" [value]="accountType.name">{{accountType.name}}</option>
+                  </select>
+                  <p class="alerts" *ngIf="accountType.invalid && accountType.touched"> Please select the account type</p>
+                  <!--
+                  <p class="alerts" ng-show="crtAss.AccountType{{$index}}.$invalid && crtAss.AccountType{{$index}}.$touched"> Account Type is required</p>
+                  <p class="alerts" ng-show="crtAss.AccountType{{$index}}.$error.pattern"> Please Enter Valid Account Type</p>
+                  -->
+              </div>
+          </div>
+         
+          <br><br>
+          <div class="col-sm-7"></div>
+          <div class="col-sm-2">
+                  <br><br>
+              <button [disabled]="loading" class="btn btn-primary btn-block" (click)="createBlock()" id="btn_createBlock">Add Block</button>
+              <br>
+          </div>
+          <div class="col-sm-2">
+                  <br><br>
+              <button type="reset" class="btn btn-primary btn-block " id="btn_rest">Reset</button>
+              <br>
+          </div>
+          <div class="col-sm-1"></div>
+          
+      </div><!--ROW ENDS-->
+    </form>
+  
+  </div>
+  
+  
+  <!----------------------------------------------------------------------------->
+  
+  <!-- Modal Popups for View Block-->
+  <div class="modal fade viewPopup" id="viewBlock" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+      
+                  <div class="modal-header" style="background-color: whitesmoke;">
+                     
+                     
+                      <h4 class="modal-title" id="myModalLabel" style="color:#b33951; font-family: Poppins;"><u>View Block</u></h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  </div>
+      
+                  <div class="modal-body" style="font-family: Poppins;">
+                      <div class="row" style="border:2px solid #b33951; padding:5px;">
+                          <div class="col-sm-12"> 
+                              <h5 class="text-center">Association Name : <strong>{{currentAssociationName}}</strong></h5> 
+                              <br>                          
+                              <h5 style="color:#b33951">Block Information</h5>
+                              <br>
+                          </div>
+                         
+                          <div class="col-sm-4">
+                              <p>Block Name : <span>{{viewBlockRow.blockName}}</span></p>
+                          </div>
+                          <div class="col-sm-4">
+                              <p>Block Type : <span>{{viewBlockRow.blockType}}</span></p>
+                          </div>
+                          <div class="col-sm-4">
+                              <p>Unit No : <span>{{viewBlockRow.unitNo}}</span></p>
+                          </div>
+      
+                          <div class="col-sm-12">
+                               <hr>
+                          </div>
+                      </div>
+                  </div> <!---------Modal Body close----------> 
+              </div>
+          </div>
+      </div>
+  `

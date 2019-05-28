@@ -1,0 +1,412 @@
+<div class="main-wrapper animateIt">
+  <div class="container-fluid">
+    <div class="pageTitle">
+      <div class="row">
+        <div class="col-sm-4 col-sm-12 col-xs-12">
+          <h3>View Invoice</h3>
+        </div>
+        <div class="col-sm-4 col-sm-12 col-xs-12">
+          <div class="form-group">
+            <select class="ui dropdown search methodDropdown" name="blBlockID" #allBlocksByAssnIDControl='ngModel'
+              [(ngModel)]="blBlockID" (change)="getCurrentBlockDetails(blBlockID)" required>
+              <option disabled="true" selected="true" value="">Select Block Name</option>
+              <option *ngFor='let item of allBlocksByAssnID' [value]="item['blBlockID']">
+                {{item['blBlkName']}}
+              </option>
+            </select>
+            <p class="alerts" *ngIf="allBlocksByAssnIDControl.invalid && allBlocksByAssnIDControl.touched"> Please
+              select BlockName</p>
+          </div>
+        </div>
+        <div class="col-sm-4 col-sm-12 col-xs-12">
+          <div class="form-group">
+            <input type="text" name="searchBoxData" [(ngModel)]="searchBoxData" class="form-control"
+              placeholder="Start Typing, this is dynamic search" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="blockid == 0">
+      <h1> Select Block to continue</h1>
+    </div>
+
+    <div class="card createInvoice" *ngIf="blockid > 0">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <!-- For Desktop -->
+          <div class="table-responsive" style="margin-top: 40px;overflow: visible;">
+            <table class="table">
+              <thead>
+                <tr style="color:#e59400;">
+                  <th>Sl. No</th>
+                  <th>Invoice Number</th>
+                  <th>Invoice Date</th>
+                  <th>Invoice Billed</th>
+                  <th>Due Date</th>
+                  <th>Current Invoice Amount</th>
+                  <th>Action</th>
+                  <th>
+                    <input *ngIf="isChecked == false" type="checkbox" ckecked='false' (change)='enableIsChecked()'>
+                    <i *ngIf="isChecked" style="cursor: pointer" class="fa fa-paper-plane" (click)="sendEmailToAll()"></i>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor='let row of invoiceLists | paginate: { itemsPerPage: 10, currentPage: p };let i=index'>
+                  <td>
+                    {{i+1}}
+                  </td>
+                  <td>
+                    {{row.inNumber}}
+                  </td>
+                  <td>
+                    {{row.inGenDate | date:"d-M-y"}}
+                  </td>
+                  <td>
+                    <span *ngIf="row.inIsActive == true"> YES</span>
+                    <span *ngIf="row.inIsActive == false"> NO</span>
+                  </td>
+                  <td>{{row.toDate | date:"d-M-y"}}</td>
+                  <td>
+                    <i class="fa fa-inr"></i> {{row.inTotVal}}
+                  </td>
+                  <td>
+                    <button class="smallBtn" type="button"
+                      (click)="viewInvoice1(template,row.inid,row.inGenDate,row.inNumber,row.inDsCVal,row.unUnitID)">
+                      <i class="fa fa-eye"></i>
+                    </button>
+
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <button class="smallBtn" type="button" (click)="discount(discountModal,row.inid,row.inNumber,row.inTotVal)">
+                      <i class="fa fa-percent"></i>
+                    </button>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <button class="smallBtn" (click)="sendInvoiceInMail(row.inid)">
+                      <i class="fa fa-paper-plane"></i>
+                    </button>
+                  </td>
+                  <td>
+                    <input class="chkBox" type="checkbox" [value]="row.inid" [checked]="isChecked">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!---->
+      <pagination-controls (pageChange)='p=$event'></pagination-controls>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <!-- Demo Modal-->
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title" style="text-align:center" id="myModalLabel">View Invoice</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body" style="padding-top: 0px;">
+      <div class="newInvoice" id="printInvoiceId">
+        
+          <div class="col-xs-12">
+
+            <div class="row">
+              <div class="col-sm-2 col-xs-2">
+                <img alt="" class="img-responsive" style="max-width: 150px; float: left;" />
+              </div>
+              <div class="col-sm-10 col-xs-10">
+                <h4 style="margin: 34px 0px;">{{associationDetails.asAsnName}}, {{associationDetails.asAddress}}, <br />
+                  {{associationDetails.asCountry}}, {{associationDetails.asPinCode}}</h4>
+              </div>
+            </div>
+
+            <label style="display: block; text-align: center; font-size: 18px; margin-bottom: 5px;">INVOICE</label>
+            <p style="margin-bottom: 32px;"><span class="pull-left">Invoice Date :
+                {{invoiceDate | date: "d-M-y"}}</span> <span class="pull-right">Invoice No : {{invoiceNumber}}</span>
+            </p>
+            <hr style="margin-top: 5px; height: 2px; background:#CCC;">
+
+            <div class="row">
+              <div class="col-sm-6 col-xs-6">
+                <address style="margin-bottom: 0;">
+                  <strong>To : </strong><br />
+                  {{OwnerFirstName}} {{OwnerLastName}} <br />
+                  {{OwnerEmail}} <br /> <br />
+                </address>
+              </div>
+              <div class="col-sm-4 col-xs-4" style="text-align:right">
+
+              </div>
+              <div class="col-sm-2 col-xs-2" style="text-align:center">
+                <strong>Due Date:</strong><br />
+                <span class="show"> {{asdPyDate | date :  "d-M-y"}}</span> <br />
+              </div>
+            </div>
+
+            <div class="table-responsive" style="border:1px;">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>SL.No</th>
+                    <th>Description</th>
+                    <th style="text-align:right">Amount</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="font-weight:bold">
+                    <td></td>
+                    <td>Previous Due</td>
+                    <td style="text-align:right">(+) ₹ {{previousDue}}</td>
+                    <td></td>
+                  </tr>
+                  <tr style="font-weight:bold">
+                    <td></td>
+                    <td>Discount</td>
+                    <td style="text-align:right">(-) ₹ {{discountedValue}} </td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="text-align: right;">Sub Total</td>
+                    <td style="text-align:right">₹ {{totalAmountPaid()}}</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="text-align: right;">Tax</td>
+                    <td style="text-align:right">₹ 00.00 </td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="text-align: right;">Total Due</td>
+                    <td style="text-align:right">₹ {{totalAmountPaid()}} </td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-11 col-xs-11">
+                <p style="text-align: right;">Total Due : <strong style="text-transform: capitalize;">
+                    {{amountInWords | words}} Rupees Only</strong></p>
+              </div>
+            </div>
+            <br />
+            <strong style="color: red; text-align: left;    display: block;">Due upon receipt</strong>
+
+          </div>
+         <!--div removed-->
+        <div class="row">
+          <div class="col-xs-12">
+            <h4 style="margin-top: 5px; margin-bottom:0px;color: red; ">{{associationDetails.asAsnName}} Association
+            </h4>
+            <hr style="margin-top: 5px;">
+          </div>
+        </div>
+
+        <div class="row">
+
+          <div class="col-sm-3">
+            <p style="color: red;">Tel : {{associationDetails.asMgrMobile}}<br />
+              {{associationDetails.asAsnName}}, {{associationDetails.asAddress}}, {{associationDetails.asCountry}},
+              {{associationDetails.asPinCode}} <br /> {{associationDetails.asWebURL}} <br />
+              {{associationDetails.asAsnEmail}}</p>
+          </div>
+          <div class="col-sm-3">
+          </div>
+          <div class="col-sm-3"></div>
+          <div class="col-sm-3"></div>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+          <div class="col-xs-12">
+            <p style="text-align: right; margin:8px 0px;" id="makePaymentButton"><strong><a href=""
+                  (click)="onButtonClick(totalAmountPaid($event))">Click here </a> to make the payment</strong>
+
+            </p>
+          </div>
+        </div>
+
+        <div class="paymentGatewayPage animateIt" *ngIf="showGateWay">
+          <div class="row" style="padding-top:20px">
+            <br><br><br><br><br>
+            <div style="text-align:center">
+              <!--center tag-->
+              <strong>
+                <h4>Please choose from the following Payment options</h4>
+              </strong>
+              <br><br>
+
+              <div class="col-xs-4">
+                <div class="gateWayLogo">
+                  <a href="" (click)="iciciBank($event,iciciModal,invValFinal)">
+                    <img src="assets/images/icici.jpg" alt="ICICI Bank" class="img-responsive" />
+                    <h6><b>₹ {{totalAmountPaid()}} + Service Fee & GST = ₹ {{invValFinal}}</b></h6>
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-xs-4">
+                <div class="gateWayLogo">
+                  <a href="" (click)="razorpay(totalAmountPaid($event))">
+                    <img src="assets/images/razorpay.jpg" alt="Razorpay" class="img-responsive" />
+                    <h6><b>₹ {{totalAmountPaid()}} + Service Fee & GST = ₹ {{ravValFinal}} </b></h6>
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-xs-4">
+                <div class="gateWayLogo">
+                  <a href="" (click)="instamojo(totalAmountPaid($event))">
+                    <img src="assets/images/instamojo.jpg" alt="Instamojo" class="img-responsive" />
+                    <h6><b>₹ {{totalAmountPaid()}} + Service Fee & GST = ₹ {{invValFinal}}</b></h6>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <!--center tag-->
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="paymentGateway">
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <p><a href="https://oyespace.com" target="_blank"> <img src="assets/images/logo.png"
+                  style="max-width: 150px;" /><strong>Powered by OyeLiving </strong> </a></p>
+          </div>
+        </div>
+
+      </div>
+      <br />
+      <br />
+      <div class="row">
+        <div class="col-xs-12">
+          <button class="mdButton1 pull-right" id="btnPrint" onclick="window.print()">Print Invoice</button>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</ng-template>
+
+
+
+<!-- ICICI PAYMENT GATEWAY MODAL USER VIEW ONLY -->
+<ng-template #iciciModal>
+  <div class="modal-content">
+
+    <div class="modal-header" style="background-color:orange">
+
+        <div class="col-sm-2" style="text-align:center;">
+          <img src="assets/images/logo.jpg" height="80px" />
+        </div>
+        <div class="col-sm-8">
+           <h3>Paying to OyeSpace</h3>
+            By Invoice Number : {{invoiceNumber}}
+        </div>
+        <div class="col-sm-2">
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+        </div>
+           
+
+    </div>
+
+    <div class="modal-body">
+      <form method="post" action="https://www4.ipg-online.com/connect/gateway/processing">
+        <!-- Above url is for Testing purpose please use Production URL which is shared by PGhelpdesk team -->
+        <input type="hidden" name="timezone" value="IST" />
+        <input type="hidden" name="authenticateTransaction" value="true" />
+        <input type="hidden" name="txntype" value="{{strTxntype}}" />
+        <input type="hidden" name="txndatetime" value="{{timezone}}" />
+        <input type="hidden" name="hash" value="{{calculatedIPGUtilHash}}" />
+        <input type="hidden" name="currency" value="{{currency}}" />
+        <input type="hidden" name="mode" value="{{strPayOnly}}" />
+        <input type="hidden" name="storename" value="{{storeId}}" />
+        <input type="hidden" name="chargetotal" value="{{charge}}" />
+        <input type="hidden" name="sharedsecret" value="{{sharedSecret}}" />
+        <input type="hidden" name="language" value="{{strLanguage}}" />
+        <input type="hidden" id="merchantTransactionId" name="merchantTransactionId"
+          value="{{strMerchantTransactionId}}" />
+        <input type="hidden" name="responseSuccessURL" value="{{responseSuccessURL}}" />
+        <input type="hidden" name="responseFailURL" value="{{responseFailURL}}" />
+        <input type="submit" class="mdButton1" name="submitBtn" value="Rs {{charge}} Paynow" />
+        <input type="hidden" name="hash_algorithm" value="SHA1" />
+      </form>
+    </div>
+
+    <div class="modal-footer" style="background-color:orange">
+    </div>
+
+  </div>
+</ng-template>
+<!-- ICICI PAYMENT GATEWAY MODAL USER VIEW ONLY -->
+
+<!-------------------Discount in Invoice Modal Start--------------------->
+<ng-template #discountModal>
+   <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="position:absolute;left:40%" id="myModalLabel"><u>Discount Invoice</u></h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+            </div>
+            <div class="modal-body" style="padding-top: 0px;">
+                <form name="dscntInv" role="form" autocomplete="off" enctype="multipart/form-data">
+                    <!--------------------------------  Block Details Section Starts Here  ------------------------>
+                    <fieldset class="scheduler-border">
+                        <legend class="scheduler-border headingOrange">Invoice Details</legend>
+                            <div class="row">
+                                <div class="col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label>Invoice Number</label>
+                                        <input type="text" name="dscntInvinvoiceNumber" [(ngModel)]="dscntInvinvoiceNumber" class="form-control" placeholder="Invoice Number " disabled/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-xs-12">
+                                    <div class="form-group" [ngClass]="{'has-error' : dscntInvdiscountedAmountControl.invalid && dscntInvdiscountedAmountControl.touched}">
+                                        <label>Discounted Amount<span class="red">*</span></label>
+                                        <input type="text" required name="dscntInvdiscountedAmount" #dscntInvdiscountedAmountControl='ngModel' [(ngModel)]="dscntInvdiscountedAmount" class="form-control" (blur)="checkDiscountedAmount(dscntInvdiscountedAmount)" placeholder="Amount After Discount" />
+                                        <p class="alerts" *ngIf="dscntInvdiscountedAmountControl.invalid && dscntInvdiscountedAmountControl.touched">Discounted Amount</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-xs-12">
+                                    <div class="form-group" [ngClass]="{'has-error' : dscntInvdescriptionControl.invalid && dscntInvdescriptionControl.touched}">
+                                        <label>Discount Reason <span class="red">*</span></label>
+                                        <input type="text" required name="dscntInvdescription" #dscntInvdescriptionControl='ngModel' (click)='emptyDisplaytext()' [(ngModel)]="dscntInvdescription" class="form-control" placeholder="Discount Reason" />
+                                        <p class="alerts" *ngIf="dscntInvdescriptionControl.invalid && dscntInvdescriptionControl.touched">Discount Reason</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="btn-group pull-right">
+                                        <button type="button" class="btn btn-primary pull-right" (click)="discountInvoice(dscntInvinvoiceNumber,dscntInvdiscountedAmount,dscntInvdescription)" ><i class="fa fa-floppy-o"></i> Update & Save</button>  
+                                    </div>
+                                </div>
+                            </div>
+                    </fieldset>
+                </form>
+
+            </div>  
+        </div>
+     
+</ng-template>
+
+<!-------------------Discount in Invoice Modal End--------------------->
