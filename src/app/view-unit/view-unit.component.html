@@ -1,442 +1,258 @@
-<div class="row" id="row1" *ngIf="addUnitISTPage">
+<div class="container">
   <div class="row">
-    <div class="col-sm-4 col-sm-12 col-xs-12">
+    <div class="col-4">
       <p>
-           <span id="currAssn"> UNITS FOR {{currentAssociationName}}</span>
+        <span id="currAssn"> UNITS FOR {{currentAssociationName}}</span>
       </p>
     </div>
-    <div class="col-sm-3 col-sm-12 col-xs-12">
-        <div class="form-group" [ngClass]="{'has-error' : blocksDetailControl.invalid && blocksDetailControl.touched}">
-            <select class="ui dropdown search methodDropdown" 
-                            name="blockname" 
-                            [(ngModel)]="blBlockID" 
-                            (change)="getAllUnitDetailsByBlockID(blBlockID)" 
-                            required
-                            #blocksDetailControl='ngModel'>
-                <option disabled="true" selected="true" value="">Select Block Name</option>
-                <option *ngFor='let blck of allBlocksLists' [value]="blck['blBlockID']">
-                  {{blck['blBlkName']}}
-                </option>
-            </select>
-            <p class="alerts" *ngIf="blocksDetailControl.invalid && blocksDetailControl.touched"> Please select BlockName</p>
-        </div>
+    <div class="col-3">
+      <div class="form-group" [ngClass]="{'has-error' : blocksDetailControl.invalid && blocksDetailControl.touched}">
+        <select class="ui dropdown search methodDropdown" name="blockname" [(ngModel)]="blBlockID"
+          (change)="getAllUnitDetailsByBlockID(blBlockID)" required #blocksDetailControl='ngModel'>
+          <option disabled="true" selected="true" value="">Select Block Name</option>
+          <option *ngFor='let blck of allBlocksLists' [value]="blck.blBlockID">
+            {{blck.blBlkName}}
+          </option>
+        </select>
+        <p class="alerts" *ngIf="blocksDetailControl.invalid && blocksDetailControl.touched"> Please select BlockName
+        </p>
+      </div>
     </div>
-    <div class="col-sm-3 col-sm-12 col-xs-12">
-        <div class="form-group">
-            <input type="text"  name="searchText" [(ngModel)]="searchText" class="form-control" placeholder="Start Typing, this is dynamic search" style="width: 90%;" />                            
-        </div>
+    <div class="col-3">
+      <div class="form-group">
+        <input type="text" name="searchText" [(ngModel)]="searchText" class="form-control"
+          placeholder="Start Typing, this is dynamic search" style="width: 90%;" />
+      </div>
     </div>
-    <div class="col-sm-2 col-sm-12 col-xs-12"> 
-        <button class="btn btn-primary" style="margin:12px" id="addUnit_btn" (click)="addBlockForm()">Add Unit</button>  
+    <div class="col-2">
+      <button class="btn btn-primary" style="margin:12px" (click)="addBlockForm()" [disabled]="blBlockID == ''">Add Unit</button>
+    </div>
+  </div>
+</div>
+<!--DIV-->
+<div *ngIf="blBlockID == ''" class="container px-lg-12">
+  <div class="row mx-lg-n12">
+    <div class="col py-3 px-lg-12 border bg-light">Select Block to Continue</div>
+  </div>
+</div>
+<!--DIV-->
+<div *ngIf="blBlockID" class="col-xs-12">
+  <table class="table table-striped">
+    <thead>
+      <tr style="color:#e59400;">
+        <td>S.No.</td>
+        <td>Unit No</td>
+        <td>Unit Type</td>
+        <td>Unit Dimension</td>
+        <td>Name</td>
+        <td>Email-Id</td>
+        <!--
+             <td>Occupancy status </td>
+             <td>OwnerShip Status </td>
+             -->
+        <td colspan="2">Action</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of allUnitBYBlockID | filter : searchText;let i=index" style="font-family: Poppins;">
+        <td>{{i+1}}</td>
+        <td>{{item.unUniName}}</td>
+        <td>{{item.unUniType}}</td>
+        <td>{{item.unDimens}} SqFt</td>
+        <td>{{(item.owner.length > 0 ? item.owner[0].uofName : '' )}}</td>
+        <td>{{(item.owner.length > 0 ? item.owner[0].uoEmail : '' )}}</td>
+        <!--
+             <td>{{unit.unOcStat}} </td>
+             <td>{{unit.unOwnStat}} </td>
+              -->
+        <td>
+          <button type="button" class="smallBtn" data-toggle="modal" data-target="#viewUnit1"
+            (click)="viewUnit(unit)"><i class="fa fa-eye"></i></button> | <button id="editBtn" class="smallBtn"
+            data-toggle="modal" data-target="#editAssociation" (click)="editUnit()"><i
+              class="fa fa-pencil"></i></button>
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
+</div>
+<!--DIV-->
+<form *ngIf='showCreateUnitemplate' #createunitForm='ngForm' (ngSubmit)='createUnit()'>
+  <div class="container">
+    <div class="row">
+      <div class="col-6">
+        <label id=label1>Unit No / Flat No <span class="red">*</span></label>
+        <input type="text" name="unitno" id="unitno" [(ngModel)]="unitno" #unitnoControl="ngModel" class="form-control"
+          placeholder="Unit no/ Flat no" pattern="[a-zA-Z0-9-]*" />
+      </div>
     </div>
   </div>
 
-  
-     
-    <div class="col-sm-12">
-       <br>
-    <table class="table table-striped">
-         <tr id="unitData_table">
-              <td>S.No.</td>
-              <td>Unit No</td>
-              <td>Unit Type</td>
-              <td>Unit Dimension</td>
-              <td>Name</td>
-              <td>Email-Id</td>
-              <!--
-              <td>Occupancy status </td>
-              <td>OwnerShip Status </td>
-              -->
-              <td colspan="2">Action</td>
-         </tr>
-         <tr *ngFor="let unit of allUnitBYBlockID | filter : searchText| paginate: config; let i = index" style="font-family: Poppins;">
-              <td>{{i+1}}</td>
-              <td>{{unit.unUniName}}</td>
-              <td>{{unit.unUniType}}</td>
-              <td>{{unit.unDimens}} SqFt</td>
-              <td>{{unit.owner[0].uofName}}</td>
-              <td>{{unit.owner[0].uoEmail}}</td>
-               <!--
-              <td>{{unit.unOcStat}} </td>
-              <td>{{unit.unOwnStat}} </td>
-               -->
-               <td>
-                <button type="button" id="viewBtn" class="smallBtn" data-toggle="modal" data-target="#viewUnit1" (click)="viewUnit(unit)" ><i class="fa fa-eye"></i></button>
-                &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;										
-                <button id="editBtn" class="smallBtn" data-toggle="modal" data-target="#editAssociation" (click)="editUnit()"><i class="fa fa-pencil"></i></button>
-              </td>
-         </tr>
-    </table>
-    <p class="text-center"><pagination-controls (pageChange)="pageChanged($event)"></pagination-controls></p>
-    </div>
-  </div>
-  
-  <!------------------------------------------------>
-  
-  <div class="row" id="row3"  *ngIf="addUnit2NDPage">
-      <div class="col-sm-8">
-          <span id="currAssn2"> UNITS FOR {{currentAssociationName}}</span>
-      </div>
-      <div class="col-sm-4">
-          <select class="form-control" name="loadBlock" [(ngModel)]="block" (ngModelChange)="loadBlock(block)"  required>
-              <option [value]="" style="color:#b33951">Select block to create unit</option>
-              <option *ngFor="let block of blocks" [value]="block.blBlockID">{{block.blBlkName}}</option>
+  <div class="container">
+    <div class="form-group">
+      <div class="row">
+
+        <div class="col-sm-3">
+
+          <label id=label2>Unit Type <span class="red">*</span></label>
+          <select class="form-control" name="unitType" id="unitType" [(ngModel)]="unitType" #unitTypeControl="ngModel">
+            <option value="" style="color:#b33951">Select Unit Type</option>
+            <option *ngFor="let unitTp of unitTypes" [value]="unitTp['name']">{{unitTp['name']}}</option>
           </select>
-      </div>
-  
-      <div class="col-sm-12" *ngIf="selectBlock">
-          <br><br><br><br>
-          <p class="text-center" id="select_above">Please Select Block to Continue</p>
-      </div>
-  
-       <!-------------------FORM STRATS----------------------------->
-      <div class="col-sm-12">
-      <div class="row" *ngIf="unit_Form"> 
-        <div class="col-sm-12">
-            <br><br>
-         <form class="form-horizontal" name="unit" enctype="multipart/form-data">
-          <div class="row" style="border:1px solid #b33951; border-radius: 10px;">
-            <div class="col-sm-12">
-                <br>
-               <h5 style="color:#b33951; font-family: Poppins">Unit Details</h5>
-               <br>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group" >
-               <label id=label1>Unit No / Flat No  <span class="red">*</span></label>
-               <input type="text" name="unitno" id="input1" autocomplete='unit.unitno' [(ngModel)]="unit.unitno" #unitno="ngModel"  class="form-control" placeholder="Unit no/ Flat no" pattern="[a-zA-Z0-9-]*" required/>
-               <p class="alerts" *ngIf="unitno.invalid && unitno.touched"> Valid unit no is required</p>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group" >
-               <label id=label2>Unit Type <span class="red">*</span></label>
-               <select class="form-control" name="unitType" id="input2" [(ngModel)]="unit.unitType" #unitType="ngModel" required>
-                  <option ng-disabled="true" ng-selected="true" [value]="" style="color:#b33951">Select Unit Type</option>
-                  <option *ngFor="let unitType of unitTypes" [value]="unitType.name">{{unitType.name}}</option>
-              </select>
-              <p class="alerts" *ngIf="unitType.invalid && unitType.touched"> Please Select unit type</p>
-             </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group" >
-               <label id=label3>Unit Dimension <span class="red">*</span></label>
-               <input type="text" name="unitdimension" id="input3" autocomplete='unit.unitdimension' [(ngModel)]="unit.unitdimension"  #unitdimension="ngModel" class="form-control" placeholder="Unit dimension" pattern="[0-9]*" required/>
-               <p class="alerts" *ngIf="unitdimension.invalid && unitdimension.touched"> Valid Unit dimension is required</p>
-              </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="form-group" >
-                  <br>
-                 <label id=label4>Unit Rate  <span class="red">*</span></label>
-                 <input type="text" name="unitrate" id="input4" autocomplete='unit.unitrate' [(ngModel)]="unit.unitrate"  class="form-control" placeholder="Unit rate"  #unitrate="ngModel" pattern="[0-9]*" required/>
-                 <p class="alerts" *ngIf="unitrate.invalid && unitrate.touched"> Valid unit rate is required</p>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <div class="form-group" >
-                  <br>
-                 <label id=label5>Calculation Type <span class="red">*</span></label>
-                 <select class="form-control" name="calculationType" id="input5" [(ngModel)]="unit.calculationType" #calculationType="ngModel" required>
-                    <option ng-disabled="true" ng-selected="true" [value]="" style="color:#b33951">Select Calculation Types</option>
-                    <option *ngFor="let calculationType of calculationTypes" [value]="calculationType.name">{{calculationType.name}}</option>
-                 </select>
-                 <p class="alerts" *ngIf="calculationType.invalid && calculationType.touched"> Please select calculation type</p>
-               </div>
-              </div>
-              <div class="col-sm-4">
-                <div class="form-group" >
-                  <br>
-                 <label id=label6>Occupancy status & Ownership Status <span class="red">*</span></label>
-                 <select class="form-control" name="occupency" id="input6" [(ngModel)]="unit.occupency" (change)="tenantOwnerdiv()" #occupency="ngModel" required>
-                    <option ng-disabled="true" ng-selected="true" [value]="" style="color:#b33951">Select occupency & ownership status</option>
-                    <option *ngFor="let occupency of occupencys" [value]="occupency.name">{{occupency.name}}</option>
-                 </select>
-                 <p class="alerts" *ngIf="occupency.invalid && occupency.touched"> Please Select occupency</p>
-                </div>
-              </div>
-  
-            <div class="col-sm-12">
-             <div class="row" *ngIf="ownerDetails">
-              <div class="col-sm-12">
-                <br><br>
-                 <h5 style="color:#b33951; font-family: Poppins">Unit Owner Information</h5>
-                 <br>
-              </div>
-              <div class="col-sm-6">
-                  <div class="form-group" >
-                   <label id=label7>Owner First Name  <span class="red">*</span></label>
-                   <input type="text" name="ownerFirtname" id="input7" autocomplete='owner.ownerFirtname' [(ngModel)]="owner.ownerFirtname" #ownerFirtname="ngModel" class="form-control" placeholder="Owner firstname" pattern="[a-zA-Z]*" required/>
-                   <p class="alerts" *ngIf="ownerFirtname.invalid && ownerFirtname.touched"> Valid owner firstname is required</p>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group" >
-                   <label id=label8>Owner Last name <span class="red">*</span></label>
-                   <input type="text" name="ownerLastname" id="input8" autocomplete='owner.ownerLastname' [(ngModel)]="owner.ownerLastname" #ownerLastname="ngModel" class="form-control" placeholder="Owner lastname" pattern="[a-zA-Z]*" required/>
-                   <p class="alerts" *ngIf="ownerLastname.invalid && ownerLastname.touched"> Valid owner lastname is required</p>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group" >
-                    <br>
-                   <label id=label9>Owner Mobile Number <span class="red">*</span></label>
-                   <input type="text" name="ownerMobnumber" id="input9" autocomplete='owner.ownerMobnumber' [(ngModel)]="owner.ownerMobnumber" #ownerMobnumber="ngModel" class="form-control" placeholder="Owner mobile number" minlength=10 maxlength=10 pattern="[0-9]*" required/>
-                   <p class="alerts" *ngIf="ownerMobnumber.invalid && ownerMobnumber.touched"> Valid 10 digit mobile number is required</p>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group" >
-                      <br>
-                     <label id=label10>Owner Email-Id<span class="red">*</span></label>
-                     <input type="text" name="ownerEmail" id="input10" autocomplete='owner.ownerEmail' [(ngModel)]="owner.ownerEmail" #ownerEmail="ngModel" class="form-control" placeholder="Owner email-id" pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" required/>
-                     <p class="alerts" *ngIf="ownerEmail.invalid && ownerEmail.touched"> valid email-id is required</p>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="form-group" >
-                      <br>
-                     <label id=label11>Owner Altername Mobile Number</label>
-                     <input type="text" name="ownerAltnumber" id="input11" autocomplete='owner.ownerAltnumber' [(ngModel)]="owner.ownerAltnumber" #ownerAltnumber="ngModel" class="form-control" placeholder="Owner altername mobile no" minlength=10 maxlength=10 pattern="[0-9]*"/>
-                     <p class="alerts" *ngIf="ownerAltnumber.invalid && ownerAltnumber.touched"> Valid 10 digit mobile number is invalid</p>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="form-group">
-                      <br>
-                     <label id=label12>Owner Altername Email-Id</label>
-                     <input type="text" name="ownerAltemail" id="input12" autocomplete='owner.ownerAltemail' [(ngModel)]="owner.ownerAltemail" #ownerAltemail="ngModel" class="form-control" placeholder="Owner alternate email-id" pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" />
-                     <p class="alerts" *ngIf="ownerAltemail.invalid && ownerAltemail.touched"> Valid email-id is invalid</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-                  <div class="col-sm-12">
-                    <div class="row" *ngIf="tenantDetails">
-                        <div class="col-sm-12">
-                            <br><br>
-                             <h5 style="color:#b33951; font-family: Poppins">Unit Tenant Information</h5>
-                             <br>
-                          </div>
-                          <div class="col-sm-6">
-                              <div class="form-group" >
-                               <label id=label21>Tenant First Name  <span class="red">*</span></label>
-                               <input type="text" name="tenantFirtname" id="input7" autocomplete='tenant.tenantFirtname' [(ngModel)]="tenant.tenantFirtname" #tenantFirtname="ngModel" class="form-control" placeholder="Tenant firstname" pattern="[a-zA-Z]*" required/>
-                               <p class="alerts" *ngIf="tenantFirtname.invalid && tenantFirtname.touched"> Valid firstname is required</p>
-                              </div>
-                            </div>
-                            <div class="col-sm-6">
-                              <div class="form-group" >
-                               <label id=label22>Tenant Last name <span class="red">*</span></label>
-                               <input type="text" name="tenantLastname" id="input8" autocomplete='tenant.tenantLastname' [(ngModel)]="tenant.tenantLastname" #tenantLastname="ngModel" class="form-control" placeholder="Tenant lastname" pattern="[a-zA-Z]*" required/>
-                               <p class="alerts" *ngIf="tenantLastname.invalid && tenantLastname.touched"> Valid lastname is required</p>
-                              </div>
-                            </div>
-                            <div class="col-sm-6">
-                              <div class="form-group" >
-                                <br>
-                               <label id=label23>Tenant Mobile Number <span class="red">*</span></label>
-                               <input type="text" name="tenantMobnumber" id="input9" autocomplete='tenant.tenantMobnumber' [(ngModel)]="tenant.tenantMobnumber" #tenantMobnumber="ngModel" class="form-control" placeholder="Tenant mobile number" minlength=10 maxlength=10 pattern="[0-9]*" required/>
-                               <p class="alerts" *ngIf="tenantMobnumber.invalid && tenantMobnumber.touched"> Valid mobile number is required</p>
-                              </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group" >
-                                  <br>
-                                 <label id=label24>Tenant Email-Id<span class="red">*</span></label>
-                                 <input type="text" name="tenantEmail" id="input10" autocomplete='tenant.tenantEmail' [(ngModel)]="tenant.tenantEmail" #tenantEmail="ngModel" class="form-control" placeholder="Tenant email-id" pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" required/>
-                                 <p class="alerts" *ngIf="tenantEmail.invalid && tenantEmail.touched"> Valid email-id is required</p>
-                                </div>
-                              </div>
-                              <div class="col-sm-6">
-                                <div class="form-group" >
-                                  <br>
-                                 <label id=label25>Tenant Altername Mobile Number</label>
-                                 <input type="text" name="tenantAltnumber" id="input11" autocomplete='tenant.tenantAltnumber' [(ngModel)]="tenant.tenantAltnumber" #tenantAltnumber="ngModel" class="form-control" placeholder="Tenant altername mobile no" minlength=10 maxlength=10 pattern="[0-9-]*"/>
-                                 <p class="alerts" *ngIf="tenantAltnumber.invalid && tenantAltnumber.touched"> Valid mobile number is required</p>
-                                </div>
-                              </div>
-                              <div class="col-sm-6">
-                                <div class="form-group">
-                                  <br>
-                                 <label id=label26>Tenant Altername Email-Id</label>
-                                 <input type="text" name="tenantAltemail" id="input12" autocomplete='tenant.tenantAltemail' [(ngModel)]="tenant.tenantAltemail" #tenantAltemail="ngModel" class="form-control" placeholder="Tenant alternate email-id" pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" />
-                                 <p class="alerts" *ngIf="tenantAltemail.invalid && tenantAltemail.touched"> Valid email-id is required</p>
-                                </div>
-                              </div>      
-                    </div>
-                  </div>
-  
-                  <div class="col-sm-12">
-                      <br><br>
-                       <h5 style="color:#b33951; font-family: Poppins">Bank Information</h5>
-                       <br>
-                  </div>
-                  <div class="col-sm-3">
-                      <div class="form-group">
-                          <label id="label13">Bank Name <span class="red">*</span></label>
-                          <input type="text" required name="BankName" id="input13" [(ngModel)]="bank.BankName" #BankName="ngModel" class="form-control" placeholder="Bank name" style="text-transform: uppercase; font-family: Poppins; font-size: 13px;" pattern="[a-zA-Z]*"/>
-                          <p class="alerts" *ngIf="BankName.invalid && BankName.touched"> Valid Bank name is required</p>
-                          <!--<p class="alerts" *ngIf="BankName{{index}}.invalid && BankName{{index}}.touched"> Bank Name is required</p>
-                          -->
-                      </div>
-                  </div>
-                  <div class="col-sm-3">
-                      <div class="form-group">
-                          <label id="label14" style=" font-family: Poppins;">IFSC <span class="red">*</span></label>
-                          <input type="text" name="IFSC" id="input14" class="form-control" [(ngModel)]="bank.IFSC" #IFSC="ngModel" placeholder="IFSC "  required pattern="[A-Za-z0-9]{4}[0-9]{1}[A-Za-z0-9]{6}" minlength="11"  style="text-transform: uppercase;font-size: 13px; font-family: Poppins;"  />                               
-                          <small style="color:grey; font-size:12px;">Ex: PAAA1111111</small>
-                          <p class="alerts" *ngIf="IFSC.invalid && IFSC.touched"> Valid IFSC code is required</p>
-                          <!--
-                          <a href="" class="question" tooltip-size="large" tooltips tooltip-side="top" tooltip-template="IFSC of the account, usually found on the cheque book or contact your Bank"><i class="fa fa-question-circle"></i></a>                        
-                         
-                          <p class="alerts" *ngIf="IFSC{{index}}.invalid && IFSC{{index}}.$touched"> IFSC is required</p>
-                        
-                          <p class="alerts" *ngIf="IFSC{{index}}.error.pattern || ifscDuplicate"> Please Enter Valid IFSC Code</p>
-                          --> 
-                     </div>
-                  </div>
-                  <div class="col-sm-3">
-                      <div class="form-group" >
-                          <label id="label15">Account Number <span class="red">*</span></label>
-                          <input type="text" required name="AccountNumber" id="input15" [(ngModel)]="bank.AccountNumber" #AccountNumber="ngModel" class="form-control" pattern="[A-Za-z0-9]*" placeholder="Account number " maxlength="20" style="text-transform: uppercase; font-size: 13px;font-family: Poppins;"/>
-                          <p class="alerts" *ngIf="AccountNumber.invalid && AccountNumber.touched">Valid account number is required</p>
-                          <!--
-                          <p class="alerts" *ngIf="AccountNumber{{index}}.invalid && crtAss.AccountNumber{{$index}}.$touched"> Account No is required</p>
-                          <p class="alerts" *ngIf="AccountNumber{{index}}.error.pattern"> Please Enter Valid Account No</p>
-                          -->
-                      </div>
-                  </div>
-                  <div class="col-sm-3">
-                      <div class="form-group">
-                          <label id="label16">Account Type <span class="red">*</span></label>
-                          <select class="form-control" name="accountType" id="input16" [(ngModel)]="bank.accountType" #accountType="ngModel" required>
-                              <option ng-disabled="true" ng-selected="true" [value]="" style="color:#b33951">Select Account Type</option>
-                              <option *ngFor="let accountType of accountTypes" [value]="accountType.name">{{accountType.name}}</option>
-                          </select>
-                          <p class="alerts" *ngIf="accountType.invalid && accountType.touched"> Please select account type</p>
-                          <!--
-                          <p class="alerts" ng-show="crtAss.AccountType{{$index}}.$invalid && crtAss.AccountType{{$index}}.$touched"> Account Type is required</p>
-                          <p class="alerts" ng-show="crtAss.AccountType{{$index}}.$error.pattern"> Please Enter Valid Account Type</p>
-                          -->
-                      </div>
-                  </div>
-            <!---->
-                  <div class="col-sm-12">
-                    <br><br>
-                     <h5 style="color:#b33951; font-family: Poppins">Unit Vehicle Information</h5>
-                     <br>
-                  </div>
-                  <div class="col-sm-12">
-                      <table class="table" style="background-color: whitesmoke">
-                           <tr id="label16">
-                               
-                               <td>Parking Lot Number</td> 
-                               <td>Vehicle Number</td>
-                               <td>Action</td>
-                           </tr>
-                           <tr *ngFor="let parking of parkings; let i = index">
-                               <td>
-                                    <input type="text" required name="parkingNo" id="parkingNo" autocomplete='parking.parkingNo' [(ngModel)]="parking.parkingNo" #parkingNo="ngModel" class="form-control" placeholder="Parking Lot number" style="font-family: Poppins" pattern="[A-Za-z0-9]*"/>
-                                    <p class="alerts" *ngIf="parkingNo.invalid && parkingNo.touched"> Valid parking no is required</p>
-                               </td>
-                               <td>
-                                  <input type="text" required name="vehicleNo" id="vehicleNo" autocomplete='parking.vehicleNo' [(ngModel)]="parking.vehicleNo" #vehicleNo="ngModel" class="form-control" placeholder="Vehicle number" style="font-family: Poppins; text-transform: uppercase" pattern="[A-Z0-9]*"/>
-                                  <p class="alerts" *ngIf="vehicleNo.invalid && vehicleNo.touched"> Valid vehicle no is required</p>
-                               </td>
-                               <td>
-                                  <p><span class="fa fa-trash fa-1x" (click)="deleteParking(i)"></span></p>
-                               </td>
-                           </tr>
-                           <tr>
-                                <td>
-                                    <input type="text" required name="newParkingNo" id="newParkingNo" autocomplete='newParking.parkingNo' [(ngModel)]="newParking.parkingNo" #parkingNo="ngModel" class="form-control" placeholder="Parking Lot number" style="font-family: Poppins" pattern="A-Za-z0-9]*"/>
-                                    <p class="alerts" *ngIf="parkingNo.invalid && parkingNo.touched"> Valid parking no is required</p>
-                                </td>
-                                <td>
-                                    <input type="text" required name="newVehicleNo" id="newVehicleNo" autocomplete='newParking.vehicleNo' [(ngModel)]="newParking.vehicleNo" #vehicleNo="ngModel" class="form-control" placeholder="Vehicle number" style="font-family: Poppins; text-transform: uppercase" pattern="[A-Z0-9]*"/>
-                                    <p class="alerts" *ngIf="vehicleNo.invalid && vehicleNo.touched"> Valid vehicle no is required</p>
-                                </td>
-                                <td>
-                                    <p><span class="fa fa-plus-square fa-1x" (click)="addParking()"></span></p>
-                                </td>
-                            </tr>
-                      </table>
-                 </div>
-                <!---->
-            <br><br>
-            <div class="col-sm-7"></div>
-            <div class="col-sm-2">
-                    <br><br>
-                <button [disabled]="loading" class="btn btn-primary btn-block" (click)="createUnit()" id="btn_createUnit">Add Unit</button>
-                <br>
-            </div>
-            <div class="col-sm-2">
-                    <br><br>
-                <button type="reset" class="btn btn-primary btn-block " id="btn_rest">Reset</button>
-                <br>
-            </div>
-            <div class="col-sm-1"></div>
-            
-        </div><!--ROW ENDS-->
-      </form>
+
+        </div>
+        <div class="col-sm-3">
+
+          <label id=label3>Unit Dimension <span class="red">*</span></label>
+          <input type="text" name="unitdimension" id="unitdimension" [(ngModel)]="unitdimension"
+            #unitdimensionControl="ngModel" class="form-control" placeholder="Unit dimension" pattern="[0-9]*" />
+
+        </div>
+        <div class="col-sm-3">
+          <label id=label4>Unit Rate <span class="red">*</span></label>
+          <input type="text" name="unitrate" id="unitrate" [(ngModel)]="unitrate" class="form-control"
+            placeholder="Unit rate" #unitrateControl="ngModel" pattern="[0-9]*" />
+
+        </div>
+        <div class="col-sm-3">
+          <label id=label5>Calculation Type <span class="red">*</span></label>
+          <select class="form-control" name="calculationtype" id="calculationtype" [(ngModel)]="calculationtype"
+            #calculationtypeControl="ngModel">
+            <option disabled="true" selected="true" value="" style="color:#b33951">Select Calculation Types</option>
+            <option *ngFor="let calculationType of calculationTypes" [value]="calculationType.name">
+              {{calculationType.name}}</option>
+          </select>
+
+        </div>
+        <div class="col-sm-3">
+          <label id=label6>Occupancy & Ownership Status <span class="red">*</span></label>
+          <select class="form-control" name="occupency" id="occupency" [(ngModel)]="occupency"
+            (change)="tenantOwnerdiv(occupency)" #occupencyControl="ngModel">
+            <option disabled="true" selected="true" value="" style="color:#b33951">Select occupency & ownership status
+            </option>
+            <option *ngFor="let occupency of occupencys" [value]="occupency.name">{{occupency.name}}</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
-   
-  </div>
-  
-  <!-------------------------------------------------->
-  
-  
-  
-  <!---------- Modal Popups for View Unit------------------>
-  
-  <div class="modal fade viewPopup" id="viewUnit1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-  
-              <div class="modal-header" style="background-color: whitesmoke;">
-                 
-                 
-                  <h4 class="modal-title" id="myModalLabel" style="color:#b33951; font-family: Poppins;"><u>View Unit</u></h4>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              </div>
-  
-              <div class="modal-body" style="font-family: Poppins;">
-                  <div class="row" style="border:2px solid #b33951; padding:5px;">
-                      <div class="col-sm-12"> 
-                          <h5 class="text-center">Association Name : <strong>{{currentAssociationName}}</strong></h5> 
-                          <br>                          
-                          <h5 style="color:#b33951">Unit Information</h5>
-                          <br>
-                      </div>
-                      <div class="col-sm-4">
-                          <p>Unit No : <span>{{viewUnitRow.unitNo}}</span></p>
-                      </div>
-                      <div class="col-sm-4">
-                          <p>Unit Type : <span>{{viewUnitRow.unitType}}</span></p>
-                      </div>
-                      <div class="col-sm-4">
-                          <p>Unit Dimension : <span>{{viewUnitRow.unitDimen}}</span></p>
-                      </div>
-  
-                      <div class="col-sm-12">
-                           <hr>
-                      </div>
-  
-                      <div class="col-sm-4">
-                          <p>Unit Rate : <span>{{viewUnitRow.rate}}</span></p>
-                      </div>
-                      <div class="col-sm-4">
-                          <p>Calculation Type : <span>{{viewUnitRow.calculationType}}</span></p><!---->
-                      </div>
-                      <div class="col-sm-4">
-                          <p>Ownership Status : <span>{{viewUnitRow.ownershipStatus}}</span></p>
-                      </div>
-                  </div>
-              </div> <!---------Modal Body close----------> 
-          </div>
+
+
+  <div class="container">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-sm-3">
+          <label id=label7>Owner First Name <span class="red">*</span></label>
+          <input type="text" name="ownerFirtname" id="ownerFirtname" [(ngModel)]="ownerFirtname"
+            #ownerFirtnameControl="ngModel" class="form-control" placeholder="Owner firstname" pattern="[a-zA-Z]*" />
+        </div>
+        <div class="col-sm-3">
+          <label id=label8>Owner Last name <span class="red">*</span></label>
+          <input type="text" name="ownerLastname" id="ownerLastname" [(ngModel)]="ownerLastname"
+            #ownerLastnameControl="ngModel" class="form-control" placeholder="Owner lastname" pattern="[a-zA-Z]*" />
+        </div>
+        <div class="col-sm-3">
+          <label id=label9>Owner Mobile Number <span class="red">*</span></label>
+          <input type="text" name="ownerMobnumber" id="ownerMobnumber" [(ngModel)]="ownerMobnumber"
+            #ownerMobnumberControl="ngModel" class="form-control" placeholder="Owner mobile number" minlength=10
+            maxlength=10 pattern="[0-9]*" />
+        </div>
+        <div class="col-sm-3">
+          <label id=label10>Owner Email-Id<span class="red">*</span></label>
+          <input type="text" name="ownerEmail" id="ownerEmail" [(ngModel)]="ownerEmail" #ownerEmailControl="ngModel"
+            class="form-control" placeholder="Owner email-id"
+            pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" />
+        </div>
+        <div class="col-sm-3">
+          <label id=label11>Owner Altername Mobile Number</label>
+          <input type="text" name="ownerAltnumber" id="ownerAltnumber" [(ngModel)]="ownerAltnumber"
+            #ownerAltnumberontrol="ngModel" class="form-control" placeholder="Owner altername mobile no" minlength=10
+            maxlength=10 pattern="[0-9]*" />
+        </div>
+        <div class="col-sm-3">
+          <label id=label12>Owner Altername Email-Id</label>
+          <input type="text" name="ownerAltemail" id="ownerAltemail" [(ngModel)]="ownerAltemail" class="form-control"
+            placeholder="Owner alternate email-id"
+            pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" />
+        </div>
       </div>
+    </div>
   </div>
+
+  <div class="container">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-sm-3">
+          <label id=label21>Tenant First Name <span class="red">*</span></label>
+          <input type="text" name="tenantFirtname" id="tenantFirtname" [(ngModel)]="tenantFirtname"
+            #tenantFirtnameControl="ngModel" class="form-control" placeholder="Tenant firstname" pattern="[a-zA-Z]*" />
+        </div>
+
+        <div class="col-sm-3">
+          <label id=label22>Tenant Last name <span class="red">*</span></label>
+          <input type="text" name="tenantLastname" id="tenantLastname" [(ngModel)]="tenantLastname"
+            #tenantLastnameControl="ngModel" class="form-control" placeholder="Tenant lastname" pattern="[a-zA-Z]*" />
+        </div>
+
+        <div class="col-sm-3">
+          <label id=label23>Tenant Mobile Number <span class="red">*</span></label>
+          <input type="text" name="tenantMobnumber" id="tenantMobnumber" [(ngModel)]="tenantMobnumber"
+            #tenantMobnumberControl="ngModel" class="form-control" placeholder="Tenant mobile number" minlength=10
+            maxlength=10 pattern="[0-9]*" />
+        </div>
+
+        <div class="col-sm-3">
+          <label id=label24>Tenant Email-Id<span class="red">*</span></label>
+          <input type="text" name="tenantEmail" id="tenantEmail" [(ngModel)]="tenantEmail" #tenantEmailControl="ngModel"
+            class="form-control" placeholder="Tenant email-id"
+            pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <table class="table" style="background-color: whitesmoke">
+      <tr id="label16">
+
+        <td>Parking Lot Number</td>
+        <td>Vehicle Number</td>
+        <td>Action</td>
+      </tr>
+      <tr *ngFor="let parking of parkings; let i = index">
+        <td>
+          <input type="text" name="parkingNo" id="parkingNo" [(ngModel)]="parkingNo" #parkingNoControl="ngModel"
+            class="form-control" placeholder="Parking Lot number" style="font-family: Poppins" pattern="[A-Za-z0-9]*" />
+        </td>
+        <td>
+          <input type="text" name="vehicleNo" id="vehicleNo" [(ngModel)]="vehicleNo" #vehicleNoControl="ngModel"
+            class="form-control" placeholder="Vehicle number" style="font-family: Poppins; text-transform: uppercase"
+            pattern="[A-Z0-9]*" />
+        </td>
+        <td>
+          <p><span class="fa fa-trash fa-1x" (click)="deleteParking()"></span></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input type="text" name="newParkingNo" id="newParkingNo" [(ngModel)]="newParkingNo"
+            #parkingNoControl="ngModel" class="form-control" placeholder="Parking Lot number"
+            style="font-family: Poppins" pattern="A-Za-z0-9]*" />
+        </td>
+        <td>
+          <input type="text" name="newVehicleNo" id="newVehicleNo" [(ngModel)]="newVehicleNo"
+            #vehicleNoControl="ngModel" class="form-control" placeholder="Vehicle number"
+            style="font-family: Poppins; text-transform: uppercase" pattern="[A-Z0-9]*" />
+        </td>
+        <td>
+          <p><span class="fa fa-plus-square fa-1x" (click)="addParking()"></span></p>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="form-group pull-right">
+    <input type="submit" style="margin-right: 4px" class="btn btn-primary btn-lg" value="Add Unit"/>
+    <button class="btn btn-primary btn-lg">Reset</button>
+  </div>
+</form>

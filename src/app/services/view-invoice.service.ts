@@ -61,11 +61,23 @@ export class ViewInvoiceService {
     return this.http.get(this.url, { headers: headers });
   }
 
-  InvoiceDetails(blockid) {
+  viewInvoice(blockid) {
     let headers = this.getHttpheaders();
     this.url = `${this.ipAddress}oyeliving/api/v1/invoice/view/${this.currentAssociationID}/${blockid}`;
+    
 
     return this.http.get(this.url, { headers: headers });
+  }
+
+  invoiceDetails(InvoiceId,UnitID){
+    console.log('invoiceDetails','InvoiceId-'+InvoiceId,'UnitID-'+UnitID);
+    let headers = this.getHttpheaders();
+    this.url = `${this.ipAddress}oyeliving/api/v1/invoice/details/${InvoiceId}/${UnitID}`;
+    this.http.get(this.url, { headers: headers })
+    .subscribe(data=>{
+      console.log(data);
+    })
+//http://apidev.oyespace.com/oyeliving/api/v1/invoice/details/{InvoiceId}/{UnitID}
   }
 
   GetUnitListByUnitID(unitID) {

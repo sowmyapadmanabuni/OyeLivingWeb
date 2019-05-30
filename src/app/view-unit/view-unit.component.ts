@@ -26,8 +26,10 @@ export class ViewUnitComponent implements OnInit {
   ownerDetails: boolean = true;
   unit_Form: boolean = false;
   selectBlock: boolean = false;
-  allBlocksLists:any[];
-  blBlockID:string;
+  allBlocksLists: any[];
+  blBlockID: string;
+  viewAddunitUI:boolean;
+  showCreateUnitemplate:boolean;
 
 
   blocks: any = [];
@@ -36,17 +38,33 @@ export class ViewUnitComponent implements OnInit {
   unit: any = {};
   owner: any = {};
   tenant: any = {};
-  createUnitData: any = {};
   config: any;
   repUnit: any = {};
   viewUnitRow: any = {};
   parkings: any = [];
   newParking: any = {};
-  allUnitBYBlockID:any[];
+  allUnitBYBlockID: any[];
+  accountTypes:object[];
+  unitTypes:object[];
+  calculationTypes:object[];
+  occupencys:object[];
 
-
-
-
+  unitType:string;
+  unitno:number;
+  unitdimension:number;
+  unitrate:number;
+  calculationtype:string;
+  occupency:string;
+  ownerFirtname:string;
+  ownerLastname:string;
+  ownerMobnumber:number;
+  ownerAltnumber:number;
+  ownerEmail:string;
+  ownerAltemail:string;
+  tenantFirtname:string;
+  tenantLastname:string;
+  tenantMobnumber:number;
+  tenantEmail:string;
 
   constructor(private viewUniService: ViewUnitService, private globalService: GlobalServiceService) {
     //pagination
@@ -55,7 +73,34 @@ export class ViewUnitComponent implements OnInit {
       currentPage: 1
     };
 
-    this.blBlockID='';
+    this.blBlockID = '';
+    this.unitType='';
+    this.calculationtype='';
+    this.occupency='';
+
+    this.accountTypes = [
+      { "name": "Saving" },
+      { "name": "Current" }
+    ];
+  
+    this.unitTypes = [
+      { "name": "Flat" },
+      { "name": "Villa" },
+      { "name": "Vaccant Plot" }
+    ];
+  
+    this.calculationTypes = [
+      { "name": "Flat Rate Value" },
+      { "name": "Dimension Based" }
+    ];
+  
+    this.occupencys = [
+      { "name": "Sold Owner Occupied" },
+      { "name": "Sold Tenant Occupied" },
+      { "name": "Sold Vaccant" },
+      { "name": "Unsold Vaccant" },
+      { "name": "Unsold Tenant Occupied" }
+    ];
   }
 
 
@@ -68,41 +113,17 @@ export class ViewUnitComponent implements OnInit {
     this.currentAssociationID = this.globalService.getCurrentAssociationId();
     this.currentAssociationID = '1156';
     this.currentAssociationName = this.globalService.getCurrentAssociationName();
-    this.currentAssociationName='MANAS ASSOCIATION';
+    this.currentAssociationName = 'MANAS ASSOCIATION';
     //this.associationID="10";
     this.getUnitDetails();
     this.getBlocks();
     this.viewUniService.GetBlockListByAssocID(this.currentAssociationID)
-      .subscribe(data =>{
-       this.allBlocksLists=data['data'].blocksByAssoc;
+      .subscribe(data => {
+        this.allBlocksLists = data['data'].blocksByAssoc;
+        console.log('allBlocksLists',this.allBlocksLists);
       });
   }
 
-
-  accountTypes: any = [
-    { "name": "Saving" },
-    { "name": "Current" }
-  ];
-
-  unitTypes: any = [
-    { "name": "Flat" },
-    { "name": "Villa" },
-    { "name": "Vaccant Plot" }
-  ];
-
-  calculationTypes: any = [
-    { "name": "Flat Rate Value" },
-    { "name": "Dimension Based" }
-  ];
-
-  occupencys: any = [
-    { "name": "All Units" },
-    { "name": "Single Unit" },
-    { "name": "All sold Owner Occupied Units" },
-    { "name": "All sold Tenant Occupied Units" },
-    { "name": "Sold Vaccant" },
-    { "name": "Unsold Vaccant" }
-  ];
 
   getUnitDetails() {
     //console.log(this.associationID);
@@ -118,21 +139,18 @@ export class ViewUnitComponent implements OnInit {
     this.viewUniService.getBlocks(this.currentAssociationID).subscribe(res => {
       //console.log(JSON.stringify(res));
       var data: any = res;
+      console.log('data.data.blocksByAssoc', data.data.blocksByAssoc);
       this.blocks = data.data.blocksByAssoc;
 
     });
   }
 
   addBlockForm() {
-    this.addUnitISTPage = false;
-    this.addUnit2NDPage = true;
-    this.selectBlock = true;
+    this.showCreateUnitemplate = true;
   }
 
   loadBlock(block: string) {
-    this.selectBlock = false;
     this.unit_Form = true;
-    this.blockID = block;
     console.log("blockID:" + this.blockID);
   }
 
@@ -152,117 +170,122 @@ export class ViewUnitComponent implements OnInit {
     this.parkings.splice(index, 1);
   }
 
-  tenantOwnerdiv() {
-    if (this.unit.occupency == "All sold Tenant Occupied Units") {
-      this.tenantDetails = true;
-      this.ownerDetails = false;
-    }
-    else {
-      this.tenantDetails = false;
-      this.ownerDetails = true;
-    }
+  tenantOwnerdiv(occupency) {
+    this.occupencys.forEach(item => {
+      if (occupency == 'Unsold Vaccant') {
+        this.tenantDetails = true;
+        this.ownerDetails = false;
+      }
+      else if (occupency == 'Unsold Tenant Occupied') {
+        this.tenantDetails = true;
+        this.ownerDetails = false;
+      }
+      else {
+        this.tenantDetails = false;
+        this.ownerDetails = true;
+      }
+    })
   }
 
 
   createUnit() {
-    this.createUnitData = {
-      "ASAssnID": this.currentAssociationID,
-      "ACAccntID": "21",
-      "units": [{
-        "UNUniName": this.unit.unitno,
-        "UNUniType": this.unit.unitType,
-        "UNDimens": this.unit.unitdimension,
-        //unit rate field not there in API?
-        //"" : this.unit.unitrate,
-        "UNCalType": this.unit.calculationType,
-        "BLBlockID": this.blockID,
-        //ownership & occupency field not there in API
-        // "" : this.unit.occupency,
-        "Owner": {
-          "UOFName": this.owner.ownerFirtname,
-          "UOLName": this.owner.ownerLastname,
-          "UOMobile": this.owner.ownerMobnumber,
-          "UOMobile1": this.owner.ownerAltnumber,
-          "UOEmail": this.owner.ownerEmail,
-          "UOEmail1": this.owner.ownerAltemail,
-        },
-        "Tenant": {
-          "UTFName": this.tenant.tenantFirtname,
-          "UTLName": this.tenant.tenantLastname,
-          "UTMobile": this.tenant.tenantMobnumber,
-          "UTMobile1": this.tenant.tenantAltnumber,
-          "UTEmail": this.tenant.tenantEmail,
-          "UTEmail1": this.tenant.tenantAltemail,
-        },
-        "unitbankaccount": {
-          "UBName": this.bank.BankName,
-          "UBIFSC": this.bank.IFSC,
-          "UBActNo": this.bank.AccountNumber,
-          "UBActType": this.bank.accountType,
-        },
-        "UnitParkingLot": [{
-          "UnitParkingLot": this.unit.parkingNo
-          //vehicleNumber
-        }]
-      }]
-    };
-    console.log(JSON.stringify(this.unit.parkingNo));
-    console.log(JSON.stringify(this.createUnitData));
-    this.viewUniService.createUnit(this.createUnitData).subscribe(res => {
-      console.log("Done")
-      //alert("Unit Created Successfully");
+    let createUnitData =
+    {
+      "ASAssnID": 1156,
+      "ACAccntID": 21,
+      "units": [
+        {
+          "UNUniName": this.unitno,
+          "UNUniType": this.unitType,
+          "UNRate": this.unitrate,
+          "UNOcStat": this.occupency,
+          "UNOcSDate": "2019-03-02",
+          "UNOwnStat": "null",
+          "UNSldDate": "2019-03-02",
+          "UNDimens": this.unitdimension,
+          "UNCalType": this.calculationtype,
+          "FLFloorID": 1,
+          "BLBlockID": this.blockID,
+          "Owner":
+          {
+
+            "UOFName": this.ownerFirtname,
+            "UOLName": this.ownerLastname,
+            "UOMobile": this.ownerMobnumber,
+            "UOISDCode": "+91",
+            "UOMobile1": this.ownerAltnumber,
+            "UOMobile2": "null",
+            "UOMobile3": "null",
+            "UOMobile4": "null",
+            "UOEmail": this.ownerEmail,
+            "UOEmail1": this.ownerAltemail,
+            "UOEmail2": "null",
+            "UOEmail3": "null",
+            "UOEmail4": "null",
+            "UOCDAmnt": ""
+          },
+          "Tenant":
+          {
+
+            "UTFName":this.tenantFirtname,
+            "UTLName": this.tenantLastname,
+            "UTMobile": this.tenantMobnumber,
+            "UTISDCode": "",
+            "UTMobile1": "",
+            "UTEmail": this.tenantEmail,
+            "UTEmail1": ""
+          },
+          "UnitParkingLot":
+            [
+              {
+                "UPLNum": "null",
+                "MEMemID": "null",
+                "UPGPSPnt": "null"
+
+              }
+            ]
+        }
+      ]
+    }
+
+    console.log(JSON.stringify(createUnitData));
+    this.viewUniService.createUnit(createUnitData).subscribe((response) => {
 
       Swal.fire({
         title: 'Unit Created Successfuly',
-        //text: 'You will not be able to recover this imaginary file!',
-        //type: 'warning',
-        // showCancelButton: true,
-        //confirmButtonText: 'Yes, delete it!',
-        //cancelButtonText: 'No, keep it'
+        type: 'success',
+        confirmButtonText: 'OK'
       })
-      /*
-      .then((result) => {
-        if (result.value) {
-          Swal.fire(
-            'Deleted!',
-            'Your imaginary file has been deleted.',
-            'success'
-          )
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          Swal.fire(
-            'Cancelled',
-            'Your imaginary file is safe :)',
-            'error'
-          )
-        }
-      });
-      */
 
-    });
+    },
+      (response) => {
+        console.log(response);
+      });
 
   }//createUnit function ends
 
   viewUnit(repUnit: any) {
-    console.log(JSON.stringify(repUnit));
-    this.currentAssociationName = this.globalService.getCurrentAssociationName();
-    this.viewUnitRow = {
-      unitNo: repUnit.unUniName,
-      unitType: repUnit.unUniType,
-      unitDimen: repUnit.unDimens,
-      rate: repUnit.unRate,
-      calculationType: repUnit.unCalType,
-      ownershipStatus: repUnit.unOwnStat
-    };
+    // console.log(JSON.stringify(repUnit));
+    // this.currentAssociationName = this.globalService.getCurrentAssociationName();
+    // this.viewUnitRow = {
+    //   unitNo: repUnit.unUniName,
+    //   unitType: repUnit.unUniType,
+    //   unitDimen: repUnit.unDimens,
+    //   rate: repUnit.unRate,
+    //   calculationType: repUnit.unCalType,
+    //   ownershipStatus: repUnit.unOwnStat
+    // };
 
   }
 
-  getAllUnitDetailsByBlockID(blBlockID){
+  getAllUnitDetailsByBlockID(blBlockID) {
+    this.blockID = blBlockID;
     /*-------------------Get Unit List By Block ID ------------------*/
     this.viewUniService.GetUnitListByBlockID(blBlockID)
-    .subscribe(data=>{
-      console.log(data);
-      this.allUnitBYBlockID = data['data'].unitsByBlockID;
-    });
-};
+      .subscribe(data => {
+        console.log('allUnitBYBlockID',data);
+        this.allUnitBYBlockID = data['data'].unitsByBlockID;
+      });
+  };
 
 }//class ends

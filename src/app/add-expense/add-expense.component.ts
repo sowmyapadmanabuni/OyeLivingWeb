@@ -103,7 +103,13 @@ export class AddExpenseComponent implements OnInit {
       { 'name': '', 'displayName': 'Common Area Electric Bill', 'id': 3 },
       { 'name': '', 'displayName': 'Security Fees', 'id': 4 },
       { 'name': '', 'displayName': 'HouseKeeping', 'id': 5 },
-      { 'name': '', 'displayName': 'Fixed Maintenance', 'id': 6 }
+      { 'name': '', 'displayName': 'Fixed Maintenance', 'id': 6 },
+      { 'name': '', 'displayName': 'One Time Onboarding fee', 'id': 7 },
+      { 'name': '', 'displayName': 'One Time Membership fee', 'id': 8 },
+      { 'name': '', 'displayName': 'Water Meter', 'id': 9 },
+      { 'name': '', 'displayName': 'Renting Fees', 'id': 10 },
+      { 'name': '', 'displayName': 'Unsold Rental Fees', 'id': 11 },
+      { 'name': '', 'displayName': 'One Time Occupancy Fees', 'id': 12 }
     ]
 
     this.categories = [

@@ -128,7 +128,7 @@ export class ViewInvoiceComponent implements OnInit {
 
       })
 
-    this.viewinvoiceservice.InvoiceDetails(this.blockid)
+    this.viewinvoiceservice.viewInvoice(this.blockid)
       .subscribe(data => {
         console.log('InvoiceDetails', data);
         //this.allLineItem = data['data'].invoiceDetails;
@@ -153,6 +153,8 @@ export class ViewInvoiceComponent implements OnInit {
         console.log('associationDetails', data);
         this.associationDetails = data
       })
+
+      this.viewinvoiceservice.invoiceDetails(inid,unUnitID);
 
   }
 
@@ -296,7 +298,7 @@ export class ViewInvoiceComponent implements OnInit {
         })
   }
 
-  enableIsChecked(){
+  enableisChecked(){
         this.isChecked = true;
   }
 
