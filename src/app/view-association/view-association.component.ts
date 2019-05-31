@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, ViewChild } from '@angular/core';
+import {  FormGroup } from '@angular/forms';
 import { ViewAssociationService } from './view-association.service';
 import {GlobalServiceService} from '../global-service.service';
 import Swal from 'sweetalert2';
@@ -18,6 +18,8 @@ export class ViewAssociationComponent implements OnInit {
   joinAssociation:boolean=false;
   viewAssociation_Table:boolean=true;
   //crtAssn:CreateAssn;
+  selectedFile: File;
+  @ViewChild('view-association') form: any;
   accountID:string;
   currentAssociationID:string;
   associations:any = [];
@@ -33,6 +35,20 @@ export class ViewAssociationComponent implements OnInit {
  config:any;
  AmenityT:string;
  AmenityN:string;
+ AmenityType:string;
+ AmenityNo:number;
+  logo:boolean=false;
+  EXPyCopy:string;
+  dynamic: number;
+  registerForm: FormGroup;
+  submitted = false;
+  modal: any = {};
+ filesize:boolean;
+ isLargefile:boolean;
+ disableButton:boolean;
+ isnotValidformat:boolean;
+ _validFileExtensions = [ ".bmp", ".gif", ".png"];
+ accountTypes:any[];
   
  
 
@@ -51,6 +67,12 @@ export class ViewAssociationComponent implements OnInit {
 
     this.AmenityT='';
     this.AmenityN='';
+
+    this.accountTypes=[
+      {"name":"Saving"},
+      {"name":"Current"}
+    ];
+
   }
   
   pageChanged(event){
@@ -98,7 +120,7 @@ export class ViewAssociationComponent implements OnInit {
     else{
         this.PANdiv1=false;
         }
-    if(this.crtAssn.country == "United Kingdom"){
+    if(this.crtAssn.country != "India"){
       this.PANdiv2=true;
        }
   else{
@@ -144,6 +166,53 @@ deleteAmenity(index){
     {"name":"residentialCumCommercial", "displayName": "Residential Cum Commercial Property"}								
     ];
     
+    removeSelectedfile(){
+      const dataTransfer = new ClipboardEvent('').clipboardData || new DataTransfer();
+       dataTransfer.items.add('', '');
+       console.log('dataTransfer', dataTransfer);
+       const inputElement: HTMLInputElement = document.getElementById('uploadFileinput') as HTMLInputElement;
+       console.log('inputElement', inputElement.files);
+       inputElement.files = dataTransfer.files;
+       this.disableButton=false;
+       this.isnotValidformat = false;
+       this.isLargefile = false;
+     }
+     removePanfile(){
+      const dataTransfer = new ClipboardEvent('').clipboardData || new DataTransfer();
+       dataTransfer.items.add('', '');
+       console.log('dataTransfer', dataTransfer);
+       const inputElements: HTMLInputElement = document.getElementById('uploadPaninput') as HTMLInputElement;
+       console.log('inputElement', inputElements.files);
+       inputElements.files = dataTransfer.files;
+       this.disableButton=false;
+       this.isnotValidformat = false;
+       this.isLargefile = false;
+     }
+
+     onFileSelected(event) {
+      this.isLargefile = false;
+      this.isnotValidformat = false;
+      this.disableButton=false;
+      this.selectedFile = <File>event.target.files[0];
+      console.log('file type',this.selectedFile['type']);
+     
+      if (this.selectedFile['type'] == "application/zip") {
+        console.log('inside file type');
+        this.isnotValidformat = true;
+        this.disableButton=true;
+      }
+     
+      if (this.selectedFile['size'] > 2000000) {
+        console.log('inside file size');
+        this.isLargefile = true;
+        this.disableButton=true;
+      }
+      let splitarr = this.selectedFile['name'].split('.')
+      let currentdate = new Date();
+      let expycopy = splitarr[0] + '_' + currentdate.getTime().toString() + '.' + splitarr[1];
+     
+      this.EXPyCopy = expycopy;
+     }
 
   createAssociation(){
     

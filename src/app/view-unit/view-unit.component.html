@@ -82,8 +82,9 @@
     <div class="row">
       <div class="col-6">
         <label id=label1>Unit No / Flat No <span class="red">*</span></label>
-        <input type="text" name="unitno" id="unitno" [(ngModel)]="unitno" #unitnoControl="ngModel" class="form-control"
-          placeholder="Unit no/ Flat no" pattern="[a-zA-Z0-9-]*" />
+        <input type="text" name="unitno" id="unitno" style="text-transform: uppercase" autocomplete="unitno" [(ngModel)]="unitno" #unitnoControl="ngModel" class="form-control"
+          placeholder="Unit no/ Flat no" pattern="[a-zA-Z0-9]*" required />
+          <p class="alerts" *ngIf="unitnoControl.invalid && unitnoControl.touched"> Valid unit no is required</p>
       </div>
     </div>
   </div>
@@ -111,8 +112,8 @@
         <div class="col-sm-3">
           <label id=label4>Unit Rate <span class="red">*</span></label>
           <input type="text" name="unitrate" id="unitrate" [(ngModel)]="unitrate" class="form-control"
-            placeholder="Unit rate" #unitrateControl="ngModel" pattern="[0-9]*" />
-
+            placeholder="Unit rate" #unitrateControl="ngModel" pattern="[0-9]+(\.[0-9][0-9]?)?" required/>
+            <p class="alerts" *ngIf="unitrateControl.invalid && unitrateControl.touched"> Valid unit rate is required</p>
         </div>
         <div class="col-sm-3">
           <label id=label5>Calculation Type <span class="red">*</span></label>

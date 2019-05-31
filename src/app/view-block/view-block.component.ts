@@ -102,6 +102,7 @@ checkRate(){
 latePaymentChargeTypes:any=[
     {"name":"Monthly", "displayName":"Monthly"}, 
     {"name":"Quaterly", "displayName":"Quaterly"}, 
+    {"name":"HalfYearly", "displayName":"HalfYearly"}, 
     {"name":"Annually", "displayName":"Annually"}
   ];
 
