@@ -28,6 +28,7 @@ import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { NewAmenityComponent } from './new-amenity/new-amenity.component';
 import { ViewreceiptComponent } from './viewreceipt/viewreceipt.component';
 import { GenerateReceiptComponent } from './generate-receipt/generate-receipt.component';
+import { AddUnitComponent } from './add-unit/add-unit.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { GenerateReceiptComponent } from './generate-receipt/generate-receipt.co
     WordsPipe,
     NewAmenityComponent,
     ViewreceiptComponent,
-    GenerateReceiptComponent
+    GenerateReceiptComponent,
+    AddUnitComponent
   ],
   imports: [
     BrowserModule,

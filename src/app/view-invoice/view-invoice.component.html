@@ -47,8 +47,8 @@
                   <th>Current Invoice Amount</th>
                   <th>Action</th>
                   <th>
-                    <input *ngIf="isChecked == false" type="checkbox" (change)="sendEmailToAll()" ckecked='false'>
-                    <i *ngIf="isChecked" style="cursor:pointer" class="fa fa-paper-plane"></i>
+                    <input *ngIf="isChecked == false" type="checkbox" (change)='toggleAllCheck($event)'  ckecked='false'>
+                    <i *ngIf="isChecked" style="cursor:pointer" (click)="sendEmailToAll()" class="fa fa-paper-plane"></i>
                   </th>
                 </tr>
               </thead>
@@ -87,7 +87,7 @@
                     </button>
                   </td>
                   <td>
-                    <input class="chkBox" type="checkbox" [value]="row.inid" [checked]="isChecked">
+                    <input class="chkBox" type="checkbox" [value]="row.inid" [checked]='checkAll' (change)='toggleIsChecked($event)'>
                   </td>
                 </tr>
               </tbody>

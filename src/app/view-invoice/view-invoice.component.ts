@@ -61,7 +61,8 @@ export class ViewInvoiceComponent implements OnInit {
   validationResult: boolean;
   blockid: number;
   p: number;
-  isChecked:boolean;
+  isChecked: boolean;
+  checkAll:boolean;
 
   constructor(private viewinvoiceservice: ViewInvoiceService,
     private modalService: BsModalService,
@@ -76,7 +77,7 @@ export class ViewInvoiceComponent implements OnInit {
     this.blBlockID = '';
     this.validationResult = true;
     this.p = 1;
-    this.isChecked=false;
+    this.isChecked = false;
   }
 
   ngOnInit() {
@@ -97,7 +98,8 @@ export class ViewInvoiceComponent implements OnInit {
         this.invoiceLists = data['data'].invoices;
         console.log('invoiceLists', this.invoiceLists);
       })
-      this.isChecked=false;
+    this.isChecked = false;
+    this.checkAll=false;
   }
 
   viewInvoice1(template: TemplateRef<any>, inid, inGenDate, inNumber, inDsCVal, unUnitID) {
@@ -154,7 +156,7 @@ export class ViewInvoiceComponent implements OnInit {
         this.associationDetails = data
       })
 
-      this.viewinvoiceservice.invoiceDetails(inid,unUnitID);
+    this.viewinvoiceservice.invoiceDetails(inid, unUnitID);
 
   }
 
@@ -298,33 +300,53 @@ export class ViewInvoiceComponent implements OnInit {
         })
   }
 
-  enableisChecked(){
+  toggleIsChecked(event) {
+    if (event.target.checked) {
+      this.isChecked = true;
+    }
+    else {
+      this.isChecked = false;
+    }
+
+    let chkboxs = document.querySelectorAll('.chkBox');
+    chkboxs.forEach((item) => {
+      if (item['checked'] == true) {
         this.isChecked = true;
+      }
+    })
+  }
+
+  toggleAllCheck(event) {
+    alert('toggleAllCheck');
+    if (event.target.checked) {
+      this.isChecked = true;
+      this.checkAll=true;
+    }
   }
 
   sendEmailToAll() {
-    let chkboxs=document.querySelectorAll('.chkBox');
-    let inids=[];
-    chkboxs.forEach((item)=>{
-     if(item['checked'] == true){
-      inids.push(item['value'])
-     }
+    let chkboxs = document.querySelectorAll('.chkBox');
+    let inids = [];
+    chkboxs.forEach((item) => {
+      if (item['checked'] == true) {
+        inids.push(item['value'])
+      }
     })
     //inids=inids.substring(0,inids.length-1);
 
     this.viewinvoiceservice.GetInvoiceOwnerListByInvoiceId(inids)
-    .subscribe(() => {
-      swal.fire({
-        title: "Mail Sent Successful",
-        text: "",
-        type: "success",
-        confirmButtonColor: "#f69321",
-        confirmButtonText: "OK"
-      })
-    },
-      () => {
-        swal.fire('Error', 'No Email Address to Send!', 'error')
-      })
+      .subscribe(() => {
+        swal.fire({
+          title: "Mail Sent Successful",
+          text: "",
+          type: "success",
+          confirmButtonColor: "#f69321",
+          confirmButtonText: "OK"
+        })
+      },
+        () => {
+          swal.fire('Error', 'No Email Address to Send!', 'error')
+        })
   }
 
 }

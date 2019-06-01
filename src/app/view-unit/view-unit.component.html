@@ -25,15 +25,13 @@
       </div>
     </div>
     <div class="col-2">
-      <button class="btn btn-primary" style="margin:12px" (click)="addBlockForm()" [disabled]="blBlockID == ''">Add Unit</button>
+      <button class="btn btn-primary" style="margin:12px" routerLink='/addunit'>Add Unit</button>
     </div>
   </div>
 </div>
 <!--DIV-->
-<div *ngIf="blBlockID == ''" class="container px-lg-12">
-  <div class="row mx-lg-n12">
-    <div class="col py-3 px-lg-12 border bg-light">Select Block to Continue</div>
-  </div>
+<div *ngIf="blBlockID == ''" class="card">
+  <h1 style="text-align :center">Select Block to Continue</h1>
 </div>
 <!--DIV-->
 <div *ngIf="blBlockID" class="col-xs-12">

@@ -6,6 +6,7 @@ import {PathNotFoundComponent} from './path-not-found/path-not-found.component';
 import {ViewInvoiceComponent} from './view-invoice/view-invoice.component';
 import {ViewreceiptComponent} from './viewreceipt/viewreceipt.component';
 import {GenerateReceiptComponent} from './generate-receipt/generate-receipt.component';
+import {AddUnitComponent} from './add-unit/add-unit.component';
 
 const routes:Routes=[{path:'',redirectTo:'/viewexpense',pathMatch:'full'},
                      {path:'viewexpense',component:ViewExpensesComponent},
@@ -13,6 +14,7 @@ const routes:Routes=[{path:'',redirectTo:'/viewexpense',pathMatch:'full'},
                      {path:'viewinvoice',component:ViewInvoiceComponent},
                      {path:'viewreceipt',component:ViewreceiptComponent},
                      {path:'generatereceipt',component:GenerateReceiptComponent},
+                     {path:'addunit',component:AddUnitComponent},
                      {path:'**',component:PathNotFoundComponent}]
 
 @NgModule({

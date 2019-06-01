@@ -286,6 +286,6 @@ export class ViewUnitComponent implements OnInit {
         console.log('allUnitBYBlockID',data);
         this.allUnitBYBlockID = data['data'].unitsByBlockID;
       });
-  };
+  }
 
 }//class ends

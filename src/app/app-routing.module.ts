@@ -10,7 +10,7 @@ const routes: Routes = [
   {path: 'dashboard', component: DashBoardComponent},
   {path: 'association', component: ViewAssociationComponent},
   {path: 'block', component: ViewBlockComponent},
-  {path: 'unit', component: ViewUnitComponent}
+  {path: 'viewunit', component: ViewUnitComponent}
 ];
 
 @NgModule({
