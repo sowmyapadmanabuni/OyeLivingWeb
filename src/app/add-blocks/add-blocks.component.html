@@ -1,0 +1,117 @@
+<div class="main-wrapper animateIt">
+  <div class="container-fluid">
+    <div class="pageTitle">
+        <div class="row">
+            <div class="col-md-10 col-sm-12 col-xs-12">
+                <h3 style="margin-top: 8px;">Add Blocks of Your {{assnName}} Association</h3>
+            </div>
+            <div class="col-md-2 col-sm-12 col-xs-12">
+                <a routerLink="/viewBlocks">
+                    <button type="button" class="btn btn-danger pull-right"><i class="fa fa-times"></i> Cancel</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <form name="crtBlock" role="form" autocomplete="off">
+
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border headingOrange">Blocks Details</legend>
+        
+       
+     
+        <div class="row">
+           
+            <div class="col-sm-4 col-sm-12">
+                <div class="form-group">
+                    <label id=label1>Block Name <span class="red">*</span></label>
+                    <input type="text" name="blockname" id="input1" autocomplete='blockname'
+                        [(ngModel)]="blockname" #blocknameControl="ngModel" class="form-control" placeholder="Block Name"
+                        pattern="[a-zA-Z0-9-]*" required />
+                    <p class="alerts" *ngIf="blocknameControl.invalid && blocknameControl.touched">Valid name is required</p>
+                </div>
+            </div>
+            <div class="col-sm-4 col-sm-12">
+                <div class="form-group">
+                    <label id=label2>Block Type <span class="red">*</span></label>
+                    <input type="text" name="blocktype" id="input2" autocomplete='blocktype'
+                        [(ngModel)]="blocktype" #blocktypeControl="ngModel" class="form-control" placeholder="Block Type"
+                        pattern="[a-zA-Z]*" required />
+                    <p class="alerts" *ngIf="blocktypeControl.invalid && blocktypeControl.touched">Valid block type is required</p>
+                </div>
+            </div>
+
+            <div class="col-sm-4 col-sm-12">
+                <div class="form-group">
+                    <label id=label3>No of Units <span class="red">*</span></label>
+                    <input type="text" name="noofunits" id="input3" autocomplete='noofunits'
+                        [(ngModel)]="noofunits" #noofunitsControl="ngModel" class="form-control"
+                        placeholder="No Of Units" pattern="[0-9]*" required />
+                    <p class="alerts" *ngIf="noofunitsControl.invalid && noofunitsControl.touched">No of units are required</p>
+                </div>
+            </div>
+        </div>
+      
+        <div class="row">
+            <div class="col-sm-3 col-sm-12"></div>
+            <div class="col-sm-3 col-sm-12"></div>
+            <div class="col-sm-3 col-sm-12"></div>
+            <div class="col-sm-3 col-sm-12"></div>
+            
+        </div>
+    </fieldset>
+   
+<!--Manager Details Starts-->
+ <fieldset class="scheduler-border">
+              <legend class="scheduler-border headingOrange">Manager Details</legend>
+                <div class="row">
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label id=label4>Manager Name <span class="red">*</span></label>
+                            <input type="text" name="managername" id="input4" autocomplete='managername'
+                                [(ngModel)]="managername" #managernameControl="ngModel" class="form-control"
+                                placeholder="Manager Name" pattern="[a-zA-Z]*" required />
+                            <p class="alerts" *ngIf="managernameControl.invalid && managernameControl.touched">Manager name is required</p>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label id=label5>Manager Mobile Number <span class="red">*</span></label>
+                            <input type="text" name="managernumber" id="input5" autocomplete='managernumber'
+                                [(ngModel)]="managernumber" #managernumberControl="ngModel" class="form-control"
+                                placeholder="Manager Mobile Number" minlength=10 maxlength=10 pattern="[0-9]*" required />
+                            <p class="alerts" *ngIf="managernumberControl.invalid && managernumberControl.touched">Manager mobile number is
+                                required</p>
+                        </div>                       
+                    </div>
+
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label id=label6>Manager Email Id <span class="red">*</span></label>
+                            <input type="text" name="manageremail" id="input6" autocomplete='manageremail'
+                                [(ngModel)]="manageremail" #manageremailControl="ngModel" class="form-control"
+                                placeholder="Manager Email Id"
+                                pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*"
+                                required />
+                            <p class="alerts" *ngIf="manageremailControl.invalid && manageremailControl.touched">Manager email-id is required
+                            </p>
+                        </div>
+                        </div>
+                    </div>
+              
+                <div class="row">
+                    <div class="col-sm-3 col-sm-12"></div>
+                    <div class="col-sm-3 col-sm-12"></div>
+                    <div class="col-sm-3 col-sm-12"></div>
+                    <div class="col-sm-3 col-sm-12"></div>
+                    
+                </div>
+            </fieldset> 
+
+          
+        </form></div>    
+  </div>
+</div>

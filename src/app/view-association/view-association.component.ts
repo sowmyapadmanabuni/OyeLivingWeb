@@ -128,17 +128,17 @@ export class ViewAssociationComponent implements OnInit {
       }
   }
 
+getAmenities(amenities:object){
 
-addAmenity() {
-  this.amenities.push(new Amenity(this.AmenityT,this.AmenityN));
+this.amenities.push(new Amenity(amenities['AmenityT'],amenities['AmenityN'],amenities['AmenityId']));
   this.AmenityT='';
   this.AmenityN='';
   console.log('amenities',this.amenities);
 }
 
-
-deleteAmenity(index){
-  this.amenities.splice(index, 1);
+deleteamenity(AmenityId){
+  console.log('AmenityId',AmenityId);
+  this.amenities = this.amenities.filter(item=>item['amenityId'] != AmenityId);
 }
 
 

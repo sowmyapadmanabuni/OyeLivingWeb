@@ -7,6 +7,11 @@ button{border:0;}
 .pageTitle{width: 100%; height: auto; padding:12px 20px; background: #FFF; border-radius: 2px; box-shadow: 1px 2px 15px #e5e5e5;    -webkit-box-shadow: 1px 2px 15px #e5e5e5; }
 .pageTitle h3{font-size: 16px; font-weight: 500; color: #58666e; margin: 0; letter-spacing: 2px;    text-transform: uppercase;}
 
+thead{background: #fff; color: #555;}
+thead tr th{ min-width: 75px; text-align: center; border-bottom: 1px solid #e6e6e6 !important; padding: 10px 0px !important; height: 40px; vertical-align: baseline !important;}
+tbody tr {background: #fff;}
+tbody tr td{ text-align: center;border-top:0px !important; border-bottom: 0px solid #e6e6e6; padding: 10px 0px !important; height: 60px; vertical-align: inherit !important;}
+
 .card {
   border-radius: 2px;
   margin-bottom: 10px;

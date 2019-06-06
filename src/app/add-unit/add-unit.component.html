@@ -34,7 +34,7 @@
     <div class="card col-xs-12" *ngIf='showCreateUnitemplate'>
       
         <!---->
-          <form name="addUnits" autocomplete="off" #createunitForm='ngForm' (ngSubmit)='createUnit()'>
+          <form name="addUnits" #createunitForm='ngForm' (ngSubmit)='createUnit()'>
             <fieldset class="scheduler-border">
               <legend class="scheduler-border headingOrange">Unit Information</legend>
               <div class="row">
@@ -54,10 +54,11 @@
                   <div class="form-group">
                     <label id=label2>Unit Type <span class="red">*</span></label>
                     <select class="form-control" name="unitType" id="unitType" [(ngModel)]="unitType"
-                      #unitTypeControl="ngModel">
+                      #unitTypeControl="ngModel" required>
                       <option value="" style="color:#b33951">Select Unit Type</option>
                       <option *ngFor="let unitTp of unitTypes" [value]="unitTp['name']">{{unitTp['name']}}</option>
                     </select>
+                    <p class="alerts" *ngIf="unitTypeControl.invalid && unitTypeControl.touched"> Please Select unit type</p>
                   </div>
                 </div>
                 <div class="col-sm-3 col-xs-12">
@@ -65,7 +66,8 @@
                     <label id=label3>Unit Dimension <span class="red">*</span></label>
                     <input type="text" name="unitdimension" id="unitdimension" [(ngModel)]="unitdimension"
                       #unitdimensionControl="ngModel" class="form-control" placeholder="Unit dimension"
-                      pattern="[0-9]*" />
+                      pattern="[0-9]*" required/>
+                      <p class="alerts" *ngIf="unitdimensionControl.invalid && unitdimensionControl.touched"> Valid Unit dimension is required</p>
                   </div>
                 </div>
                 <div class="col-sm-3 col-xs-12">
@@ -81,12 +83,13 @@
                   <div class="form-group">
                     <label id=label5>Calculation Type <span class="red">*</span></label>
                     <select class="form-control" name="calculationtype" id="calculationtype"
-                      [(ngModel)]="calculationtype" #calculationtypeControl="ngModel">
+                      [(ngModel)]="calculationtype" #calculationtypeControl="ngModel" required>
                       <option disabled="true" selected="true" value="" style="color:#b33951">Select Calculation Types
                       </option>
                       <option *ngFor="let calculationType of calculationTypes" [value]="calculationType.name">
                         {{calculationType.name}}</option>
                     </select>
+                    <p class="alerts" *ngIf="calculationtypeControl.invalid && calculationtypeControl.touched"> Please select calculation type</p>
                   </div>
                 </div>
               </div>
@@ -96,12 +99,13 @@
                   <div class="form-group">
                     <label id=label6>Occupancy & Ownership Status <span class="red">*</span></label>
                     <select class="form-control" name="occupency" id="occupency" [(ngModel)]="occupency"
-                      (change)="tenantOwnerdiv(occupency)" #occupencyControl="ngModel">
+                      (change)="tenantOwnerdiv(occupency)" #occupencyControl="ngModel" required>
                       <option disabled="true" selected="true" value="" style="color:#b33951">Select occupency &
                         ownership status
                       </option>
                       <option *ngFor="let occupency of occupencys" [value]="occupency.name">{{occupency.name}}</option>
                     </select>
+                    <p class="alerts" *ngIf="occupencyControl.invalid && occupencyControl.touched"> Please Select occupency</p>
                   </div>
                 </div>
                 <div class="col-sm-4 col-xs-12" *ngIf="occupency == 'Sold Owner Occupied'">
@@ -127,7 +131,8 @@
                     <label id=label7>Owner First Name <span class="red">*</span></label>
                     <input type="text" name="ownerFirtname" id="ownerFirtname" [(ngModel)]="ownerFirtname"
                       #ownerFirtnameControl="ngModel" class="form-control" placeholder="Owner firstname"
-                      pattern="[a-zA-Z]*" />
+                      pattern="[a-zA-Z]*" required/>
+                      <p class="alerts" *ngIf="ownerFirtnameControl.invalid && ownerFirtnameControl.touched"> Valid owner firstname is required</p>
                   </div>
                 </div>
                 <div class="col-sm-6 col-xs-12">
@@ -135,7 +140,8 @@
                     <label id=label8>Owner Last name <span class="red">*</span></label>
                     <input type="text" name="ownerLastname" id="ownerLastname" [(ngModel)]="ownerLastname"
                       #ownerLastnameControl="ngModel" class="form-control" placeholder="Owner lastname"
-                      pattern="[a-zA-Z]*" />
+                      pattern="[a-zA-Z]*" required/>
+                      <p class="alerts" *ngIf="ownerLastnameControl.invalid && ownerLastnameControl.touched"> Valid owner lastname is required</p>
                   </div>
                 </div>
               </div>
@@ -145,7 +151,8 @@
                     <label id=label9>Owner Mobile Number <span class="red">*</span></label>
                     <input type="text" name="ownerMobnumber" id="ownerMobnumber" [(ngModel)]="ownerMobnumber"
                       #ownerMobnumberControl="ngModel" class="form-control" placeholder="Owner mobile number"
-                      minlength=10 maxlength=10 pattern="[0-9]*" />
+                      minlength=10 maxlength=10 pattern="[0-9]*" required/>
+                      <p class="alerts" id="phonenum" type="tel" pattern="[0-9]+" *ngIf="ownerMobnumberControl.invalid && ownerMobnumberControl.touched"> Valid 10 digit mobile number is required</p>                  
                   </div>
                 </div>
                 <div class="col-sm-6 col-xs-12">
@@ -153,7 +160,8 @@
                     <label id=label10>Owner Email-Id<span class="red">*</span></label>
                     <input type="text" name="ownerEmail" id="ownerEmail" [(ngModel)]="ownerEmail"
                       #ownerEmailControl="ngModel" class="form-control" placeholder="Owner email-id"
-                      pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" />
+                      pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" required/>
+                      <p class="alerts" *ngIf="ownerEmailControl.invalid && ownerEmailControl.touched"> valid email-id is required</p>
                   </div>
                 </div>
               </div>
@@ -163,15 +171,17 @@
                     <label id=label11>Owner Altername Mobile Number</label>
                     <input type="text" name="ownerAltnumber" id="ownerAltnumber" [(ngModel)]="ownerAltnumber"
                       #ownerAltnumberontrol="ngModel" class="form-control" placeholder="Owner altername mobile no"
-                      minlength=10 maxlength=10 pattern="[0-9]*" />
+                      minlength=10 maxlength=10 pattern="[0-9]*" required/>
+                      <p class="alerts" *ngIf="ownerAltnumberontrol.invalid && ownerAltnumberontrol.touched">Mobile number is invalid</p>
                   </div>
                 </div>
                 <div class="col-sm-6 col-xs-12">
                   <div class="form-group">
                     <label id=label12>Owner Altername Email-Id</label>
                     <input type="text" name="ownerAltemail" id="ownerAltemail" [(ngModel)]="ownerAltemail"
-                      class="form-control" placeholder="Owner alternate email-id"
-                      pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" />
+                      class="form-control" #ownerAltemailControl="ngModel" placeholder="Owner alternate email-id"
+                      pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" required/>
+                      <p class="alerts" *ngIf="ownerAltemailControl.invalid && ownerAltemailControl.touched">Email-id is invalid</p>
                   </div>
                 </div>
               </div>
@@ -186,7 +196,8 @@
                       <label id=label21>Tenant First Name <span class="red">*</span></label>
                       <input type="text" name="tenantFirtname" id="tenantFirtname" [(ngModel)]="tenantFirtname"
                         #tenantFirtnameControl="ngModel" class="form-control" placeholder="Tenant firstname"
-                        pattern="[a-zA-Z]*" />
+                        pattern="[a-zA-Z]*" required/>
+                        <p class="alerts" *ngIf="tenantFirtnameControl.invalid && tenantFirtnameControl.touched"> Valid firstname is required</p>
                     </div>
                   </div>
                   <div class="col-sm-6 col-xs-12">
@@ -194,7 +205,8 @@
                       <label id=label22>Tenant Last name <span class="red">*</span></label>
                       <input type="text" name="tenantLastname" id="tenantLastname" [(ngModel)]="tenantLastname"
                         #tenantLastnameControl="ngModel" class="form-control" placeholder="Tenant lastname"
-                        pattern="[a-zA-Z]*" />
+                        pattern="[a-zA-Z]*" required/>
+                        <p class="alerts" *ngIf="tenantLastnameControl.invalid && tenantLastnameControl.touched"> Valid lastname is required</p>
                     </div>
                   </div>
                 </div>
@@ -204,7 +216,8 @@
                       <label id=label23>Tenant Mobile Number <span class="red">*</span></label>
                       <input type="text" name="tenantMobnumber" id="tenantMobnumber" [(ngModel)]="tenantMobnumber"
                         #tenantMobnumberControl="ngModel" class="form-control" placeholder="Tenant mobile number"
-                        minlength=10 maxlength=10 pattern="[0-9]*" />
+                        minlength=10 maxlength=10 pattern="[0-9]*" required/>
+                        <p class="alerts" *ngIf="tenantMobnumberControl.invalid && tenantMobnumberControl.touched"> Valid mobile number is required</p>
                     </div>
                   </div>
                   <div class="col-sm-6 col-xs-12">
@@ -212,7 +225,8 @@
                       <label id=label24>Tenant Email-Id<span class="red">*</span></label>
                       <input type="text" name="tenantEmail" id="tenantEmail" [(ngModel)]="tenantEmail"
                         #tenantEmailControl="ngModel" class="form-control" placeholder="Tenant email-id"
-                        pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" />
+                        pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" required/>
+                        <p class="alerts" *ngIf="tenantEmailControl.invalid && tenantEmailControl.touched"> Valid email-id is required</p>
                     </div>
                   </div>
                 </div>
@@ -262,7 +276,7 @@
             </fieldset>
             <div class="from-group">
               <div class="form-group pull-right">
-                <input type="submit" class="mdButton1" value="Add Unit" />
+                <input type="submit" class="mdButton1" value="Add Unit"/>
                 <button type="reset" class="mdButton1">Reset</button>
               </div>
             </div>

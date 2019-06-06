@@ -264,18 +264,18 @@ export class ViewUnitComponent implements OnInit {
 
   }//createUnit function ends
 
-  viewUnit(repUnit: any) {
-    // console.log(JSON.stringify(repUnit));
-    // this.currentAssociationName = this.globalService.getCurrentAssociationName();
-    // this.viewUnitRow = {
-    //   unitNo: repUnit.unUniName,
-    //   unitType: repUnit.unUniType,
-    //   unitDimen: repUnit.unDimens,
-    //   rate: repUnit.unRate,
-    //   calculationType: repUnit.unCalType,
-    //   ownershipStatus: repUnit.unOwnStat
-    // };
-
+  viewUnit(repUnit:any){
+    console.log('repUnit',JSON.stringify(repUnit));
+      this.currentAssociationName=this.globalService.getCurrentAssociationName();
+      this.viewUnitRow={
+        unitNo : repUnit.unUniName,
+        unitType: repUnit.unUniType,
+        unitDimen: repUnit.unDimens,
+        rate: repUnit.unRate,
+        calculationType: repUnit.unCalType,
+        ownershipStatus: repUnit.unOwnStat
+      };
+     
   }
 
   getAllUnitDetailsByBlockID(blBlockID) {

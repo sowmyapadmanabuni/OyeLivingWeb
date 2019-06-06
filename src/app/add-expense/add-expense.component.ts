@@ -76,7 +76,7 @@ export class AddExpenseComponent implements OnInit {
     this.unit = '';
     this.paybymethod = '';
     this.dateandTime = new Date();
-    this.expensedata.ASAssnID = 1156;
+    this.expensedata.ASAssnID = 4217;
     this.expensedata.BLBlockID = '';
     this.expensedata.POID = '';
     this.expensedata.EXHead = '';
@@ -122,17 +122,16 @@ export class AddExpenseComponent implements OnInit {
     this.expensecategories = [{ "name": "Fixed", "displayName": "Fixed", "id": 10 }, { "name": "Variable", "displayName": "Variable", "id": 11 }]
 
     this.applicabltToUnits = [
-      { 'name': 'All', 'displayName': 'All Units' },
-      { 'name': 'Single', 'displayName': 'Single Unit' },
-      { 'name': 'SoldOwnerOccupied', 'displayName': 'Sold Owner-Occupied' },
-      { 'name': 'SoldTenantOccupied', 'displayName': 'Sold Tenant-Occupied' },
-      { 'name': 'SoldVacant', 'displayName': 'Sold Vacant' },
-      { 'name': 'UnsoldVacant', 'displayName': 'Unsold Vacant' },
-      { 'name': 'UnsoldTenant', 'displayName': 'Unsold Tenant-Occupied' },
-      { 'name': 'AllSold', 'displayName': 'All Sold' },
-      { 'name': 'AllUnSold', 'displayName': 'All UnSold' },
-      { 'name': 'AllVacantUnits', 'displayName': 'All Vacant Units' },
-      { 'name': ' AllOccupiedUnits', 'displayName': ' All Occupied Units' }
+      { 'name': 'All Units', 'displayName': 'All Units' },
+      { 'name': 'Single Unit', 'displayName': 'Single Unit' },
+      { 'name': 'All Sold Owner Occupied Units', 'displayName': 'All Sold Owner Occupied Units' },
+      { 'name': 'All Sold Tenant Occupied Units', 'displayName': 'All Sold Tenant Occupied Units' },
+      { 'name': 'All Sold Vacant Units', 'displayName': 'All Sold Vacant Units' },
+      { 'name': 'Unsold Vacant Units', 'displayName': 'Unsold Vacant Units' },
+      { 'name': 'Unsold Tenant Occupied Units', 'displayName': 'Unsold Tenant Occupied Units' },
+      { 'name': 'All Sold Units', 'displayName': 'All Sold Units' },
+      { 'name': 'All UnSold Units', 'displayName': 'All UnSold Units' },
+      { 'name': 'All Occupied Units', 'displayName': 'All Occupied Units' }
     ]
 
     this.methodArray = [{ 'name': 'Cash', 'displayName': 'Cash', 'id': 1 },

@@ -43,6 +43,7 @@ export class DashBoardComponent implements OnInit {
       //console.log(JSON.stringify(res));
       var data:any = res;
       this.associations = data.data.associationByAccount;
+      console.log('associations',this.associations);
       });
   }
 

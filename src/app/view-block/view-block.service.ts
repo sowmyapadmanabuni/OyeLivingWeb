@@ -26,10 +26,13 @@ export class ViewBlockService {
                                      .append('Access-Control-Allow-Origin', "*");
   }//constructor ends
 
-  getBlockDetails(currentAssociationID:string){
+  getBlockDetails(currentAssociationID){
     return this.http.get(this.scopeIP + 'oyeliving/api/v1/Block/GetBlockListByAssocID/' +currentAssociationID ,  {headers:this.headers});
   }
 
+  getassociationlist(currentAssociationID){
+    return this.http.get(this.scopeIP + '/oyeliving/api/v1/association/getassociationlist/' +currentAssociationID ,  {headers:this.headers});
+  }
 
   createBlock(createBlockData:any)
   {

@@ -29,6 +29,8 @@ import { NewAmenityComponent } from './new-amenity/new-amenity.component';
 import { ViewreceiptComponent } from './viewreceipt/viewreceipt.component';
 import { GenerateReceiptComponent } from './generate-receipt/generate-receipt.component';
 import { AddUnitComponent } from './add-unit/add-unit.component';
+import { AddBlocksComponent } from './add-blocks/add-blocks.component';
+import { ViewFloorsComponent } from './view-floors/view-floors.component';
 
 
 @NgModule({
@@ -49,7 +51,9 @@ import { AddUnitComponent } from './add-unit/add-unit.component';
     NewAmenityComponent,
     ViewreceiptComponent,
     GenerateReceiptComponent,
-    AddUnitComponent
+    AddUnitComponent,
+    AddBlocksComponent,
+    ViewFloorsComponent
   ],
   imports: [
     BrowserModule,

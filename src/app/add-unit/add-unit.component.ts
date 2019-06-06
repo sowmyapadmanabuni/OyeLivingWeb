@@ -68,7 +68,7 @@ export class AddUnitComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.currentAssociationID = '1156';
+    this.currentAssociationID = '4217';
     this.viewUniService.GetBlockListByAssocID(this.currentAssociationID)
     .subscribe(data => {
       this.allBlocksLists = data['data'].blocksByAssoc;
@@ -109,7 +109,7 @@ export class AddUnitComponent implements OnInit {
   createUnit() {
     let createUnitData =
     {
-      "ASAssnID": 1156,
+      "ASAssnID": 4217,
       "ACAccntID": 21,
       "units": [
         {

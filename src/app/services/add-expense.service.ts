@@ -19,7 +19,7 @@ export class AddExpenseService {
 
   constructor(private http: HttpClient) {
     this.ipAddress = 'http://apidev.oyespace.com/';
-    this.currentAssociationID = 1156;
+    this.currentAssociationID = 4217;
   }
 
   /*----------------------Block List By association ID -----------------*/

@@ -15,7 +15,7 @@ export class ViewInvoiceService {
 
   constructor(private http: HttpClient) {
     this.ipAddress = 'http://apidev.oyespace.com/';
-    this.currentAssociationID = 1156;
+    this.currentAssociationID = 4217;
   }
 
   /*----------------------Block List By association ID -----------------*/
@@ -70,12 +70,11 @@ export class ViewInvoiceService {
   }
 
   invoiceDetails(InvoiceId,UnitID){
-    console.log('invoiceDetails','InvoiceId-'+InvoiceId,'UnitID-'+UnitID);
     let headers = this.getHttpheaders();
     this.url = `${this.ipAddress}oyeliving/api/v1/invoice/details/${InvoiceId}/${UnitID}`;
     this.http.get(this.url, { headers: headers })
     .subscribe(data=>{
-      console.log(data);
+      console.log('invoiceDetails',data);
     })
 //http://apidev.oyespace.com/oyeliving/api/v1/invoice/details/{InvoiceId}/{UnitID}
   }

@@ -65,7 +65,7 @@
               -->
         <td>
           <button type="button" class="smallBtn" data-toggle="modal" data-target="#viewUnit1"
-            (click)="viewUnit(unit)"><i class="fa fa-eye"></i></button> | <button id="editBtn" class="smallBtn"
+            (click)="viewUnit(item)"><i class="fa fa-eye"></i></button> | <button id="editBtn" class="smallBtn"
             data-toggle="modal" data-target="#editAssociation" (click)="editUnit()"><i
               class="fa fa-pencil"></i></button>
         </td>
@@ -75,183 +75,50 @@
   </table>
 </div>
 <!--DIV-->
-<form *ngIf='showCreateUnitemplate' #createunitForm='ngForm' (ngSubmit)='createUnit()'>
-  <div class="container">
-    <div class="row">
-      <div class="col-6">
-        <label id=label1>Unit No / Flat No <span class="red">*</span></label>
-        <input type="text" name="unitno" id="unitno" style="text-transform: uppercase" autocomplete="unitno" [(ngModel)]="unitno" #unitnoControl="ngModel" class="form-control"
-          placeholder="Unit no/ Flat no" pattern="[a-zA-Z0-9]*" required />
-          <p class="alerts" *ngIf="unitnoControl.invalid && unitnoControl.touched"> Valid unit no is required</p>
-      </div>
+<div class="modal fade viewPopup" id="viewUnit1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header" style="background-color: whitesmoke;">
+               
+               
+                <h4 class="modal-title" id="myModalLabel" style="color:#b33951; font-family: Poppins;"><u>View Unit</u></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+
+            <div class="modal-body" style="font-family: Poppins;">
+                <div class="row" style="border:2px solid #b33951; padding:5px;">
+                    <div class="col-sm-12"> 
+                        <h5 class="text-center">Association Name : <strong>{{currentAssociationName}}</strong></h5> 
+                        <br>                          
+                        <h5 style="color:#b33951">Unit Information</h5>
+                        <br>
+                    </div>
+                    <div class="col-sm-4">
+                        <p>Unit No : <span>{{viewUnitRow.unitNo}}</span></p>
+                    </div>
+                    <div class="col-sm-4">
+                        <p>Unit Type : <span>{{viewUnitRow.unitType}}</span></p>
+                    </div>
+                    <div class="col-sm-4">
+                        <p>Unit Dimension : <span>{{viewUnitRow.unitDimen}}</span></p>
+                    </div>
+
+                    <div class="col-sm-12">
+                         <hr>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <p>Unit Rate : <span>{{viewUnitRow.rate}}</span></p>
+                    </div>
+                    <div class="col-sm-4">
+                        <p>Calculation Type : <span>{{viewUnitRow.calculationType}}</span></p><!---->
+                    </div>
+                    <div class="col-sm-4">
+                        <p>Ownership Status : <span>{{viewUnitRow.ownershipStatus}}</span></p>
+                    </div>
+                </div>
+            </div> <!---------Modal Body close----------> 
+        </div>
     </div>
-  </div>
-
-  <div class="container">
-    <div class="form-group">
-      <div class="row">
-
-        <div class="col-sm-3">
-
-          <label id=label2>Unit Type <span class="red">*</span></label>
-          <select class="form-control" name="unitType" id="unitType" [(ngModel)]="unitType" #unitTypeControl="ngModel">
-            <option value="" style="color:#b33951">Select Unit Type</option>
-            <option *ngFor="let unitTp of unitTypes" [value]="unitTp['name']">{{unitTp['name']}}</option>
-          </select>
-
-        </div>
-        <div class="col-sm-3">
-
-          <label id=label3>Unit Dimension <span class="red">*</span></label>
-          <input type="text" name="unitdimension" id="unitdimension" [(ngModel)]="unitdimension"
-            #unitdimensionControl="ngModel" class="form-control" placeholder="Unit dimension" pattern="[0-9]*" />
-
-        </div>
-        <div class="col-sm-3">
-          <label id=label4>Unit Rate <span class="red">*</span></label>
-          <input type="text" name="unitrate" id="unitrate" [(ngModel)]="unitrate" class="form-control"
-            placeholder="Unit rate" #unitrateControl="ngModel" pattern="[0-9]+(\.[0-9][0-9]?)?" required/>
-            <p class="alerts" *ngIf="unitrateControl.invalid && unitrateControl.touched"> Valid unit rate is required</p>
-        </div>
-        <div class="col-sm-3">
-          <label id=label5>Calculation Type <span class="red">*</span></label>
-          <select class="form-control" name="calculationtype" id="calculationtype" [(ngModel)]="calculationtype"
-            #calculationtypeControl="ngModel">
-            <option disabled="true" selected="true" value="" style="color:#b33951">Select Calculation Types</option>
-            <option *ngFor="let calculationType of calculationTypes" [value]="calculationType.name">
-              {{calculationType.name}}</option>
-          </select>
-
-        </div>
-        <div class="col-sm-3">
-          <label id=label6>Occupancy & Ownership Status <span class="red">*</span></label>
-          <select class="form-control" name="occupency" id="occupency" [(ngModel)]="occupency"
-            (change)="tenantOwnerdiv(occupency)" #occupencyControl="ngModel">
-            <option disabled="true" selected="true" value="" style="color:#b33951">Select occupency & ownership status
-            </option>
-            <option *ngFor="let occupency of occupencys" [value]="occupency.name">{{occupency.name}}</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="container">
-    <div class="form-group">
-      <div class="row">
-        <div class="col-sm-3">
-          <label id=label7>Owner First Name <span class="red">*</span></label>
-          <input type="text" name="ownerFirtname" id="ownerFirtname" [(ngModel)]="ownerFirtname"
-            #ownerFirtnameControl="ngModel" class="form-control" placeholder="Owner firstname" pattern="[a-zA-Z]*" />
-        </div>
-        <div class="col-sm-3">
-          <label id=label8>Owner Last name <span class="red">*</span></label>
-          <input type="text" name="ownerLastname" id="ownerLastname" [(ngModel)]="ownerLastname"
-            #ownerLastnameControl="ngModel" class="form-control" placeholder="Owner lastname" pattern="[a-zA-Z]*" />
-        </div>
-        <div class="col-sm-3">
-          <label id=label9>Owner Mobile Number <span class="red">*</span></label>
-          <input type="text" name="ownerMobnumber" id="ownerMobnumber" [(ngModel)]="ownerMobnumber"
-            #ownerMobnumberControl="ngModel" class="form-control" placeholder="Owner mobile number" minlength=10
-            maxlength=10 pattern="[0-9]*" />
-        </div>
-        <div class="col-sm-3">
-          <label id=label10>Owner Email-Id<span class="red">*</span></label>
-          <input type="text" name="ownerEmail" id="ownerEmail" [(ngModel)]="ownerEmail" #ownerEmailControl="ngModel"
-            class="form-control" placeholder="Owner email-id"
-            pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" />
-        </div>
-        <div class="col-sm-3">
-          <label id=label11>Owner Altername Mobile Number</label>
-          <input type="text" name="ownerAltnumber" id="ownerAltnumber" [(ngModel)]="ownerAltnumber"
-            #ownerAltnumberontrol="ngModel" class="form-control" placeholder="Owner altername mobile no" minlength=10
-            maxlength=10 pattern="[0-9]*" />
-        </div>
-        <div class="col-sm-3">
-          <label id=label12>Owner Altername Email-Id</label>
-          <input type="text" name="ownerAltemail" id="ownerAltemail" [(ngModel)]="ownerAltemail" class="form-control"
-            placeholder="Owner alternate email-id"
-            pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" />
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="form-group">
-      <div class="row">
-        <div class="col-sm-3">
-          <label id=label21>Tenant First Name <span class="red">*</span></label>
-          <input type="text" name="tenantFirtname" id="tenantFirtname" [(ngModel)]="tenantFirtname"
-            #tenantFirtnameControl="ngModel" class="form-control" placeholder="Tenant firstname" pattern="[a-zA-Z]*" />
-        </div>
-
-        <div class="col-sm-3">
-          <label id=label22>Tenant Last name <span class="red">*</span></label>
-          <input type="text" name="tenantLastname" id="tenantLastname" [(ngModel)]="tenantLastname"
-            #tenantLastnameControl="ngModel" class="form-control" placeholder="Tenant lastname" pattern="[a-zA-Z]*" />
-        </div>
-
-        <div class="col-sm-3">
-          <label id=label23>Tenant Mobile Number <span class="red">*</span></label>
-          <input type="text" name="tenantMobnumber" id="tenantMobnumber" [(ngModel)]="tenantMobnumber"
-            #tenantMobnumberControl="ngModel" class="form-control" placeholder="Tenant mobile number" minlength=10
-            maxlength=10 pattern="[0-9]*" />
-        </div>
-
-        <div class="col-sm-3">
-          <label id=label24>Tenant Email-Id<span class="red">*</span></label>
-          <input type="text" name="tenantEmail" id="tenantEmail" [(ngModel)]="tenantEmail" #tenantEmailControl="ngModel"
-            class="form-control" placeholder="Tenant email-id"
-            pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" />
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-sm-12">
-    <table class="table" style="background-color: whitesmoke">
-      <tr id="label16">
-
-        <td>Parking Lot Number</td>
-        <td>Vehicle Number</td>
-        <td>Action</td>
-      </tr>
-      <tr *ngFor="let parking of parkings; let i = index">
-        <td>
-          <input type="text" name="parkingNo" id="parkingNo" [(ngModel)]="parkingNo" #parkingNoControl="ngModel"
-            class="form-control" placeholder="Parking Lot number" style="font-family: Poppins" pattern="[A-Za-z0-9]*" />
-        </td>
-        <td>
-          <input type="text" name="vehicleNo" id="vehicleNo" [(ngModel)]="vehicleNo" #vehicleNoControl="ngModel"
-            class="form-control" placeholder="Vehicle number" style="font-family: Poppins; text-transform: uppercase"
-            pattern="[A-Z0-9]*" />
-        </td>
-        <td>
-          <p><span class="fa fa-trash fa-1x" (click)="deleteParking()"></span></p>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <input type="text" name="newParkingNo" id="newParkingNo" [(ngModel)]="newParkingNo"
-            #parkingNoControl="ngModel" class="form-control" placeholder="Parking Lot number"
-            style="font-family: Poppins" pattern="A-Za-z0-9]*" />
-        </td>
-        <td>
-          <input type="text" name="newVehicleNo" id="newVehicleNo" [(ngModel)]="newVehicleNo"
-            #vehicleNoControl="ngModel" class="form-control" placeholder="Vehicle number"
-            style="font-family: Poppins; text-transform: uppercase" pattern="[A-Z0-9]*" />
-        </td>
-        <td>
-          <p><span class="fa fa-plus-square fa-1x" (click)="addParking()"></span></p>
-        </td>
-      </tr>
-    </table>
-  </div>
-
-  <div class="form-group pull-right">
-    <input type="submit" style="margin-right: 4px" class="btn btn-primary btn-lg" value="Add Unit"/>
-    <button class="btn btn-primary btn-lg">Reset</button>
-  </div>
-</form>
+</div>
