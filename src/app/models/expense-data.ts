@@ -24,7 +24,7 @@ export class ExpenseData {
     EXDisType:string;
     UnUniIden:string;
     BLBlockID:string;
-    ASAssnID:number;
+    ASAssnID:string;
     EXDDNo:number;
     EXDDDate:string;
 }

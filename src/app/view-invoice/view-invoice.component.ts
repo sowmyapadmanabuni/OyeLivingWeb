@@ -5,6 +5,7 @@ import { AssociationDetails } from '../models/association-details';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import swal from 'sweetalert2';
+import { GlobalServiceService } from '../global-service.service';
 
 @Component({
   selector: 'app-view-invoice',
@@ -33,7 +34,7 @@ export class ViewInvoiceComponent implements OnInit {
   showGateWay: boolean;
   invValFinal: any;
   mainAmt: number;
-  currentAssociationID: number;
+  currentAssociationID: string;
   storeId: string;
   sharedSecret: string;
   charge: string;
@@ -62,18 +63,31 @@ export class ViewInvoiceComponent implements OnInit {
   blockid: number;
   p: number;
   isChecked: boolean;
-  checkAll:boolean;
+  checkAll: boolean;
+  description: string;
+  invoicevalue: number;
+
+  securityfee: number;
+  housekeepingfee: number;
+  generatorfee: number;
+  corpusfee: number;
+  commonareafee: number;
+  fixedmaintenancefee: number;
+  watermeterfee: number;
+  unsoldrentalfees: number;
+
 
   constructor(private viewinvoiceservice: ViewInvoiceService,
     private modalService: BsModalService,
-    private toastr: ToastrService) {
+    private toastr: ToastrService,
+    private globalservice: GlobalServiceService) {
     this.currentPage = 1;
     this.pageSize = 10;
     this.previousDue = 0.00;
     this.amountInWords = 0;
     this.hasnumber = false;
     this.showGateWay = false;
-    this.currentAssociationID = 356;
+    this.currentAssociationID = this.globalservice.getCurrentAssociationId();
     this.blBlockID = '';
     this.validationResult = true;
     this.p = 1;
@@ -81,7 +95,8 @@ export class ViewInvoiceComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.viewinvoiceservice.GetBlockListByAssocID()
+    console.log('this.currentAssociationID', this.currentAssociationID);
+    this.viewinvoiceservice.GetBlockListByAssocID(this.currentAssociationID)
       .subscribe(data => {
         this.allBlocksByAssnID = data;
         this.asdPyDate = this.allBlocksByAssnID[0]['asdPyDate'];
@@ -93,13 +108,13 @@ export class ViewInvoiceComponent implements OnInit {
   getCurrentBlockDetails(blBlockID) {
     this.blockid = blBlockID;
     console.log('blBlockID-' + blBlockID);
-    this.viewinvoiceservice.getCurrentBlockDetails(blBlockID)
+    this.viewinvoiceservice.getCurrentBlockDetails(blBlockID, this.currentAssociationID)
       .subscribe(data => {
         this.invoiceLists = data['data'].invoices;
-        console.log('invoiceLists', this.invoiceLists);
+        console.log('invoiceLists?', this.invoiceLists);
       })
     this.isChecked = false;
-    this.checkAll=false;
+    this.checkAll = false;
   }
 
   viewInvoice1(template: TemplateRef<any>, inid, inGenDate, inNumber, inDsCVal, unUnitID) {
@@ -108,6 +123,16 @@ export class ViewInvoiceComponent implements OnInit {
     console.log('inid', inid);
     console.log('inDsCVal', inDsCVal);
     console.log('unUnitID', unUnitID);
+
+    this.securityfee = 0;
+    this.housekeepingfee = 0;
+    this.generatorfee = 0;
+    this.corpusfee = 0;
+    this.commonareafee = 0;
+    this.fixedmaintenancefee = 0;
+    this.watermeterfee = 0;
+    this.unsoldrentalfees = 0;
+
 
     this.invoiceID = inid;
     this.invoiceDate = inGenDate;
@@ -130,9 +155,9 @@ export class ViewInvoiceComponent implements OnInit {
 
       })
 
-    this.viewinvoiceservice.viewInvoice(this.blockid)
+    this.viewinvoiceservice.viewInvoice(this.blockid, this.currentAssociationID)
       .subscribe(data => {
-        console.log('InvoiceDetails', data);
+        console.log('InvoiceDetails+', data);
         //this.allLineItem = data['data'].invoiceDetails;
         //console.log(data['data'].invoiceDetails);
       },
@@ -150,13 +175,40 @@ export class ViewInvoiceComponent implements OnInit {
           //previousDue=parseFloat(0.00);
         })
 
-    this.viewinvoiceservice.getassociationlist(this.asdPyDate, this.blMgrMobile)
+    this.viewinvoiceservice.getassociationlist(this.asdPyDate, this.blMgrMobile, this.currentAssociationID)
       .subscribe(data => {
         console.log('associationDetails', data);
         this.associationDetails = data
       })
 
-    this.viewinvoiceservice.invoiceDetails(inid, unUnitID);
+    this.viewinvoiceservice.invoiceDetails(inid, unUnitID)
+      .subscribe(data => {
+        console.log('invoiceDetails--', data['data']['invoiceDetails']);
+        data['data']['invoiceDetails'].forEach(item => {
+          if (item['idDesc'] == "common area electric bill") {
+            this.commonareafee = item['idValue'];
+          }
+          else if (item['idDesc'] == "Fixed Maintenance") {
+            this.fixedmaintenancefee = item['idValue'];
+          }
+          else if (item['idDesc'] == "generator bill") {
+            this.generatorfee = item['idValue'];
+          }
+          else if (item['idDesc'] == "security fees") {
+            this.securityfee = item['idValue'];
+          }
+          else if (item['idDesc'] == "unsold rental fees") {
+            this.unsoldrentalfees = item['idValue'];
+          }
+          else if (item['idDesc'] == "corpus") {
+            this.corpusfee = item['idValue'];
+          }
+          else if (item['idDesc'] == "housekeeping") {
+            this.housekeepingfee = item['idValue'];
+          }
+        })
+      })
+
 
   }
 
@@ -320,7 +372,7 @@ export class ViewInvoiceComponent implements OnInit {
     alert('toggleAllCheck');
     if (event.target.checked) {
       this.isChecked = true;
-      this.checkAll=true;
+      this.checkAll = true;
     }
   }
 

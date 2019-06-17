@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
 import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {AlertsModule} from 'angular-alert-module';
@@ -31,6 +32,8 @@ import { GenerateReceiptComponent } from './generate-receipt/generate-receipt.co
 import { AddUnitComponent } from './add-unit/add-unit.component';
 import { AddBlocksComponent } from './add-blocks/add-blocks.component';
 import { ViewFloorsComponent } from './view-floors/view-floors.component';
+import { BankComponent } from './bank/bank.component';
+import { CheckInvoiceAndDueDateDirective } from './check-invoice-and-due-date.directive';
 
 
 @NgModule({
@@ -53,7 +56,9 @@ import { ViewFloorsComponent } from './view-floors/view-floors.component';
     GenerateReceiptComponent,
     AddUnitComponent,
     AddBlocksComponent,
-    ViewFloorsComponent
+    ViewFloorsComponent,
+    BankComponent,
+    CheckInvoiceAndDueDateDirective
   ],
   imports: [
     BrowserModule,

@@ -5,8 +5,8 @@ import { Injectable } from '@angular/core';
 })
 export class GlobalServiceService {
 
-  private currentAssociationId:string;
-  private currentAssociationName:string;
+   currentAssociationId:string;
+   currentAssociationName:string;
   constructor() { }
 
 

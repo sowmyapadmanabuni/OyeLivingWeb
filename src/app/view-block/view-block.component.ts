@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ViewBlockService } from './view-block.service';
 import { GlobalServiceService } from '../global-service.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-view-block',
@@ -28,18 +29,47 @@ export class ViewBlockComponent implements OnInit {
   assnName: string;
   totalNoofblocks: number;
   availableNoOfBlocks: number;
+  allBlocksList:object;
 
+  modalRef: BsModalRef;
+ myDate = new Date();
+ BLBlkName: string;
+ BLBlkType: string;
+ BLNofUnit: number;
+ BLMgrName: string;
+ BLMgrMobile: number;
+ BLMgrEmail: string;
+ ASMtType: string;
+ ASMtFRate: number;
+ ASMtDimBs: string;
+ ASUniMsmt: string;
+ ASDPyDate: Date;
+ ASLPCType: string;
+ ASLPChrg: number;
+ ASLPSDate: Date;
+ editblockdata: object;
+ BLBlockID: string;
+ ASBGnDate:string;
 
+ addRate: string;
+ addRate1: string;
 
+  bkname: string;
+  bktype: string;
+  bknofflrs: string;
+  bknofunit: string;
 
   constructor(private viewBlkService: ViewBlockService,
     private globalService: GlobalServiceService,
-    private router: Router) {
+    private router: Router,
+    private modalService: BsModalService,) {
     //pagination
     this.config = {
       itemsPerPage: 10,
       currentPage: 1
     };
+
+    this.allBlocksList=null;
   }
 
 
@@ -50,9 +80,7 @@ export class ViewBlockComponent implements OnInit {
 
   ngOnInit() {
     this.currentAssociationID = this.globalService.getCurrentAssociationId();
-    this.currentAssociationID = '4217';
     this.currentAssociationName = this.globalService.getCurrentAssociationName();
-    this.currentAssociationName = 'MAMAJI ASSOCIATION';
     this.getBlockDetails();
     this.viewBlkService.getassociationlist(this.currentAssociationID)
       .subscribe(data => {
@@ -64,11 +92,18 @@ export class ViewBlockComponent implements OnInit {
 
   getBlockDetails() {
     this.viewBlkService.getBlockDetails(this.currentAssociationID).subscribe(data => {
-      console.log('getBlockDetails', data);
       this.allBlocksLists = data['data'].blocksByAssoc;
+      console.log('allBlocksLists', this.allBlocksLists);
       this.availableNoOfBlocks = data['data'].blocksByAssoc.length;
     });
   }
+
+  viewBlockDetails(blBlkName,blBlkType,blNofUnit){
+      this.bkname =blBlkName;
+      this.bktype =blBlkType;
+      this.bknofunit =blNofUnit;
+    //$scope.rowId = idx;
+}
 
   addBlocksValidation() {
     let totalNoofblocks = this.totalNoofblocks;
@@ -115,21 +150,38 @@ export class ViewBlockComponent implements OnInit {
       this.flatRatevalue=false; 
   }
   */
-  checkRate() {
+  // checkRate() {
 
-    if (this.block.rate == true) {
-      this.flatRatevalue = true;
-    }
-    else {
-      this.flatRatevalue = false;
-    }
-    if (this.block.rate1 == true) {
-      this.dimensionBasedRate = true;
-    }
-    else {
-      this.dimensionBasedRate = false;
-    }
+  //   if (this.block.rate == true) {
+  //     this.flatRatevalue = true;
+  //   }
+  //   else {
+  //     this.flatRatevalue = false;
+  //   }
+  //   if (this.block.rate1 == true) {
+  //     this.dimensionBasedRate = true;
+  //   }
+  //   else {
+  //     this.dimensionBasedRate = false;
+  //   }
 
+  // }
+
+  checkRate1(rate1) {
+    if (rate1 == true) {
+      this.addRate1 = 'dimension';
+    } else {
+      this.addRate1 = '';
+    }
+  }
+
+  checkRate(rate) {
+
+    if (rate == true) {
+      this.addRate = 'flatRatevalue';
+    } else {
+      this.addRate = '';
+    }
   }
 
   latePaymentChargeTypes: any = [
@@ -183,6 +235,85 @@ export class ViewBlockComponent implements OnInit {
     };
   }
 
+  OpenModal(template: TemplateRef<any>, blBlkName: string, blBlkType: string, blNofUnit: number, blMgrName: string, blMgrMobile: number, blMgrEmail: string, asMtType: string, asMtFRate: number, asMtDimBs: string, asUniMsmt: string,asbGnDate:string, bldUpdated: Date, aslpcType: string, aslpChrg: number, aslpsDate: Date, blBlockID: string) {
 
+    this.BLBlkName = blBlkName;
+    this.BLBlkType = blBlkType;
+    this.BLNofUnit = blNofUnit;
+    this.BLMgrName = blMgrName;
+    this.BLMgrMobile = blMgrMobile;
+    this.BLMgrEmail = blMgrEmail;
+    //this.ASMtType = asMtType;
+    this.ASMtFRate = asMtFRate;
+    this.ASMtDimBs = asMtDimBs;
+    this.ASUniMsmt = asUniMsmt;
+ 
+    this.ASBGnDate = asbGnDate;
+    this.ASDPyDate = bldUpdated;
+    this.ASLPCType = aslpcType;
+    this.ASLPChrg = aslpChrg;
+    this.ASLPSDate = aslpsDate;
+    this.BLBlockID = blBlockID;
+ 
+    console.log(this.BLBlkName);
+    console.log(this.BLBlkType);
+    console.log(this.BLNofUnit);
+    console.log(this.BLMgrEmail);
+    console.log(this.ASUniMsmt);
+    console.log(this.ASDPyDate);
+    console.log(this.ASLPChrg);
+    console.log(this.ASLPSDate);
+    console.log(this.BLBlockID);
+    this.modalRef = this.modalService.show(template,
+      Object.assign({}, { class: 'gray modal-lg' }));
+ 
+  }
 
-}//export class ViewBlockComponent
+  UpdateBlock() {
+    this.editblockdata = {
+      BLBlkName: this.BLBlkName,
+      BLBlkType: this.BLBlkType,
+      BLNofUnit: this.BLNofUnit,
+      BLMgrName: this.BLMgrName,
+      BLMgrMobile: this.BLMgrMobile,
+      BLMgrEmail: this.BLMgrEmail,
+      ASMtType: this.ASMtType,
+      ASMtFRate: this.ASMtFRate,
+      ASMtDimBs: this.ASMtDimBs,
+      ASUniMsmt: this.ASUniMsmt,
+      ASBGnDate:this.ASBGnDate,
+      ASDPyDate: this.ASDPyDate,
+      ASLPCType: this.ASLPCType,
+      ASLPChrg: this.ASLPChrg,
+      ASLPSDate: this.ASLPSDate,
+      BLBlockID: this.BLBlockID,
+      ASAssnID: 4217
+    };
+ 
+    console.log('editblockdata', this.editblockdata);
+    this.viewBlkService.UpdateBlock(this.editblockdata).subscribe(res => {
+      console.log("Done");
+      console.log(JSON.stringify(res));
+      console.log('editblockdata', this.editblockdata);
+      Swal.fire({
+        title: 'Block Updated Successfuly',
+      }).then(
+        (result) => {
+ 
+          if (result.value) {
+            //this.form.reset();
+            this.modalRef.hide();
+            this.router.navigate(['viewBlocks']);
+            
+ 
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            this.router.navigate(['']);
+          }
+        }
+      )
+ 
+    });
+ 
+  }
+ }
+//export class ViewBlockComponent

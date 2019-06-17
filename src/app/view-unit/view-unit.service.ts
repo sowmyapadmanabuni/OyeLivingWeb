@@ -33,6 +33,7 @@ getBlocks(currentAssociationID:string){
 }
 
 createUnit(createUnitData:any){
+  console.log('createUnitData *',JSON.stringify(createUnitData));
      return this.http.post(this.scopeIP + 'oyeliving/api/v1/unit/create' ,  createUnitData, {headers:this.headers});
 }
 

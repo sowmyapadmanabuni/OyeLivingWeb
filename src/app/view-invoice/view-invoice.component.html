@@ -47,8 +47,9 @@
                   <th>Current Invoice Amount</th>
                   <th>Action</th>
                   <th>
-                    <input *ngIf="isChecked == false" type="checkbox" (change)='toggleAllCheck($event)'  ckecked='false'>
-                    <i *ngIf="isChecked" style="cursor:pointer" (click)="sendEmailToAll()" class="fa fa-paper-plane"></i>
+                    <input *ngIf="isChecked == false" type="checkbox" (change)='toggleAllCheck($event)' ckecked='false'>
+                    <i *ngIf="isChecked" style="cursor:pointer" (click)="sendEmailToAll()"
+                      class="fa fa-paper-plane"></i>
                   </th>
                 </tr>
               </thead>
@@ -78,7 +79,8 @@
                     </button>
 
                     &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <button class="smallBtn" type="button" (click)="discount(discountModal,row.inid,row.inNumber,row.inTotVal)">
+                    <button class="smallBtn" type="button"
+                      (click)="discount(discountModal,row.inid,row.inNumber,row.inTotVal)">
                       <i class="fa fa-percent"></i>
                     </button>
                     &nbsp;&nbsp;|&nbsp;&nbsp;
@@ -87,7 +89,8 @@
                     </button>
                   </td>
                   <td>
-                    <input class="chkBox" type="checkbox" [value]="row.inid" [checked]='checkAll' (change)='toggleIsChecked($event)'>
+                    <input class="chkBox" type="checkbox" [value]="row.inid" [checked]='checkAll'
+                      (change)='toggleIsChecked($event)'>
                   </td>
                 </tr>
               </tbody>
@@ -113,95 +116,143 @@
 
     <div class="modal-body" style="padding-top: 0px;">
       <div class="newInvoice" id="printInvoiceId">
-        
-          <div class="col-xs-12">
 
-            <div class="row">
-              <div class="col-sm-2 col-xs-2">
-                <img alt="" class="img-responsive" style="max-width: 150px; float: left;" />
-              </div>
-              <div class="col-sm-10 col-xs-10">
-                <h4 style="margin: 34px 0px;">{{associationDetails.asAsnName}}, {{associationDetails.asAddress}}, <br />
-                  {{associationDetails.asCountry}}, {{associationDetails.asPinCode}}</h4>
-              </div>
-            </div>
 
-            <label style="display: block; text-align: center; font-size: 18px; margin-bottom: 5px;">INVOICE</label>
-            <p style="margin-bottom: 32px;"><span class="pull-left">Invoice Date :
-                {{invoiceDate | date: "d-M-y"}}</span> <span class="pull-right">Invoice No : {{invoiceNumber}}</span>
-            </p>
-            <hr style="margin-top: 5px; height: 2px; background:#CCC;">
+        <div class="row">
+          <div class="col-sm-2 col-xs-2">
+            <img alt="" class="img-responsive" style="max-width: 150px; float: left;" />
+          </div>
+          <div class="col-sm-10 col-xs-10">
+            <h4 style="margin: 34px 0px;">{{associationDetails.asAsnName}}, {{associationDetails.asAddress}}, <br />
+              {{associationDetails.asCountry}}, {{associationDetails.asPinCode}}</h4>
+          </div>
+        </div>
 
-            <div class="row">
-              <div class="col-sm-6 col-xs-6">
-                <address style="margin-bottom: 0;">
-                  <strong>To : </strong><br />
-                  {{OwnerFirstName}} {{OwnerLastName}} <br />
-                  {{OwnerEmail}} <br /> <br />
-                </address>
-              </div>
-              <div class="col-sm-4 col-xs-4" style="text-align:right">
+        <label style="display: block; text-align: center; font-size: 18px; margin-bottom: 5px;">INVOICE</label>
+        <p style="margin-bottom: 32px;"><span class="pull-left">Invoice Date :
+            {{invoiceDate | date: "d-M-y"}}</span> <span class="pull-right">Invoice No : {{invoiceNumber}}</span>
+        </p>
+        <hr style="margin-top: 5px; height: 2px; background:#CCC;">
 
-              </div>
-              <div class="col-sm-2 col-xs-2" style="text-align:center">
-                <strong>Due Date:</strong><br />
-                <span class="show"> {{asdPyDate | date :  "d-M-y"}}</span> <br />
-              </div>
-            </div>
-
-            <div class="table-responsive" style="border:1px;">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>SL.No</th>
-                    <th>Description</th>
-                    <th style="text-align:right">Amount</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style="font-weight:bold">
-                    <td></td>
-                    <td>Previous Due</td>
-                    <td style="text-align:right">(+) ₹ {{previousDue}}</td>
-                    <td></td>
-                  </tr>
-                  <tr style="font-weight:bold">
-                    <td></td>
-                    <td>Discount</td>
-                    <td style="text-align:right">(-) ₹ {{discountedValue}} </td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td colspan="2" style="text-align: right;">Sub Total</td>
-                    <td style="text-align:right">₹ {{totalAmountPaid()}}</td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td colspan="2" style="text-align: right;">Tax</td>
-                    <td style="text-align:right">₹ 00.00 </td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td colspan="2" style="text-align: right;">Total Due</td>
-                    <td style="text-align:right">₹ {{totalAmountPaid()}} </td>
-                    <td></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="row">
-              <div class="col-sm-11 col-xs-11">
-                <p style="text-align: right;">Total Due : <strong style="text-transform: capitalize;">
-                    {{amountInWords | words}} Rupees Only</strong></p>
-              </div>
-            </div>
-            <br />
-            <strong style="color: red; text-align: left;    display: block;">Due upon receipt</strong>
+        <div class="row">
+          <div class="col-sm-6 col-xs-6">
+            <address style="margin-bottom: 0;">
+              <strong>To : </strong><br />
+              {{OwnerFirstName}} {{OwnerLastName}} <br />
+              {{OwnerEmail}} <br /> <br />
+            </address>
+          </div>
+          <div class="col-sm-4 col-xs-4" style="text-align:right">
 
           </div>
-         <!--div removed-->
+          <div class="col-sm-2 col-xs-2" style="text-align:center">
+            <strong>Due Date:</strong><br />
+            <span class="show"> {{asdPyDate | date :  "d-M-y"}}</span> <br />
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">SL.No</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf='previousDue > 0' style="font-weight:bold">
+                  <td scope="row">1</td>
+                  <td>Previous Due</td>
+                  <td>₹ {{previousDue}}</td>
+                  <td></td>
+                </tr>
+                <tr *ngIf='discountedValue > 0' style="font-weight:bold">
+                  <td scope="row">2</td>
+                  <td>Discount</td>
+                  <td>₹ {{discountedValue}} </td>
+                  <td></td>
+                </tr>
+                <tr *ngIf='securityfee > 0' style="font-weight:bold">
+                  <td scope="row">3</td>
+                  <td>Security Fees</td>
+                  <td>₹ {{securityfee}}</td>
+                  <td></td>
+                </tr>
+                <tr *ngIf='housekeepingfee > 0' style="font-weight:bold">
+                  <td scope="row">4</td>
+                  <td>Housekeeping</td>
+                  <td>₹ {{housekeepingfee}}</td>
+                  <td></td>
+                </tr>
+                <tr>
+                <tr *ngIf='generatorfee > 0' style="font-weight:bold">
+                  <td scope="row">5</td>
+                  <td>Generator</td>
+                  <td>₹ {{generatorfee}}</td>
+                  <td></td>
+                </tr>
+                <tr *ngIf='corpusfee > 0' style="font-weight:bold">
+                  <td scope="row">6</td>
+                  <td>Corpus</td>
+                  <td>₹ {{corpusfee}}</td>
+                  <td></td>
+                </tr>
+                <tr *ngIf='commonareafee > 0' style="font-weight:bold">
+                  <td scope="row">7</td>
+                  <td>Common Area Electric Bill</td>
+                  <td>₹ {{commonareafee}}</td>
+                  <td></td>
+                </tr>
+                <tr *ngIf='fixedmaintenancefee > 0' style="font-weight:bold">
+                  <td scope="row">8</td>
+                  <td>Fixed Maintenance</td>
+                  <td>₹ {{fixedmaintenancefee}}</td>
+                  <td></td>
+                </tr>
+                <tr *ngIf='watermeterfee > 0' style="font-weight:bold">
+                  <td scope="row">9</td>
+                  <td>Water Meter</td>
+                  <td>₹ {{watermeterfee}}</td>
+                  <td></td>
+                </tr>
+                <tr *ngIf='unsoldrentalfees > 0' style="font-weight:bold">
+                  <td scope="row">10</td>
+                  <td>Unsold Rental Fees</td>
+                  <td>₹ {{unsoldrentalfees}}</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="text-align: right;">Sub Total</td>
+                  <td>₹ {{totalAmountPaid()}}</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="text-align: right;">Tax</td>
+                  <td>₹ 00.00 </td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="text-align: right;">Total Due</td>
+                  <td>₹ {{totalAmountPaid()}} </td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+
+        </div>
+
+        <div class="row">
+          <div class="col-sm-11 col-xs-11">
+            <p style="text-align: right;">Total Due : <strong style="text-transform: capitalize;">
+                {{amountInWords | words}} Rupees Only</strong></p>
+          </div>
+        </div>
+        <br />
+        <strong style="color: red; text-align: left;    display: block;">Due upon receipt</strong>
+
+        <!--div removed-->
         <div class="row">
           <div class="col-xs-12">
             <h4 style="margin-top: 5px; margin-bottom:0px;color: red; ">{{associationDetails.asAsnName}} Association
@@ -311,19 +362,19 @@
 
     <div class="modal-header" style="background-color:orange">
 
-        <div class="col-sm-2" style="text-align:center;">
-          <img src="assets/images/logo.jpg" height="80px" />
-        </div>
-        <div class="col-sm-8">
-           <h3>Paying to OyeSpace</h3>
-            By Invoice Number : {{invoiceNumber}}
-        </div>
-        <div class="col-sm-2">
-            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                <span aria-hidden="true">&times;</span>
-              </button>
-        </div>
-           
+      <div class="col-sm-2" style="text-align:center;">
+        <img src="assets/images/logo.jpg" height="80px" />
+      </div>
+      <div class="col-sm-8">
+        <h3>Paying to OyeSpace</h3>
+        By Invoice Number : {{invoiceNumber}}
+      </div>
+      <div class="col-sm-2">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
 
     </div>
 
@@ -359,54 +410,66 @@
 
 <!-------------------Discount in Invoice Modal Start--------------------->
 <ng-template #discountModal>
-   <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" style="position:absolute;left:40%" id="myModalLabel"><u>Discount Invoice</u></h4>
-                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title" style="position:absolute;left:40%" id="myModalLabel"><u>Discount Invoice</u></h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" style="padding-top: 0px;">
+      <form name="dscntInv" role="form" autocomplete="off" enctype="multipart/form-data">
+        <!--------------------------------  Block Details Section Starts Here  ------------------------>
+        <fieldset class="scheduler-border">
+          <legend class="scheduler-border headingOrange">Invoice Details</legend>
+          <div class="row">
+            <div class="col-sm-4 col-xs-12">
+              <div class="form-group">
+                <label>Invoice Number</label>
+                <input type="text" name="dscntInvinvoiceNumber" [(ngModel)]="dscntInvinvoiceNumber" class="form-control"
+                  placeholder="Invoice Number " disabled />
+              </div>
             </div>
-            <div class="modal-body" style="padding-top: 0px;">
-                <form name="dscntInv" role="form" autocomplete="off" enctype="multipart/form-data">
-                    <!--------------------------------  Block Details Section Starts Here  ------------------------>
-                    <fieldset class="scheduler-border">
-                        <legend class="scheduler-border headingOrange">Invoice Details</legend>
-                            <div class="row">
-                                <div class="col-sm-4 col-xs-12">
-                                    <div class="form-group">
-                                        <label>Invoice Number</label>
-                                        <input type="text" name="dscntInvinvoiceNumber" [(ngModel)]="dscntInvinvoiceNumber" class="form-control" placeholder="Invoice Number " disabled/>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 col-xs-12">
-                                    <div class="form-group" [ngClass]="{'has-error' : dscntInvdiscountedAmountControl.invalid && dscntInvdiscountedAmountControl.touched}">
-                                        <label>Discounted Amount<span class="red">*</span></label>
-                                        <input type="text" required name="dscntInvdiscountedAmount" #dscntInvdiscountedAmountControl='ngModel' [(ngModel)]="dscntInvdiscountedAmount" class="form-control" (blur)="checkDiscountedAmount(dscntInvdiscountedAmount)" placeholder="Amount After Discount" />
-                                        <p class="alerts" *ngIf="dscntInvdiscountedAmountControl.invalid && dscntInvdiscountedAmountControl.touched">Discounted Amount</p>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 col-xs-12">
-                                    <div class="form-group" [ngClass]="{'has-error' : dscntInvdescriptionControl.invalid && dscntInvdescriptionControl.touched}">
-                                        <label>Discount Reason <span class="red">*</span></label>
-                                        <input type="text" required name="dscntInvdescription" #dscntInvdescriptionControl='ngModel' (click)='emptyDisplaytext()' [(ngModel)]="dscntInvdescription" class="form-control" placeholder="Discount Reason" />
-                                        <p class="alerts" *ngIf="dscntInvdescriptionControl.invalid && dscntInvdescriptionControl.touched">Discount Reason</p>
-                                    </div>
-                                </div>
+            <div class="col-sm-4 col-xs-12">
+              <div class="form-group"
+                [ngClass]="{'has-error' : dscntInvdiscountedAmountControl.invalid && dscntInvdiscountedAmountControl.touched}">
+                <label>Discounted Amount<span class="red">*</span></label>
+                <input type="text" required name="dscntInvdiscountedAmount" #dscntInvdiscountedAmountControl='ngModel'
+                  [(ngModel)]="dscntInvdiscountedAmount" class="form-control"
+                  (blur)="checkDiscountedAmount(dscntInvdiscountedAmount)" placeholder="Amount After Discount" />
+                <p class="alerts"
+                  *ngIf="dscntInvdiscountedAmountControl.invalid && dscntInvdiscountedAmountControl.touched">Discounted
+                  Amount</p>
+              </div>
+            </div>
+            <div class="col-sm-4 col-xs-12">
+              <div class="form-group"
+                [ngClass]="{'has-error' : dscntInvdescriptionControl.invalid && dscntInvdescriptionControl.touched}">
+                <label>Discount Reason <span class="red">*</span></label>
+                <input type="text" required name="dscntInvdescription" #dscntInvdescriptionControl='ngModel'
+                  (click)='emptyDisplaytext()' [(ngModel)]="dscntInvdescription" class="form-control"
+                  placeholder="Discount Reason" />
+                <p class="alerts" *ngIf="dscntInvdescriptionControl.invalid && dscntInvdescriptionControl.touched">
+                  Discount Reason</p>
+              </div>
+            </div>
 
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 col-xs-12">
-                                    <div class="btn-group pull-right">
-                                        <button type="button" class="btn btn-primary pull-right" (click)="discountInvoice(dscntInvinvoiceNumber,dscntInvdiscountedAmount,dscntInvdescription)" ><i class="fa fa-floppy-o"></i> Update & Save</button>  
-                                    </div>
-                                </div>
-                            </div>
-                    </fieldset>
-                </form>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-xs-12">
+              <div class="btn-group pull-right">
+                <button type="button" class="btn btn-primary pull-right"
+                  (click)="discountInvoice(dscntInvinvoiceNumber,dscntInvdiscountedAmount,dscntInvdescription)"><i
+                    class="fa fa-floppy-o"></i> Update & Save</button>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
 
-            </div>  
-        </div>
-     
+    </div>
+  </div>
+
 </ng-template>
 
 <!-------------------Discount in Invoice Modal End--------------------->

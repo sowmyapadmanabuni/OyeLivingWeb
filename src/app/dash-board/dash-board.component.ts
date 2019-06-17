@@ -39,10 +39,9 @@ export class DashBoardComponent implements OnInit {
 
   getAssociation(){
     console.log(this.accountID);
-    this.dashBrdService.getAssociation(this.accountID).subscribe(res => {
+    this.dashBrdService.getAssociation(this.accountID).subscribe(data => {
       //console.log(JSON.stringify(res));
-      var data:any = res;
-      this.associations = data.data.associationByAccount;
+      this.associations = data['data'].associationByAccount;
       console.log('associations',this.associations);
       });
   }
@@ -74,20 +73,13 @@ export class DashBoardComponent implements OnInit {
         });
   }
 
-  loadAssociation(associationName:string){
+  loadAssociation(asAssnID){
+    console.log('asAssnID',asAssnID); 
+   let singleassociation= this.associations.find(item=>item['asAssnID'] == asAssnID);
     this.appComponent.myMenus=true;
-    //console.log("Selected AssociationName: " + JSON.stringify(this.associations));
-    this.currentAssociationName = associationName;
-    this.associations.forEach(association => {
-      if(association.asAsnName == associationName)
-      {
-        this.globalService.setCurrentAssociationId(association.asAssnID);
-        this.globalService.setCurrentAssociationName(associationName);
-        console.log("Selected AssociationId: " + this.globalService.getCurrentAssociationId());
-      }
-      
-    });
-    
+    this.currentAssociationName = singleassociation['asAsnName'];
+    this.globalService.setCurrentAssociationId(asAssnID);
+    this.globalService.setCurrentAssociationName(singleassociation['asAsnName']);
   }
 
   assnAmountDue(){

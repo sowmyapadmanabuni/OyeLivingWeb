@@ -111,9 +111,7 @@ export class ViewUnitComponent implements OnInit {
 
   ngOnInit() {
     this.currentAssociationID = this.globalService.getCurrentAssociationId();
-    this.currentAssociationID = '1156';
     this.currentAssociationName = this.globalService.getCurrentAssociationName();
-    this.currentAssociationName = 'MANAS ASSOCIATION';
     //this.associationID="10";
     this.getUnitDetails();
     this.getBlocks();

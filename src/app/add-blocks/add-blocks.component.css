@@ -14,3 +14,7 @@ legend.scheduler-border {
     padding:5px 10px;
     border-bottom:none;
 }
+
+button[type="submit"]{
+    margin-right: 2px;
+}

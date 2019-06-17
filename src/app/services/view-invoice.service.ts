@@ -10,18 +10,17 @@ import { AssociationDetails } from '../models/association-details';
 export class ViewInvoiceService {
 
   ipAddress: string;
-  currentAssociationID: number;
   url: string;
 
   constructor(private http: HttpClient) {
     this.ipAddress = 'http://apidev.oyespace.com/';
-    this.currentAssociationID = 4217;
   }
 
   /*----------------------Block List By association ID -----------------*/
-  GetBlockListByAssocID() {
+  GetBlockListByAssocID(currentAssociationID) {
+    console.log('currentAssociationID',currentAssociationID);
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/Block/GetBlockListByAssocID/${this.currentAssociationID}`
+    this.url = `${this.ipAddress}oyeliving/api/v1/Block/GetBlockListByAssocID/${currentAssociationID}`
     return this.http.get(this.url, { headers: headers })
       .pipe(map(data => {
         return data['data'].blocksByAssoc.map(item => {
@@ -54,16 +53,16 @@ export class ViewInvoiceService {
       }))
   }
 
-  getCurrentBlockDetails(blockId) {
+  getCurrentBlockDetails(blockId,currentAssociationID) {
     console.log('getCurrentBlockDetails', blockId);
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/invoice/view/${this.currentAssociationID}/${blockId}`;
+    this.url = `${this.ipAddress}oyeliving/api/v1/invoice/view/${currentAssociationID}/${blockId}`;
     return this.http.get(this.url, { headers: headers });
   }
 
-  viewInvoice(blockid) {
+  viewInvoice(blockid,currentAssociationID) {
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/invoice/view/${this.currentAssociationID}/${blockid}`;
+    this.url = `${this.ipAddress}oyeliving/api/v1/invoice/view/${currentAssociationID}/${blockid}`;
     
 
     return this.http.get(this.url, { headers: headers });
@@ -72,10 +71,8 @@ export class ViewInvoiceService {
   invoiceDetails(InvoiceId,UnitID){
     let headers = this.getHttpheaders();
     this.url = `${this.ipAddress}oyeliving/api/v1/invoice/details/${InvoiceId}/${UnitID}`;
-    this.http.get(this.url, { headers: headers })
-    .subscribe(data=>{
-      console.log('invoiceDetails',data);
-    })
+   return this.http.get(this.url, { headers: headers });
+
 //http://apidev.oyespace.com/oyeliving/api/v1/invoice/details/{InvoiceId}/{UnitID}
   }
 
@@ -98,9 +95,9 @@ export class ViewInvoiceService {
     return this.http.post(this.url, JSON.stringify(iciciData), { headers: headers });
   }
 
-  getassociationlist(asdPyDate, blMgrMobile) {
+  getassociationlist(asdPyDate, blMgrMobile,currentAssociationID) {
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/association/getassociationlist/${this.currentAssociationID}`;
+    this.url = `${this.ipAddress}oyeliving/api/v1/association/getassociationlist/${currentAssociationID}`;
     return this.http.get(this.url, { headers: headers })
       .pipe(map(data => {
         return new AssociationDetails(

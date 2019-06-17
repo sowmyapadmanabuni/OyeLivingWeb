@@ -21,19 +21,19 @@ export class ViewExpensesService {
   purchaseordersbyassoc: PurchaseOrdersByAssoc[];
 
   invoiceLists: any[];
-  invoiceBlockid:string;
   totalItems: number;
+
+  currentBlockId:string;
 
   constructor(private http: HttpClient) {
     this.ipAddress = 'http://apidev.oyespace.com/';
-    this.currentAssociationID = 4217;
     this.todayDate = new Date();
   }
 
-  getAssociationList() {
-    console.log('getAssociationList')
+  getAssociationList(currentAssociationID) {
+    console.log('getAssociationList',currentAssociationID);
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/association/getAssociationList/${this.currentAssociationID}`;
+    this.url = `${this.ipAddress}oyeliving/api/v1/association/getAssociationList/${currentAssociationID}`;
     return this.http.get(this.url, { headers: headers })
   }
 
@@ -60,10 +60,10 @@ export class ViewExpensesService {
       )
   }*/
 
-  GetExpenseListByAssocID(): Observable<Viewexpense[]> {
+  GetExpenseListByAssocID(currentAssociationID): Observable<Viewexpense[]> {
     console.log('GetExpenseListByAssocID')
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/Expense/GetExpenseListByAssocID/${this.currentAssociationID}`;
+    this.url = `${this.ipAddress}oyeliving/api/v1/Expense/GetExpenseListByAssocID/${currentAssociationID}`;
     return this.http.get(this.url, { headers: headers })
       .pipe(
         map(data => {
@@ -129,10 +129,11 @@ export class ViewExpensesService {
       }))
   }
 
-  generateInvoice() {
-    console.log('invoiceBlockid',this.invoiceBlockid);
+  generateInvoice(currentAssociationID) {
+    console.log('currentBlockId',this.currentBlockId);
+    console.log('currentAssociationID',currentAssociationID);
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/invoice/list/${this.currentAssociationID}/${4164}`;
+    this.url = `${this.ipAddress}oyeliving/api/v1/invoice/list/${currentAssociationID}/${this.currentBlockId}`;
     return this.http.get(this.url, { headers: headers })
       .pipe(switchMap(data => this.generateInvoice_post(data)))
   }

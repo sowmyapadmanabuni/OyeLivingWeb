@@ -7,6 +7,8 @@ import {CreateBlock} from './../create-block';
 })
 export class ViewBlockService {
    
+  url:string;
+
   scopeIP:string;
   scriptIP:string;
   headers:HttpHeaders;
@@ -39,5 +41,18 @@ export class ViewBlockService {
     return this.http.post(this.scopeIP + 'oyeliving/api/v1/Block/create', createBlockData,  {headers:this.headers});
   }
 
-  
+  UpdateBlock(editblockdata:any)
+ {
+   let headers = this.getHttpheaders();
+   this.url = `http://apidev.oyespace.com/oyeliving/api/v1/Block/BlockDetailsUpdate`;
+   return this.http.post(this.url, JSON.stringify(editblockdata), { headers: headers });
+ }
+ getHttpheaders(): HttpHeaders {
+   const headers = new HttpHeaders()
+     .set('Authorization', 'my-auth-token')
+     .set('X-Champ-APIKey', '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1')
+     .set('Content-Type', 'application/json');
+   return headers;
+ }
 }
+

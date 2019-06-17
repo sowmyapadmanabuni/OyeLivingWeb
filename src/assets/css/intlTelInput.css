@@ -1,17 +1,3 @@
-/**
- * Variables declared here can be overridden by consuming applications, with
- * the help of the `!default` flag.
- *
- * @example
- *     // overriding $hoverColor
- *     $hoverColor: rgba(red, 0.05);
- *
- *     // overriding image path
- *     $flagsImagePath: "images/";
- *
- *     // import the scss file after the overrides
- *     @import "bower_component/intl-tel-input/src/css/intlTelInput";
- */
 .intl-tel-input {
   position: relative;
   display: inline-block; }
@@ -38,19 +24,12 @@
   .intl-tel-input .selected-flag {
     z-index: 1;
     position: relative;
-    width: 36px;
+    display: flex;
+    align-items: center;
     height: 100%;
-    padding: 0 0 0 8px; }
-    .intl-tel-input .selected-flag .iti-flag {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      margin: auto; }
+    padding: 0 6px 0 8px; }
     .intl-tel-input .selected-flag .iti-arrow {
-      position: absolute;
-      top: 50%;
-      margin-top: -2px;
-      right: 6px;
+      margin-left: 6px;
       width: 0;
       height: 0;
       border-left: 3px solid transparent;
@@ -71,7 +50,8 @@
     border: 1px solid #CCC;
     white-space: nowrap;
     max-height: 200px;
-    overflow-y: scroll; }
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch; }
     .intl-tel-input .country-list.dropup {
       bottom: 100%;
       margin-bottom: -1px; }
@@ -86,7 +66,8 @@
       margin-bottom: 5px;
       border-bottom: 1px solid #CCC; }
     .intl-tel-input .country-list .country {
-      padding: 5px 10px; }
+      padding: 5px 10px;
+      outline: none; }
       .intl-tel-input .country-list .country .dial-code {
         color: #999; }
     .intl-tel-input .country-list .country.highlight {
@@ -102,8 +83,6 @@
   .intl-tel-input.allow-dropdown .flag-container, .intl-tel-input.separate-dial-code .flag-container {
     right: auto;
     left: 0; }
-  .intl-tel-input.allow-dropdown .selected-flag, .intl-tel-input.separate-dial-code .selected-flag {
-    width: 46px; }
   .intl-tel-input.allow-dropdown .flag-container:hover {
     cursor: pointer; }
     .intl-tel-input.allow-dropdown .flag-container:hover .selected-flag {
@@ -113,44 +92,9 @@
     .intl-tel-input.allow-dropdown input[disabled] + .flag-container:hover .selected-flag, .intl-tel-input.allow-dropdown input[readonly] + .flag-container:hover .selected-flag {
       background-color: transparent; }
   .intl-tel-input.separate-dial-code .selected-flag {
-    background-color: rgba(0, 0, 0, 0.05);
-    display: table; }
+    background-color: rgba(0, 0, 0, 0.05); }
   .intl-tel-input.separate-dial-code .selected-dial-code {
-    display: table-cell;
-    vertical-align: middle;
-    padding-left: 28px; }
-  .intl-tel-input.separate-dial-code.iti-sdc-2 input, .intl-tel-input.separate-dial-code.iti-sdc-2 input[type=text], .intl-tel-input.separate-dial-code.iti-sdc-2 input[type=tel] {
-    padding-left: 66px; }
-  .intl-tel-input.separate-dial-code.iti-sdc-2 .selected-flag {
-    width: 60px; }
-  .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-2 input, .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-2 input[type=text], .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-2 input[type=tel] {
-    padding-left: 76px; }
-  .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-2 .selected-flag {
-    width: 70px; }
-  .intl-tel-input.separate-dial-code.iti-sdc-3 input, .intl-tel-input.separate-dial-code.iti-sdc-3 input[type=text], .intl-tel-input.separate-dial-code.iti-sdc-3 input[type=tel] {
-    padding-left: 74px; }
-  .intl-tel-input.separate-dial-code.iti-sdc-3 .selected-flag {
-    width: 68px; }
-  .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-3 input, .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-3 input[type=text], .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-3 input[type=tel] {
-    padding-left: 84px; }
-  .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-3 .selected-flag {
-    width: 78px; }
-  .intl-tel-input.separate-dial-code.iti-sdc-4 input, .intl-tel-input.separate-dial-code.iti-sdc-4 input[type=text], .intl-tel-input.separate-dial-code.iti-sdc-4 input[type=tel] {
-    padding-left: 82px; }
-  .intl-tel-input.separate-dial-code.iti-sdc-4 .selected-flag {
-    width: 76px; }
-  .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-4 input, .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-4 input[type=text], .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-4 input[type=tel] {
-    padding-left: 92px; }
-  .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-4 .selected-flag {
-    width: 86px; }
-  .intl-tel-input.separate-dial-code.iti-sdc-5 input, .intl-tel-input.separate-dial-code.iti-sdc-5 input[type=text], .intl-tel-input.separate-dial-code.iti-sdc-5 input[type=tel] {
-    padding-left: 90px; }
-  .intl-tel-input.separate-dial-code.iti-sdc-5 .selected-flag {
-    width: 84px; }
-  .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-5 input, .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-5 input[type=text], .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-5 input[type=tel] {
-    padding-left: 100px; }
-  .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-5 .selected-flag {
-    width: 94px; }
+    margin-left: 6px; }
   .intl-tel-input.iti-container {
     position: absolute;
     top: -1000px;
@@ -188,9 +132,9 @@
     width: 13px; }
   .iti-flag.va {
     width: 15px; }
-  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .iti-flag {
-      background-size: 5630px 15px; } }
+      background-size: 5652px 15px; } }
   .iti-flag.ac {
     height: 10px;
     background-position: 0px 0px; }
@@ -360,7 +304,7 @@
     height: 10px;
     background-position: -1203px 0px; }
   .iti-flag.cy {
-    height: 13px;
+    height: 14px;
     background-position: -1225px 0px; }
   .iti-flag.cz {
     height: 14px;
@@ -381,7 +325,7 @@
     height: 10px;
     background-position: -1357px 0px; }
   .iti-flag.do {
-    height: 13px;
+    height: 14px;
     background-position: -1379px 0px; }
   .iti-flag.dz {
     height: 14px;
@@ -908,72 +852,74 @@
   .iti-flag.um {
     height: 11px;
     background-position: -5219px 0px; }
+  .iti-flag.un {
+    height: 14px;
+    background-position: -5241px 0px; }
   .iti-flag.us {
     height: 11px;
-    background-position: -5241px 0px; }
+    background-position: -5263px 0px; }
   .iti-flag.uy {
     height: 14px;
-    background-position: -5263px 0px; }
+    background-position: -5285px 0px; }
   .iti-flag.uz {
     height: 10px;
-    background-position: -5285px 0px; }
+    background-position: -5307px 0px; }
   .iti-flag.va {
     height: 15px;
-    background-position: -5307px 0px; }
+    background-position: -5329px 0px; }
   .iti-flag.vc {
     height: 14px;
-    background-position: -5324px 0px; }
+    background-position: -5346px 0px; }
   .iti-flag.ve {
     height: 14px;
-    background-position: -5346px 0px; }
+    background-position: -5368px 0px; }
   .iti-flag.vg {
     height: 10px;
-    background-position: -5368px 0px; }
+    background-position: -5390px 0px; }
   .iti-flag.vi {
     height: 14px;
-    background-position: -5390px 0px; }
+    background-position: -5412px 0px; }
   .iti-flag.vn {
     height: 14px;
-    background-position: -5412px 0px; }
+    background-position: -5434px 0px; }
   .iti-flag.vu {
     height: 12px;
-    background-position: -5434px 0px; }
+    background-position: -5456px 0px; }
   .iti-flag.wf {
     height: 14px;
-    background-position: -5456px 0px; }
+    background-position: -5478px 0px; }
   .iti-flag.ws {
     height: 10px;
-    background-position: -5478px 0px; }
+    background-position: -5500px 0px; }
   .iti-flag.xk {
     height: 15px;
-    background-position: -5500px 0px; }
+    background-position: -5522px 0px; }
   .iti-flag.ye {
     height: 14px;
-    background-position: -5522px 0px; }
+    background-position: -5544px 0px; }
   .iti-flag.yt {
     height: 14px;
-    background-position: -5544px 0px; }
+    background-position: -5566px 0px; }
   .iti-flag.za {
     height: 14px;
-    background-position: -5566px 0px; }
+    background-position: -5588px 0px; }
   .iti-flag.zm {
     height: 14px;
-    background-position: -5588px 0px; }
+    background-position: -5610px 0px; }
   .iti-flag.zw {
     height: 10px;
-    background-position: -5610px 0px; }
+    background-position: -5632px 0px; }
 
 .iti-flag {
-  width: 20px;
   height: 15px;
   box-shadow: 0px 0px 1px 0px #888;
-  background-image: url("../img/flags.png");
+  background-image: url("../pathto/flags.png");
   background-repeat: no-repeat;
   background-color: #DBDBDB;
   background-position: 20px 0; }
-  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .iti-flag {
-      background-image: url("../img/flags@2x.png"); } }
+      background-image: url("../pathto/flags@2x.png"); } }
 
 .iti-flag.np {
   background-color: transparent; }

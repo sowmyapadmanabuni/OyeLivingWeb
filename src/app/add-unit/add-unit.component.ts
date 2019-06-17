@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewUnitService } from '../view-unit/view-unit.service';
 import Swal from 'sweetalert2';
+import {GlobalServiceService} from '../global-service.service';
 
 @Component({
   selector: 'app-add-unit',
@@ -38,9 +39,9 @@ export class AddUnitComponent implements OnInit {
   currentAssociationID:string;
   allBlocksLists: any[];
 
-  constructor(private viewUniService: ViewUnitService) {
+  constructor(private viewUniService: ViewUnitService,
+    private globalservice:GlobalServiceService) {
 
-    this.currentAssociationName = 'MANAS ASSOCIATION';
     this.blBlockID = '';
     this.occupency='';
     this.unitType='';
@@ -53,22 +54,23 @@ export class AddUnitComponent implements OnInit {
     ];
 
     this.calculationTypes = [
-      { "name": "Flat Rate Value" },
-      { "name": "Dimension Based" }
+      { "name": "FlatRateValue","displayName":"Flat Rate Value" },
+      { "name": "dimension","displayName":"Dimension Based"  }
     ];
 
     this.occupencys = [
       { "name": "Sold Owner Occupied" },
       { "name": "Sold Tenant Occupied" },
-      { "name": "Sold Vaccant" },
-      { "name": "Unsold Vaccant" },
-      { "name": "Unsold Tenant Occupied" }
+      { "name": "Sold Vacant" },
+      { "name": "UnSold Vacant" },
+      { "name": "UnSold Tenant Occupied" }
     ];
 
    }
 
   ngOnInit() {
-    this.currentAssociationID = '4217';
+    this.currentAssociationID = this.globalservice.getCurrentAssociationId();
+    console.log('this.currentAssociationID',this.currentAssociationID);
     this.viewUniService.GetBlockListByAssocID(this.currentAssociationID)
     .subscribe(data => {
       this.allBlocksLists = data['data'].blocksByAssoc;
@@ -77,7 +79,9 @@ export class AddUnitComponent implements OnInit {
   }
 
   getAllUnitDetailsByBlockID(blBlockID) {
+    console.log('getAllUnitDetailsByBlockID',blBlockID)
     this.blockID = blBlockID;
+    console.log('this.blockID',this.blockID)
     /*-------------------Get Unit List By Block ID ------------------*/
     this.viewUniService.GetUnitListByBlockID(blBlockID)
       .subscribe(data => {
@@ -109,7 +113,7 @@ export class AddUnitComponent implements OnInit {
   createUnit() {
     let createUnitData =
     {
-      "ASAssnID": 4217,
+      "ASAssnID": this.currentAssociationID,
       "ACAccntID": 21,
       "units": [
         {
@@ -125,7 +129,7 @@ export class AddUnitComponent implements OnInit {
           "FLFloorID": 1,
           "BLBlockID": this.blockID,
           "Owner":
-          {
+          [{
 
             "UOFName": this.ownerFirtname,
             "UOLName": this.ownerLastname,
@@ -141,9 +145,9 @@ export class AddUnitComponent implements OnInit {
             "UOEmail3": "null",
             "UOEmail4": "null",
             "UOCDAmnt": ""
-          },
+          }],
           "Tenant":
-          {
+          [{
 
             "UTFName":this.tenantFirtname,
             "UTLName": this.tenantLastname,
@@ -152,7 +156,7 @@ export class AddUnitComponent implements OnInit {
             "UTMobile1": "",
             "UTEmail": this.tenantEmail,
             "UTEmail1": ""
-          },
+          }],
           "UnitParkingLot":
             [
               {
@@ -166,7 +170,6 @@ export class AddUnitComponent implements OnInit {
       ]
     }
 
-    console.log(JSON.stringify(createUnitData));
     this.viewUniService.createUnit(createUnitData).subscribe((response) => {
 
       Swal.fire({

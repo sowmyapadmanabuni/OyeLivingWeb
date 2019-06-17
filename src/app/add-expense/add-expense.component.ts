@@ -10,6 +10,7 @@ import swal from 'sweetalert2';
 import { ViewChild } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { HttpEventType } from '@angular/common/http';
+import {GlobalServiceService} from '../global-service.service';
 
 
 @Component({
@@ -61,9 +62,14 @@ export class AddExpenseComponent implements OnInit {
   isnotValidformat: boolean;
   disableButton: boolean;
 
+  currentAssociationID:string;
+
   constructor(private addexpenseservice: AddExpenseService,
     private router: Router,
-    private viewexpensesservice: ViewExpensesService) {
+    private viewexpensesservice: ViewExpensesService,
+    private globalservice:GlobalServiceService) {
+
+      this.currentAssociationID=this.globalservice.getCurrentAssociationId();
     this.expensedata = new ExpenseData();
     this.selectedFile = null;
     this.blockName = '';
@@ -76,7 +82,7 @@ export class AddExpenseComponent implements OnInit {
     this.unit = '';
     this.paybymethod = '';
     this.dateandTime = new Date();
-    this.expensedata.ASAssnID = 4217;
+    this.expensedata.ASAssnID = this.currentAssociationID;
     this.expensedata.BLBlockID = '';
     this.expensedata.POID = '';
     this.expensedata.EXHead = '';
@@ -140,7 +146,9 @@ export class AddExpenseComponent implements OnInit {
     { 'name': 'OnlinePay', 'displayName': 'OnlinePay', 'id': 4 }
     ]
 
-    this.distributionTypes = [{ "name": "Dimension Based" }, { "name": "Per Unit" }, { "name": "Actuals" }];
+    this.distributionTypes = [{ "name": "Dimension Based","displayName":"Dimension Based" }, 
+    { "name": "Per Unit","displayName":"Per Unit" },
+     { "name": "Actuals","displayName":"Actuals" }];
 
     this.bankList = [
       'Allahabad Bank',
@@ -194,7 +202,7 @@ export class AddExpenseComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.addexpenseservice.GetBlockListByAssocID()
+    this.addexpenseservice.GetBlockListByAssocID(this.currentAssociationID)
       .subscribe(item => {
         this.allBlocksLists = item;
         this.availableNoOfBlocks = item.length;
@@ -202,13 +210,13 @@ export class AddExpenseComponent implements OnInit {
 
       });
 
-    this.addexpenseservice.GetPurchaseOrderListByAssocID()
+    this.addexpenseservice.GetPurchaseOrderListByAssocID(this.currentAssociationID)
       .subscribe(data => {
         console.log(data);
         this.purchaseOrders = data;
       });
 
-    this.addexpenseservice.getAssociationList();
+    this.addexpenseservice.getAssociationList(this.currentAssociationID);
     //this.addexpenseservice.applicableTo('applicableTo');
   }
   poDetails(POID) {
@@ -300,7 +308,6 @@ export class AddExpenseComponent implements OnInit {
   }
 
   addExp() {
-
     this.expensedata.EXDate = formatDate(this.EXDate, 'yyyy/MM/dd', 'en');
     if (this.checkField == 'Cash') {
       this.expensedata.EXChqDate = null;
@@ -316,8 +323,7 @@ export class AddExpenseComponent implements OnInit {
     this.addexpenseservice.createExpense(this.expensedata)
       .subscribe(
         () => {
-          this.viewexpensesservice.invoiceBlockid = this.expensedata.BLBlockID;
-          console.log('viewexpensesservice.invoiceBlockid', this.viewexpensesservice.invoiceBlockid);
+          this.viewexpensesservice.currentBlockId = this.expensedata.BLBlockID;
           swal.fire({
             title: "Expense Added Successfully",
             text: "",

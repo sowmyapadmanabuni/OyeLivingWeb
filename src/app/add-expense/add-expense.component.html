@@ -189,7 +189,7 @@
               #distributionControl='ngModel' required>
               <option disabled="true" selected="true" value="">Select Distribution Type</option>
               <option *ngFor='let item of distributionTypes' [value]="item['name']">
-                {{item['name']}}
+                {{item['displayName']}}
               </option>
             </select>
             <p class="alerts" *ngIf="distributionControl.invalid && distributionControl.touched">

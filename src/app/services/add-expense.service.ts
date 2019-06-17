@@ -13,19 +13,17 @@ import {ExpenseData} from '../models/expense-data';
 export class AddExpenseService {
 
   ipAddress: string;
-  currentAssociationID: number;
   url: string;
   availableNoOfBlocks: number;
 
   constructor(private http: HttpClient) {
     this.ipAddress = 'http://apidev.oyespace.com/';
-    this.currentAssociationID = 4217;
   }
 
   /*----------------------Block List By association ID -----------------*/
-  GetBlockListByAssocID() {
+  GetBlockListByAssocID(currentAssociationID) {
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/Block/GetBlockListByAssocID/${this.currentAssociationID}`
+    this.url = `${this.ipAddress}oyeliving/api/v1/Block/GetBlockListByAssocID/${currentAssociationID}`
    return this.http.get(this.url, { headers: headers })
       .pipe(map(data => {
         return data['data'].blocksByAssoc.map(item => {
@@ -68,9 +66,9 @@ export class AddExpenseService {
   }
 
   /* Get All PurchaseOrder details For purchase Order UI lists */
-  GetPurchaseOrderListByAssocID(): Observable<PurchaseOrdersByAssoc[]> {
+  GetPurchaseOrderListByAssocID(currentAssociationID): Observable<PurchaseOrdersByAssoc[]> {
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/PurchaseOrder/GetPurchaseOrderListByAssocID/${this.currentAssociationID}`
+    this.url = `${this.ipAddress}oyeliving/api/v1/PurchaseOrder/GetPurchaseOrderListByAssocID/${currentAssociationID}`
     return this.http.get(this.url, { headers: headers })
       .pipe(map(data => {
         return data['data'].purchaseOrdersByAssoc.map(item => {
@@ -111,9 +109,9 @@ export class AddExpenseService {
   }
 
   /* getAssociationList */
-  getAssociationList() {
+  getAssociationList(currentAssociationID) {
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/association/getAssociationList/${this.currentAssociationID}`
+    this.url = `${this.ipAddress}oyeliving/api/v1/association/getAssociationList/${currentAssociationID}`
     this.http.get(this.url, { headers: headers })
       .subscribe(data => {
         console.log(data);

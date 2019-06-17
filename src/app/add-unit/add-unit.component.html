@@ -87,7 +87,7 @@
                       <option disabled="true" selected="true" value="" style="color:#b33951">Select Calculation Types
                       </option>
                       <option *ngFor="let calculationType of calculationTypes" [value]="calculationType.name">
-                        {{calculationType.name}}</option>
+                        {{calculationType.displayName}}</option>
                     </select>
                     <p class="alerts" *ngIf="calculationtypeControl.invalid && calculationtypeControl.touched"> Please select calculation type</p>
                   </div>

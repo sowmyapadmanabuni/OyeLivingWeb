@@ -9,9 +9,9 @@
   </div>
 
   <div class="col-sm-4">
-      <select class="form-control" name="loadAssociation" id="loadAssn" [(ngModel)]="association"  (ngModelChange)="loadAssociation(association)" required>
+      <select class="form-control" name="asAssnID" id="loadAssn" [(ngModel)]="asAssnID" (change)="loadAssociation(asAssnID)" required>
          <option [value]="" style="color:#b33951">Select Association</option>
-         <option *ngFor="let association of associations" [value]="association.asAsnName">{{association.asAsnName}}</option>
+         <option *ngFor="let item of associations" [value]="item['asAssnID']">{{item['asAsnName']}}</option>
       </select>
   </div>
 </div>

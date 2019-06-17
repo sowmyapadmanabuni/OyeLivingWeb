@@ -14,6 +14,7 @@ import swal from 'sweetalert2';
 import { ToastrService } from 'ngx-toastr';
 import { formatDate } from '@angular/common';
 import { HttpEventType } from '@angular/common/http';
+import {GlobalServiceService} from '../global-service.service';
 
 @Component({
   selector: 'app-view-expenses',
@@ -65,22 +66,18 @@ export class ViewExpensesComponent implements OnInit {
   p: number;
   dynamic: number;
 
+  currentAssociationID:string;
+
   constructor(private viewexpenseservice: ViewExpensesService,
     private modalService: BsModalService,
     private addexpenseservice: AddExpenseService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private globalservice:GlobalServiceService
   ) {
     this.todayDate = new Date();
+    this.currentAssociationID=this.globalservice.getCurrentAssociationId();
 
-    this.viewexpenseservice.getAssociationList()
-      .subscribe(data => {
-        this.associationlist = data['data'].association;
-        this.associationDetails = data['data'].association;
-        this.assnName = data['data'].association.asAsnName;
-      });
-
-    this.viewexpenses = this.viewexpenseservice.GetExpenseListByAssocID();
     //this.viewexpenseservice.GetExpenseListByAssocID();
     //this.mgrName= this.viewexpenseservice.GetBlockListByBlockID('1107');
     //this.viewexpenseservice.GetPurchaseOrderListByAssocID();
@@ -98,8 +95,8 @@ export class ViewExpensesComponent implements OnInit {
     this.unit = '';
     this.paybymethod = '';
     this.dateandTime = new Date();
-    this.editexpensedata.BLBlockID = 1107;
-    this.editexpensedata.ASAssnID = 1156;
+    //this.editexpensedata.BLBlockID = 1107;
+    //this.editexpensedata.ASAssnID = 1156;
     this.editexpensedata.EXHead = '';
     this.editexpensedata.EXRecurr = '';
     this.editexpensedata.EXApplTO = '';
@@ -161,7 +158,16 @@ export class ViewExpensesComponent implements OnInit {
 
     //   });
 
-    this.addexpenseservice.GetPurchaseOrderListByAssocID()
+    this.viewexpenseservice.getAssociationList(this.currentAssociationID)
+      .subscribe(data => {
+        this.associationlist = data['data'].association;
+        this.associationDetails = data['data'].association;
+        this.assnName = data['data'].association.asAsnName;
+      });
+
+    this.viewexpenses = this.viewexpenseservice.GetExpenseListByAssocID(this.currentAssociationID);
+
+    this.addexpenseservice.GetPurchaseOrderListByAssocID(this.currentAssociationID)
       .subscribe(data => {
         console.log(data);
         this.purchaseOrders = data;
@@ -187,7 +193,7 @@ export class ViewExpensesComponent implements OnInit {
       .subscribe(data => console.log(data));
   }
   generateInvoice() {
-    this.viewexpenseservice.generateInvoice()
+    this.viewexpenseservice.generateInvoice(this.currentAssociationID)
       .subscribe(() => {
         swal.fire({
           title: "Invoice Generated Successfully",
