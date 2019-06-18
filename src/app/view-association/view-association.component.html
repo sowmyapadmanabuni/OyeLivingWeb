@@ -643,7 +643,7 @@
                           [ngClass]="{'has-error' : addressControl.invalid && addressControl.touched}">
                           <label>Address<span class="red">*</span></label>
                           <input type="text" class="form-control" name="ASAddress" [(ngModel)]="ASAddress"
-                            #addressControl='ngModel' placeholder="Address" pattern="[a-zA-Z0-9-]*" required />
+                            #addressControl='ngModel' placeholder="Address" pattern="[a-zA-Z0-9_]*" required />
                             <p class="alerts" *ngIf="addressControl.invalid && addressControl.touched">Address is required</p>
                         </div>
                       </div>

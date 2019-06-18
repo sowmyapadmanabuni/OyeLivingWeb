@@ -643,23 +643,24 @@ export class ViewAssociationComponent implements OnInit {
         }]
     };
     console.log(JSON.stringify(this.editassndata));
-  //   this.viewAssnService.UpdateAssociation(this.editassndata).subscribe(res => {console.log("Done");
-  //   console.log(JSON.stringify(res));
-  // //alert("Association Created Successfully")
-  // Swal.fire({
-  //   title: 'Association Updated Successfuly',
-  // }).then(
-  //   (result) => {
+    this.viewAssnService.UpdateAssociation(this.editassndata).subscribe(res => {console.log("Done");
+    console.log(JSON.stringify(res));
+  //alert("Association Created Successfully")
+  Swal.fire({
+    title: 'Association Updated Successfuly',
+  }).then(
+    (result) => {
   
-  //     if (result.value) {
-  //       //this.form.reset();
+      if (result.value) {
+        //this.form.reset();
+        this.modalRef.hide();
       
-  //     } else if (result.dismiss === swal.DismissReason.cancel) {
-  //       this.router.navigate(['']);
-  //     }
-  //   }
-  // )
-  // });
+      } else if (result.dismiss === swal.DismissReason.cancel) {
+        this.router.navigate(['']);
+      }
+    }
+  )
+  });
     
 
   

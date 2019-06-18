@@ -45,7 +45,7 @@
                                     <i data-toggle="modal" data-target="#viewBlockDetailsTemplate"
                                         (click)="viewBlockDetails(item['blBlkName'],item['blBlkType'],item['blNofUnit'])" class="fa fa-eye"></i>&nbsp;|&nbsp;<i
                                         data-toggle="modal" data-target="#editBlockDetails"
-                                        (click)="OpenModal(template,item.blBlkName,item.blBlkType,item.blNofUnit,item.blMgrName,item.blMgrMobile,item.blMgrEmail,item.asMtType,item.asMtFRate,item.asMtDimBs,item.asUniMsmt,item.asbGnDate,item.bldUpdated,item.aslpcType,item.aslpChrg,item.aslpsDate,item.blBlockID)"
+                                        (click)="OpenModal(template,item.blBlkName,item.blBlkType,item.blNofUnit,item.blMgrName,item.blMgrMobile,item.blMgrEmail,item.asMtType,item.asMtFRate,item.asMtDimBs,item.asUniMsmt,item.asbGnDate,item.bldUpdated,item.aslpcType,item.aslpChrg,item.aslpsDate,item.blBlockID,item.asiCrFreq)"
                                         class="fa fa-pencil"></i>
 
                                 </td>
@@ -157,9 +157,15 @@
                                 <div class="form-group"
                                     [ngClass]="{'was-validated' : blocktypeControl.invalid && blocktypeControl.touched}">
                                     <label id=label2>Block Type<span class="red">*</span></label>
-                                    <input type="text" name="BLBlkType" id="input2" autocomplete='BLBlkType'
-                                        [(ngModel)]="BLBlkType" #blocktypeControl="ngModel" class="form-control"
-                                        placeholder="Block Type" pattern="[a-zA-Z]*" required />
+
+                                        <select class="ui dropdown search methodDropdown" name="BLBlkType" [(ngModel)]="BLBlkType"
+                                        #blocktypeControl='ngModel' required>
+                                        <option value="">Select Frequency</option>
+                                        <option *ngFor="let blktype of blocktypes" [value]="blktype['name']">
+                                          {{blktype['displayName']}}
+                                        </option>
+                                      </select>
+
                                     <p class="alerts" *ngIf="blocktypeControl.invalid && blocktypeControl.touched">Valid
                                         block type is
                                         required</p>
@@ -305,8 +311,8 @@
                                 <div class="form-group">
                                     <label>Invoice Creation Frequency<span class="red">*</span> <span
                                             class="red">*</span></label>
-                                    <select class="ui dropdown search methodDropdown" name="frequency"
-                                        [(ngModel)]="frequency" #frequencyControl='ngModel' required>
+                                    <select class="ui dropdown search methodDropdown" name="ASICRFREQ"
+                                        [(ngModel)]="ASICRFREQ" #frequencyControl='ngModel' required>
                                         <option disabled="true" value="">Select Frequency</option>
                                         <option *ngFor="let frequency of frequencys" [value]="frequency['name']">
                                             {{frequency['displayName']}}

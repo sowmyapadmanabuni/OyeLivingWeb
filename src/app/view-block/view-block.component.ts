@@ -50,6 +50,7 @@ export class ViewBlockComponent implements OnInit {
  editblockdata: object;
  BLBlockID: string;
  ASBGnDate:string;
+ ASICRFREQ:string;
 
  addRate: string;
  addRate1: string;
@@ -58,6 +59,10 @@ export class ViewBlockComponent implements OnInit {
   bktype: string;
   bknofflrs: string;
   bknofunit: string;
+
+  bsConfig:object;
+
+  blocktypes:object[];
 
   constructor(private viewBlkService: ViewBlockService,
     private globalService: GlobalServiceService,
@@ -69,7 +74,19 @@ export class ViewBlockComponent implements OnInit {
       currentPage: 1
     };
 
+    this.bsConfig = Object.assign({}, { containerClass: 'theme-orange', dateInputFormat: 'YYYY-MM-DD' });
+
     this.allBlocksList=null;
+
+    this.blocktypes = [{
+      'name': 'Residential', 'displayName': 'Residential'
+    },
+    {
+      'name': 'Commercial', 'displayName': 'Commercial'
+    },
+    {
+      'name': 'Residential and Commercial', 'displayName': 'Residential and Commercial'
+    }]
   }
 
 
@@ -95,6 +112,7 @@ export class ViewBlockComponent implements OnInit {
       this.allBlocksLists = data['data'].blocksByAssoc;
       console.log('allBlocksLists', this.allBlocksLists);
       this.availableNoOfBlocks = data['data'].blocksByAssoc.length;
+      //asbGnDate
     });
   }
 
@@ -235,7 +253,7 @@ export class ViewBlockComponent implements OnInit {
     };
   }
 
-  OpenModal(template: TemplateRef<any>, blBlkName: string, blBlkType: string, blNofUnit: number, blMgrName: string, blMgrMobile: number, blMgrEmail: string, asMtType: string, asMtFRate: number, asMtDimBs: string, asUniMsmt: string,asbGnDate:string, bldUpdated: Date, aslpcType: string, aslpChrg: number, aslpsDate: Date, blBlockID: string) {
+  OpenModal(template: TemplateRef<any>, blBlkName: string, blBlkType: string, blNofUnit: number, blMgrName: string, blMgrMobile: number, blMgrEmail: string, asMtType: string, asMtFRate: number, asMtDimBs: string, asUniMsmt: string,asbGnDate:string, bldUpdated: Date, aslpcType: string, aslpChrg: number, aslpsDate: Date, blBlockID: string,asiCrFreq) {
 
     this.BLBlkName = blBlkName;
     this.BLBlkType = blBlkType;
@@ -243,7 +261,7 @@ export class ViewBlockComponent implements OnInit {
     this.BLMgrName = blMgrName;
     this.BLMgrMobile = blMgrMobile;
     this.BLMgrEmail = blMgrEmail;
-    //this.ASMtType = asMtType;
+    this.ASMtType = asMtType;
     this.ASMtFRate = asMtFRate;
     this.ASMtDimBs = asMtDimBs;
     this.ASUniMsmt = asUniMsmt;
@@ -254,6 +272,7 @@ export class ViewBlockComponent implements OnInit {
     this.ASLPChrg = aslpChrg;
     this.ASLPSDate = aslpsDate;
     this.BLBlockID = blBlockID;
+    this.ASICRFREQ =asiCrFreq; 
  
     console.log(this.BLBlkName);
     console.log(this.BLBlkType);
@@ -264,6 +283,7 @@ export class ViewBlockComponent implements OnInit {
     console.log(this.ASLPChrg);
     console.log(this.ASLPSDate);
     console.log(this.BLBlockID);
+    console.log(this.ASBGnDate);
     this.modalRef = this.modalService.show(template,
       Object.assign({}, { class: 'gray modal-lg' }));
  
@@ -287,7 +307,7 @@ export class ViewBlockComponent implements OnInit {
       ASLPChrg: this.ASLPChrg,
       ASLPSDate: this.ASLPSDate,
       BLBlockID: this.BLBlockID,
-      ASAssnID: 4217
+      ASAssnID: this.currentAssociationID
     };
  
     console.log('editblockdata', this.editblockdata);
