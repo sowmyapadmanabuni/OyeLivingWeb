@@ -14,7 +14,8 @@ import swal from 'sweetalert2';
 import { ToastrService } from 'ngx-toastr';
 import { formatDate } from '@angular/common';
 import { HttpEventType } from '@angular/common/http';
-import {GlobalServiceService} from '../global-service.service';
+import { GlobalServiceService } from '../global-service.service';
+import { ViewInvoiceService } from '../services/view-invoice.service';
 
 @Component({
   selector: 'app-view-expenses',
@@ -32,7 +33,7 @@ export class ViewExpensesComponent implements OnInit {
   assnName: string;
   todayDate: Date;
 
-  blockID: number;
+  blockID: string;
   availableNoOfBlocks: number;
   allBlocksLists: BlocksByAssoc[];
   purchaseOrders: PurchaseOrdersByAssoc[];
@@ -66,17 +67,23 @@ export class ViewExpensesComponent implements OnInit {
   p: number;
   dynamic: number;
 
-  currentAssociationID:string;
+  currentAssociationID: string;
+
+  invoiceLists: any[];
+
+  viewexpensesByBlockId: Observable<Object>;
 
   constructor(private viewexpenseservice: ViewExpensesService,
     private modalService: BsModalService,
     private addexpenseservice: AddExpenseService,
     private router: Router,
     private toastr: ToastrService,
-    private globalservice:GlobalServiceService
+    private globalservice: GlobalServiceService,
+    private viewinvoiceservice: ViewInvoiceService
   ) {
+    this.blockID = '';
     this.todayDate = new Date();
-    this.currentAssociationID=this.globalservice.getCurrentAssociationId();
+    this.currentAssociationID = this.globalservice.getCurrentAssociationId();
 
     //this.viewexpenseservice.GetExpenseListByAssocID();
     //this.mgrName= this.viewexpenseservice.GetBlockListByBlockID('1107');
@@ -165,13 +172,27 @@ export class ViewExpensesComponent implements OnInit {
         this.assnName = data['data'].association.asAsnName;
       });
 
+    //this.viewexpenses = this.viewexpenseservice.GetExpenseListByAssocID(this.currentAssociationID);
     this.viewexpenses = this.viewexpenseservice.GetExpenseListByAssocID(this.currentAssociationID);
+    http://apidev.oyespace.com/oyeliving/api/v1/Expense/GetExpenseListByBlockID/{BlockID}
+
 
     this.addexpenseservice.GetPurchaseOrderListByAssocID(this.currentAssociationID)
       .subscribe(data => {
         console.log(data);
         this.purchaseOrders = data;
       });
+
+    this.addexpenseservice.GetBlockListByAssocID(this.currentAssociationID)
+      .subscribe(item => {
+        this.allBlocksLists = item;
+        console.log('allBlocksLists', this.allBlocksLists);
+      });
+  }
+
+  GetExpenseListByBlockID(blockID) {
+    //this.viewexpensesByBlockId = this.viewexpenseservice.GetExpenseListByBlockID(blockID);
+    console.log(this.viewexpensesByBlockId);
   }
 
   poDetails() {
@@ -309,6 +330,15 @@ export class ViewExpensesComponent implements OnInit {
           confirmButtonColor: "#f69321",
           confirmButtonText: "OK"
         })
+      })
+  }
+
+  getCurrentBlockDetails(blBlockID) {
+    console.log('blBlockID-' + blBlockID);
+    this.viewinvoiceservice.getCurrentBlockDetails(blBlockID, this.currentAssociationID)
+      .subscribe(data => {
+        this.invoiceLists = data['data'].invoices;
+        console.log('invoiceLists?', this.invoiceLists);
       })
   }
 

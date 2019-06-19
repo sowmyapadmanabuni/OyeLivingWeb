@@ -1,17 +1,29 @@
-<div class="row">
-  <div class="col-sm-5 col-sm-12 col-xs-12">
-    <h3>View Expenses</h3>
-  </div>
-  <div class="col-sm-5 col-sm-12 col-xs-12">
-    <div class="form-group">
+<div class="pageTitle">
+  <div class="row">
+    <div class="col-sm-4 col-xs-12">
+      <h3>View Expenses</h3>
+    </div>
+    <div class="col-sm-3 col-xs-12 pull-left">
+      <div class="form-group">
+        <select required class="ui dropdown search methodDropdown" name="blockID" [(ngModel)]="blockID"
+          (change)='GetExpenseListByBlockID(blockID)' #blockNameControl='ngModel'>
+          <option disabled="true" selected="true" value="">Select Block Name</option>
+          <option *ngFor='let item of allBlocksLists' [value]="item['blBlockID']">
+            {{item['blBlkName']}}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3 col-xs-12">
+
+    </div>
+    <div class="col-sm-2 col-xs-12">
+      <button (click)='gotoAddexpense()' type="button" class="btn btn-primary pull-right"><i class="fa fa-plus"></i>Add
+        Expenses</button>
     </div>
   </div>
-  <div class="col-sm-2 col-sm-12 col-xs-12">
-    <button (click)='gotoAddexpense()' type="button" class="btn btn-primary pull-right"><i class="fa fa-plus"></i>Add
-      Expenses</button>
-  </div>
 </div>
-
+<!---->
 
 <div class="col-sm-2 col-sm-12 col-xs-12">
   <table class="table" id="example">
@@ -172,8 +184,7 @@
                     [ngClass]="{'has-error' : expenserecurrencetypeControl.invalid && expenserecurrencetypeControl.touched}">
                     <label>Expense Recurrence Type <span class="red">*</span></label>
                     <select class="ui dropdown search methodDropdown" name="EXRecurr"
-                      [(ngModel)]="editexpensedata.EXRecurr" #expenserecurrencetypeControl='ngModel'
-                       required>
+                      [(ngModel)]="editexpensedata.EXRecurr" #expenserecurrencetypeControl='ngModel' required>
                       <option disabled="true" selected="true" value="">Select Expense Type
                       </option>
                       <option *ngFor='let item of categories' [value]="item['displayName']">
@@ -365,22 +376,23 @@
                 </div>
               </div>
 
-                  <div class="col-sm-6 col-xs-12">
-                      <div class="row">
-                          <label>Invoice / Payment Copy<span class="red"></span></label>
-                      </div>
-                      <div class="row">
-                        <input type="file" id="uploadFileinput" class="form-control" (change)='onFileSelected($event)' />
-                        <button class="btn btn-primary" (click)='onUpLoad()' style="position:absolute;margin-left:90%;top:45%">
-                          <i class="fa fa-cloud-upload"></i>
-                        </button>
-                      </div>
-                          <div *ngIf='dynamic > 0' class="row mb-2">
-                              <progressbar [animate]="false" [value]="dynamic" type="success"><b>{{dynamic}}%</b></progressbar>
-                          </div>
-                
-                      <small class="pull-left">Upload File of Max 2MB and formats allowed are: PNG, JPG. JPEG and PDF</small>
-                    </div>
+              <div class="col-sm-6 col-xs-12">
+                <div class="row">
+                  <label>Invoice / Payment Copy<span class="red"></span></label>
+                </div>
+                <div class="row">
+                  <input type="file" id="uploadFileinput" class="form-control" (change)='onFileSelected($event)' />
+                  <button class="btn btn-primary" (click)='onUpLoad()'
+                    style="position:absolute;margin-left:90%;top:45%">
+                    <i class="fa fa-cloud-upload"></i>
+                  </button>
+                </div>
+                <div *ngIf='dynamic > 0' class="row mb-2">
+                  <progressbar [animate]="false" [value]="dynamic" type="success"><b>{{dynamic}}%</b></progressbar>
+                </div>
+
+                <small class="pull-left">Upload File of Max 2MB and formats allowed are: PNG, JPG. JPEG and PDF</small>
+              </div>
 
               <div>
                 <div class="from-group">

@@ -5,13 +5,15 @@ import { GlobalServiceService } from '../global-service.service';
 import swal from 'sweetalert2';
 import { ViewChild } from '@angular/core';
 
+declare var $: any;
+
 @Component({
   selector: 'app-add-blocks',
   templateUrl: './add-blocks.component.html',
   styleUrls: ['./add-blocks.component.css']
 })
 export class AddBlocksComponent implements OnInit {
-  
+
   frequencies: object[];
   assnName: string;
   bsConfig: object;
@@ -82,13 +84,17 @@ export class AddBlocksComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    $(document).ready(function () {
+      $("intlphone").click(function () {
+        alert('button clicked');
+      });
+    });
   }
 
   onValueChange(value: Date): void {
     console.log(value);
     this.minDate = new Date(value);
-    this.minDate.setDate(this.minDate.getDate()+1);
+    this.minDate.setDate(this.minDate.getDate() + 1);
   }
 
   onDueDateValueChange(value: Date) {
@@ -119,57 +125,57 @@ export class AddBlocksComponent implements OnInit {
   createBlock(frm) {
     frm.classList.add('was-validated');
     if (this.ctrateBlockform.valid) {
-    let CreateBockData = {
-      "ASAssnID": this.currentAssociationID,
-      "ACAccntID": 21,
-      "blocks": [
-        {
-          "ASAssnID": this.currentAssociationID,
-          "BLBlkName": this.blockname,
-          "BLBlkType": this.blocktype,
-          "BLNofUnit": this.noofunits,
-          "BLMgrName": this.mngName,
-          "BLMgrMobile": this.mobile,
-          "BLMgrEmail": this.manageremail,
-          "ASMtType": '',
-          "ASMtDimBs": this.maintenanceValue,
-          "ASMtFRate": this.flatRatevalue,
-          "ASUniMsmt": this.measurements,
-          "ASBGnDate": formatDate(this.billGenerationDate, 'yyyy/MM/dd', 'en'),
-          "ASLPCType": this.latePymtChargeType,
-          "ASLPChrg": this.latePymtCharge,
-          "ASLPSDate": formatDate(this.startsFrom, 'yyyy/MM/dd', 'en'),
-          "ASDPyDate": formatDate(this.dueDate, 'yyyy/MM/dd', 'en'),
-          "BankDetails": ''
-        }
-      ]
+      let CreateBockData = {
+        "ASAssnID": this.currentAssociationID,
+        "ACAccntID": 21,
+        "blocks": [
+          {
+            "ASAssnID": this.currentAssociationID,
+            "BLBlkName": this.blockname,
+            "BLBlkType": this.blocktype,
+            "BLNofUnit": this.noofunits,
+            "BLMgrName": this.mngName,
+            "BLMgrMobile": this.mobile,
+            "BLMgrEmail": this.manageremail,
+            "ASMtType": '',
+            "ASMtDimBs": this.maintenanceValue,
+            "ASMtFRate": this.flatRatevalue,
+            "ASUniMsmt": this.measurements,
+            "ASBGnDate": formatDate(this.billGenerationDate, 'yyyy/MM/dd', 'en'),
+            "ASLPCType": this.latePymtChargeType,
+            "ASLPChrg": this.latePymtCharge,
+            "ASLPSDate": formatDate(this.startsFrom, 'yyyy/MM/dd', 'en'),
+            "ASDPyDate": formatDate(this.dueDate, 'yyyy/MM/dd', 'en'),
+            "BankDetails": ''
+          }
+        ]
+      }
+
+      console.log('CreateBockData', CreateBockData);
+      this.addblockservice.createBlock(CreateBockData)
+        .subscribe(data => {
+          console.log(data);
+          swal.fire({
+            title: "Block Created Successfully",
+            text: "",
+            type: "success",
+            confirmButtonColor: "#f69321"
+          });
+        },
+          () => {
+            swal.fire({
+              title: "Error",
+              text: "Block Creation Unsuccessfull",
+              type: "error",
+              confirmButtonColor: "#f69321"
+            });
+          });
+
     }
-
-    console.log('CreateBockData', CreateBockData);
-    this.addblockservice.createBlock(CreateBockData)
-      .subscribe(data => {
-        console.log(data);
-        swal.fire({
-          title: "Block Created Successfully",
-          text: "",
-          type: "success",
-          confirmButtonColor: "#f69321"
-       });
-      },
-      ()=>{
-        swal.fire({
-          title: "Error",
-          text: "Block Creation Unsuccessfull",
-          type: "error",
-          confirmButtonColor: "#f69321"
-       });
-      });
-
   }
-    }
 
-    removeValidationClass(frm){
-      frm.classList.remove('was-validated');
-    }
+  removeValidationClass(frm) {
+    frm.classList.remove('was-validated');
+  }
 
 }

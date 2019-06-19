@@ -60,7 +60,7 @@ export class ViewExpensesService {
       )
   }*/
 
-  GetExpenseListByAssocID(currentAssociationID): Observable<Viewexpense[]> {
+  GetExpenseListByAssocID(currentAssociationID): Observable<Viewexpense[]>{
     console.log('GetExpenseListByAssocID')
     let headers = this.getHttpheaders();
     this.url = `${this.ipAddress}oyeliving/api/v1/Expense/GetExpenseListByAssocID/${currentAssociationID}`;
@@ -91,6 +91,14 @@ export class ViewExpensesService {
           })
         })
       )
+  }
+
+  GetExpenseListByBlockID(BlockID){
+   //http://apidev.oyespace.com/oyeliving/api/v1/Expense/GetExpenseListByBlockID/{BlockID}
+    let headers = this.getHttpheaders();
+    this.url = `${this.ipAddress}oyeliving/api/v1/Expense/GetExpenseListByBlockID/${BlockID}`;
+    return this.http.get(this.url, { headers: headers })
+    .subscribe(data=>{console.log(data)});
   }
 
   GetBlockListByBlockID(data: object): Observable<Viewexpense[]> {

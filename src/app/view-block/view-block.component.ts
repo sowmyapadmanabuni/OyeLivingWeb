@@ -4,6 +4,7 @@ import { GlobalServiceService } from '../global-service.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-view-block',
@@ -29,45 +30,45 @@ export class ViewBlockComponent implements OnInit {
   assnName: string;
   totalNoofblocks: number;
   availableNoOfBlocks: number;
-  allBlocksList:object;
+  allBlocksList: object;
 
   modalRef: BsModalRef;
- myDate = new Date();
- BLBlkName: string;
- BLBlkType: string;
- BLNofUnit: number;
- BLMgrName: string;
- BLMgrMobile: number;
- BLMgrEmail: string;
- ASMtType: string;
- ASMtFRate: number;
- ASMtDimBs: string;
- ASUniMsmt: string;
- ASDPyDate: Date;
- ASLPCType: string;
- ASLPChrg: number;
- ASLPSDate: Date;
- editblockdata: object;
- BLBlockID: string;
- ASBGnDate:string;
- ASICRFREQ:string;
+  myDate = new Date();
+  BLBlkName: string;
+  BLBlkType: string;
+  BLNofUnit: number;
+  BLMgrName: string;
+  BLMgrMobile: number;
+  BLMgrEmail: string;
+  ASMtType: string;
+  ASMtFRate: number;
+  ASMtDimBs: string;
+  ASUniMsmt: string;
+  ASDPyDate: string;
+  ASLPCType: string;
+  ASLPChrg: number;
+  ASLPSDate: string;
+  editblockdata: object;
+  BLBlockID: string;
+  ASBGnDate: string;
+  ASICRFREQ: string;
 
- addRate: string;
- addRate1: string;
+  addRate: string;
+  addRate1: string;
 
   bkname: string;
   bktype: string;
   bknofflrs: string;
   bknofunit: string;
 
-  bsConfig:object;
+  bsConfig: object;
 
-  blocktypes:object[];
+  blocktypes: object[];
 
   constructor(private viewBlkService: ViewBlockService,
     private globalService: GlobalServiceService,
     private router: Router,
-    private modalService: BsModalService,) {
+    private modalService: BsModalService, ) {
     //pagination
     this.config = {
       itemsPerPage: 10,
@@ -76,7 +77,7 @@ export class ViewBlockComponent implements OnInit {
 
     this.bsConfig = Object.assign({}, { containerClass: 'theme-orange', dateInputFormat: 'YYYY-MM-DD' });
 
-    this.allBlocksList=null;
+    this.allBlocksList = null;
 
     this.blocktypes = [{
       'name': 'Residential', 'displayName': 'Residential'
@@ -116,12 +117,12 @@ export class ViewBlockComponent implements OnInit {
     });
   }
 
-  viewBlockDetails(blBlkName,blBlkType,blNofUnit){
-      this.bkname =blBlkName;
-      this.bktype =blBlkType;
-      this.bknofunit =blNofUnit;
+  viewBlockDetails(blBlkName, blBlkType, blNofUnit) {
+    this.bkname = blBlkName;
+    this.bktype = blBlkType;
+    this.bknofunit = blNofUnit;
     //$scope.rowId = idx;
-}
+  }
 
   addBlocksValidation() {
     let totalNoofblocks = this.totalNoofblocks;
@@ -253,7 +254,7 @@ export class ViewBlockComponent implements OnInit {
     };
   }
 
-  OpenModal(template: TemplateRef<any>, blBlkName: string, blBlkType: string, blNofUnit: number, blMgrName: string, blMgrMobile: number, blMgrEmail: string, asMtType: string, asMtFRate: number, asMtDimBs: string, asUniMsmt: string,asbGnDate:string, bldUpdated: Date, aslpcType: string, aslpChrg: number, aslpsDate: Date, blBlockID: string,asiCrFreq) {
+  OpenModal(template: TemplateRef<any>, blBlkName: string, blBlkType: string, blNofUnit: number, blMgrName: string, blMgrMobile: number, blMgrEmail: string, asMtType: string, asMtFRate: number, asMtDimBs: string, asUniMsmt: string, asbGnDate: string, bldUpdated: Date, aslpcType: string, aslpChrg: number, aslpsDate: Date, blBlockID: string, asiCrFreq) {
 
     this.BLBlkName = blBlkName;
     this.BLBlkType = blBlkType;
@@ -265,15 +266,15 @@ export class ViewBlockComponent implements OnInit {
     this.ASMtFRate = asMtFRate;
     this.ASMtDimBs = asMtDimBs;
     this.ASUniMsmt = asUniMsmt;
- 
-    this.ASBGnDate = asbGnDate;
-    this.ASDPyDate = bldUpdated;
+
     this.ASLPCType = aslpcType;
+    this.ASBGnDate = formatDate(asbGnDate, 'yyyy/MM/dd', 'en');
+    this.ASDPyDate = formatDate(bldUpdated, 'yyyy/MM/dd', 'en')
+    this.ASLPSDate = formatDate(aslpsDate, 'yyyy/MM/dd', 'en');
     this.ASLPChrg = aslpChrg;
-    this.ASLPSDate = aslpsDate;
     this.BLBlockID = blBlockID;
-    this.ASICRFREQ =asiCrFreq; 
- 
+    this.ASICRFREQ = asiCrFreq;
+
     console.log(this.BLBlkName);
     console.log(this.BLBlkType);
     console.log(this.BLNofUnit);
@@ -286,7 +287,7 @@ export class ViewBlockComponent implements OnInit {
     console.log(this.ASBGnDate);
     this.modalRef = this.modalService.show(template,
       Object.assign({}, { class: 'gray modal-lg' }));
- 
+
   }
 
   UpdateBlock() {
@@ -301,15 +302,15 @@ export class ViewBlockComponent implements OnInit {
       ASMtFRate: this.ASMtFRate,
       ASMtDimBs: this.ASMtDimBs,
       ASUniMsmt: this.ASUniMsmt,
-      ASBGnDate:this.ASBGnDate,
-      ASDPyDate: this.ASDPyDate,
+      ASBGnDate: formatDate(this.ASBGnDate, 'yyyy/MM/dd', 'en'),
+      ASDPyDate: formatDate(this.ASDPyDate, 'yyyy/MM/dd', 'en'),
+      ASLPSDate: formatDate(this.ASLPSDate, 'yyyy/MM/dd', 'en'),
       ASLPCType: this.ASLPCType,
       ASLPChrg: this.ASLPChrg,
-      ASLPSDate: this.ASLPSDate,
       BLBlockID: this.BLBlockID,
       ASAssnID: this.currentAssociationID
     };
- 
+
     console.log('editblockdata', this.editblockdata);
     this.viewBlkService.UpdateBlock(this.editblockdata).subscribe(res => {
       console.log("Done");
@@ -319,21 +320,21 @@ export class ViewBlockComponent implements OnInit {
         title: 'Block Updated Successfuly',
       }).then(
         (result) => {
- 
+
           if (result.value) {
             //this.form.reset();
             this.modalRef.hide();
             this.router.navigate(['viewBlocks']);
-            
- 
+
+
           } else if (result.dismiss === Swal.DismissReason.cancel) {
             this.router.navigate(['']);
           }
         }
       )
- 
+
     });
- 
+
   }
- }
+}
 //export class ViewBlockComponent

@@ -14,7 +14,8 @@
     </div>
 
     <div class="card">
-      <form name="crtBlock" class="needs-validation" #frm #ctrateBlockform='ngForm' role="form" autocomplete="off" (ngSubmit)='createBlock(frm)'>
+      <form name="crtBlock" class="needs-validation" #frm #ctrateBlockform='ngForm' role="form" autocomplete="off"
+        (ngSubmit)='createBlock(frm)'>
 
         <fieldset class="scheduler-border">
           <legend class="scheduler-border headingOrange">Blocks Details</legend>
@@ -87,8 +88,8 @@
               <div class="form-group">
                 <label id=label5>Manager Mobile Number <span class="red">*</span></label>
                 <input type="number" name="mobile" id="input5" autocomplete='mobile' [(ngModel)]="mobile"
-                  #managernumberControl="ngModel" class="form-control" placeholder="Manager Mobile Number" minlength="10"
-                  maxlength="10" pattern="[0-9]*" required />
+                  #managernumberControl="ngModel" class="form-control" placeholder="Manager Mobile Number"
+                  minlength="10" maxlength="10" pattern="[0-9]*" required />
                 <p class="invalid-feedback">Manager mobile number is required</p>
               </div>
             </div>
@@ -169,7 +170,8 @@
             <div class="col-sm-6 col-xs-12">
               <div class="form-group">
                 <label>Invoice Creation Frequency <span class="red">*</span></label>
-                <input class="form-control" list="browsers" name="frequency" [(ngModel)]="frequency" placeholder="Search or Select Frequency" #frequencyControl='ngModel' required>
+                <input class="form-control" list="browsers" name="frequency" [(ngModel)]="frequency"
+                  placeholder="Search or Select Frequency" #frequencyControl='ngModel' required>
                 <datalist id="browsers">
                   <option value="">Select Frequency</option>
                   <option *ngFor="let frequency of frequencies" [value]="frequency['name']">
@@ -188,18 +190,19 @@
                 <label>Next Invoice Generation Date <span class="red">*</span></label>
                 <input type="text" class="form-control" name="billGenerationDate" #NextInvoiceGenDateControl='ngModel'
                   placeholder="Next Invoice Generation Date" [bsConfig]="bsConfig" [(ngModel)]="billGenerationDate"
-                  bsDatepicker required (bsValueChange)="onValueChange($event)"/>
-                  <p class="invalid-feedback">Invoice Generation Date required
-                    </p>
+                  bsDatepicker required (bsValueChange)="onValueChange($event)" />
+                <p class="invalid-feedback">Invoice Generation Date required
+                </p>
               </div>
             </div>
             <div class="col-sm-6 col-xs-12">
               <div class="form-group">
                 <label>Due Date <span class="red">*</span></label>
                 <input type="text" class="form-control" name="dueDate" #DueDateControl='ngModel' placeholder="Due Date"
-                 [bsConfig]="bsConfig" [(ngModel)]="dueDate" bsDatepicker required [minDate]="minDate" (bsValueChange)="onDueDateValueChange($event)"/>
-                  <p class="invalid-feedback">Due date required
-                  </p>
+                  [bsConfig]="bsConfig" [(ngModel)]="dueDate" bsDatepicker required [minDate]="minDate"
+                  (bsValueChange)="onDueDateValueChange($event)" />
+                <p class="invalid-feedback">Due date required
+                </p>
               </div>
             </div>
           </div>
@@ -211,12 +214,13 @@
               <div class="form-group">
 
                 <label>Late Payment Charge Type <span class="red">*</span></label>
-                <input class="form-control" list="browsers" name="latePymtChargeType" [(ngModel)]="latePymtChargeType" placeholder="Search or Select Charge Type" #latePymtChargeTypeControl='ngModel' required>
+                <input class="form-control" list="browsers" name="latePymtChargeType" [(ngModel)]="latePymtChargeType"
+                  placeholder="Search or Select Charge Type" #latePymtChargeTypeControl='ngModel' required>
                 <datalist id="browsers">
-                    <option disabled="true" value="">Select Charge Type</option>
-                    <option *ngFor='let lpct of latePymtChrgTypes' [value]="lpct['name']">
-                      {{lpct['displayName']}}
-                    </option>
+                  <option disabled="true" value="">Select Charge Type</option>
+                  <option *ngFor='let lpct of latePymtChrgTypes' [value]="lpct['name']">
+                    {{lpct['displayName']}}
+                  </option>
                 </datalist>
                 <p class="invalid-feedback">Select Late Payment Charge Type
                 </p>
@@ -232,7 +236,8 @@
                 <label>Late Payment Charge <span class="red">*</span></label>
 
                 <input class="form-control" type="text" #latePymtChargeControl='ngModel' name="latePymtCharge"
-                 autocomplete="latePymtCharge" [(ngModel)]="latePymtCharge" placeholder="Late Payment charge" pattern="^[0-9]*" required>
+                  autocomplete="latePymtCharge" [(ngModel)]="latePymtCharge" placeholder="Late Payment charge"
+                  pattern="^[0-9]*" required>
 
                 <p class="invalid-feedback">Invalid Late Payment Charge
                 </p>
@@ -246,10 +251,10 @@
 
                 <label>Starts From<span class="red">*</span></label>
 
-                <input class="form-control" type="text" name="startsFrom"
-                  #StartsFromDateControl='ngModel' placeholder="Starts From Date" [bsConfig]="bsConfig"
-                  [(ngModel)]="startsFrom" bsDatepicker required [minDate]='startsFromMaxDate'/>
-                  <p class="invalid-feedback">Select Date</p>
+                <input class="form-control" type="text" name="startsFrom" #StartsFromDateControl='ngModel'
+                  placeholder="Starts From Date" [bsConfig]="bsConfig" [(ngModel)]="startsFrom" bsDatepicker required
+                  [minDate]='startsFromMaxDate' />
+                <p class="invalid-feedback">Select Date</p>
               </div>
 
             </div>
@@ -275,7 +280,6 @@
         </div>
       </form>
     </div>
-
-
   </div>
 </div>
+<!---->
