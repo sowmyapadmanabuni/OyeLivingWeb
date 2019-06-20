@@ -45,7 +45,7 @@
                                     <i data-toggle="modal" data-target="#viewBlockDetailsTemplate"
                                         (click)="viewBlockDetails(item['blBlkName'],item['blBlkType'],item['blNofUnit'])" class="fa fa-eye"></i>&nbsp;|&nbsp;<i
                                         data-toggle="modal" data-target="#editBlockDetails"
-                                        (click)="OpenModal(template,item.blBlkName,item.blBlkType,item.blNofUnit,item.blMgrName,item.blMgrMobile,item.blMgrEmail,item.asMtType,item.asMtFRate,item.asMtDimBs,item.asUniMsmt,item.asbGnDate,item.bldUpdated,item.aslpcType,item.aslpChrg,item.aslpsDate,item.blBlockID,item.asiCrFreq)"
+                                        (click)="OpenModal(editBlocktemplate,item.blBlkName,item.blBlkType,item.blNofUnit,item.blMgrName,item.blMgrMobile,item.blMgrEmail,item.asMtType,item.asMtFRate,item.asMtDimBs,item.asUniMsmt,item.asbGnDate,item.bldUpdated,item.aslpcType,item.aslpChrg,item.aslpsDate,item.blBlockID,item.asiCrFreq)"
                                         class="fa fa-pencil"></i>
 
                                 </td>
@@ -108,7 +108,7 @@
 
 
 <!-------EDIT BLOCK-->
-<ng-template #template>
+<ng-template #editBlocktemplate>
     <div class="modal-content">
 
         <div class="modal-header">
@@ -308,22 +308,22 @@
                                 </div>
                             </div>
                             <div class="col-sm-6 col-xs-12">
-                                <div class="form-group">
-                                    <label>Invoice Creation Frequency<span class="red">*</span> <span
-                                            class="red">*</span></label>
-                                    <select class="ui dropdown search methodDropdown" name="ASICRFREQ"
-                                        [(ngModel)]="ASICRFREQ" #frequencyControl='ngModel' required>
-                                        <option disabled="true" value="">Select Frequency</option>
-                                        <option *ngFor="let frequency of frequencys" [value]="frequency['name']">
-                                            {{frequency['displayName']}}
-                                        </option>
-                                    </select>
-                                    <p class="alerts" *ngIf="frequencyControl.invalid && frequencyControl.touched">
-                                        Invalid Invoice Frequency
-                                    </p>
+                                    <div class="form-group">
+                                        <label>Invoice Creation Frequency<span class="red">*</span> <span
+                                                class="red">*</span></label>
+                                        <select class="ui dropdown search methodDropdown" name="ASIcRFreq"
+                                            [(ngModel)]="ASIcRFreq" #frequencyControl='ngModel' required>
+                                            <option disabled="true" value="">Select Frequency</option>
+                                            <option *ngFor="let frequency of frequencys" [value]="frequency['name']">
+                                                {{frequency['displayName']}}
+                                            </option>
+                                        </select>
+                                        <p class="alerts" *ngIf="frequencyControl.invalid && frequencyControl.touched">
+                                            Invalid Invoice Frequency
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
                         <div class="row" style="padding-left:15px;padding-right:15px;">
                             <div class="col-sm-6 col-xs-12">

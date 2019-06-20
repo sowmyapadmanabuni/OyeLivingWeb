@@ -71,7 +71,7 @@ export class ViewExpensesComponent implements OnInit {
 
   invoiceLists: any[];
 
-  viewexpensesByBlockId: Observable<Object>;
+  viewexpensesByBlockId: Object[];
 
   constructor(private viewexpenseservice: ViewExpensesService,
     private modalService: BsModalService,
@@ -191,7 +191,17 @@ export class ViewExpensesComponent implements OnInit {
   }
 
   GetExpenseListByBlockID(blockID) {
-    //this.viewexpensesByBlockId = this.viewexpenseservice.GetExpenseListByBlockID(blockID);
+    console.log('GetExpenseListByBlockID',blockID);
+    this.viewexpenseservice.currentBlockId=blockID;
+    this.viewexpenseservice.GetExpenseListByBlockID(blockID)
+    .subscribe(
+      data=>{
+        //console.log(data);
+        this.viewexpensesByBlockId=data;
+      }
+
+    )
+    //this.viewexpenseservice.GetExpenseListByBlockID(blockID);
     console.log(this.viewexpensesByBlockId);
   }
 
@@ -235,7 +245,7 @@ export class ViewExpensesComponent implements OnInit {
     console.log('repexpense1-', repexpense1);
     console.log('idx-', idx);
   }
-  openModal(template: TemplateRef<any>, exid: number, exDesc: any, expAmnt: string, exApplTO, exHead, exType, pmid, inNumber, poid, exPyCopy, exRecurr, exDate, blBlockID) {
+  openModal(editexpensetemplate: TemplateRef<any>, exid: number, exDesc: any, expAmnt: string, exApplTO, exHead, exType, pmid, inNumber, poid, exPyCopy, exRecurr, exDate, blBlockID) {
 
     this.POEAmnt = this.purchaseOrders[0]['poEstAmt'];
     this.VNName = this.purchaseOrders[0]['poPrfVen'];
@@ -256,7 +266,7 @@ export class ViewExpensesComponent implements OnInit {
     this.editexpensedata.EXDate = formatDate(exDate, 'MM/dd/yyyy', 'en');
     this.editexpensedata.BLBlockID = blBlockID;
 
-    this.modalRef = this.modalService.show(template,
+    this.modalRef = this.modalService.show(editexpensetemplate,
       Object.assign({}, { class: 'gray modal-lg' }));
 
     const dataTransfer = new ClipboardEvent('').clipboardData || new DataTransfer();

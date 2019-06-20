@@ -373,43 +373,50 @@
             </div>
            
  
-<div *ngIf="joinAssociation">
-        
-            <div class="row" style="border:1px solid #b33951; border-radius: 10px;">
-                 <div class="col-sm-12">
-                     <br>
-                     <h5 style="color:#b33951; font-family: Poppins;">Join An Association</h5>
-                     <br>
-                 </div>
-                 <div class="col-sm-8">
-                   <div class="form-group" >
-                     <input type="text"  name="searchBox"  class="form-control" [(ngModel)]="searchText" placeholder="Search by Association/ Locality/ Pincode" style="font-family: Poppins"/>
-                   </div>
-                 </div>
-            </div> 
-            <br><br> 
-            <h5 id="assn_list">List of Associations</h5>
-            <table class="table table-striped">
-                <thead>
-                     <tr style="color:#b33951; font-family: Poppins; font-size:18px;">
-                         <td>Association Name</td>
-                         <td>Property Name</td>
-                         <td>Locality</td>
-                         <td>No of Units</td>
-                     </tr>
-                </thead>
-                <tbody>
-                     <tr *ngFor="let association of associations | filter : searchText" style="font-family: Poppins;">
-                         <td>{{association.asAsnName}}</td>
-                         <td>{{association.asPrpName}}</td>
-                         <td>{{association.asAddress}}</td>
-                         <td>{{association.asNofUnit}}</td>
-                     </tr>
-       
-                </tbody>
-              </table> 
-    
+            <div *ngIf="joinAssociation">
+                    <div class="card">
+                    <h5 style="color:black;padding:10px; font-family: Poppins;" class="card-body">Join An Association</h5>
+                    </div>
+                    <br>
+                    <br>
+                    <br>&nbsp;
+                    <div class="card" style="color:white;padding:0px 20px;background-color: #b8b7b7 ; font-family: Poppins;" >
+                           <h5 class="card-body" style="margin:-15px">Search Association</h5>
+                           </div>
+                           <br>
 
+                  <div class="form-group" >
+                    <input type="text"  name="searchBox"  class="form-control" [(ngModel)]="searchText" placeholder="Search by Association/ Locality/ Pincode" style="font-family: Poppins"/>
+                  </div>
+
+
+
+
+
+                 <div class="table-responsive-sm card">
+                       <table class="table table-striped">
+                               <thead>
+                                       <tr id="assnTable">
+                                         <th>Name</th>
+                                         <th>Email ID</th>
+                                         <th>PAN Number</th>
+                                         <th>Locality</th>
+                                         <th colspan="1">Action</th>
+                                       </tr>
+                                     </thead>
+                                     <tbody>
+                          <tr *ngFor="let association of associations | filter : searchText" style="font-family: Poppins;">
+                                    <td>{{association.asAsnName}}</td>
+                                    <td>{{association.asAsnEmail}}</td>
+                                    <td>{{association.aspanNum}}</td>
+                                    <td>{{association.asAddress}}</td>
+                                    <td><span class="fa fa-eye"></span>
+
+                                     </td>
+                            </tr>
+
+                                  </table>
+                                  </div>
 </div>
 
 <ng-template #viewreceiptmodal>

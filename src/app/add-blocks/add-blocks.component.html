@@ -283,3 +283,10 @@
   </div>
 </div>
 <!---->
+<input type="text"
+  ng2TelInput
+  [ng2TelInputOptions]="{initialCountry: 'us'}"
+  (hasError)="hasError($event)"
+  (ng2TelOutput)="getNumber($event)"
+  (intlTelInputObject)="telInputObject($event)"
+  (countryChange)="onCountryChange($event)" />

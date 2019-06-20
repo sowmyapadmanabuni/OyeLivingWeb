@@ -51,7 +51,7 @@ export class ViewBlockComponent implements OnInit {
   editblockdata: object;
   BLBlockID: string;
   ASBGnDate: string;
-  ASICRFREQ: string;
+  ASIcRFreq: string;
 
   addRate: string;
   addRate1: string;
@@ -254,7 +254,7 @@ export class ViewBlockComponent implements OnInit {
     };
   }
 
-  OpenModal(template: TemplateRef<any>, blBlkName: string, blBlkType: string, blNofUnit: number, blMgrName: string, blMgrMobile: number, blMgrEmail: string, asMtType: string, asMtFRate: number, asMtDimBs: string, asUniMsmt: string, asbGnDate: string, bldUpdated: Date, aslpcType: string, aslpChrg: number, aslpsDate: Date, blBlockID: string, asiCrFreq) {
+  OpenModal(editBlocktemplate: TemplateRef<any>, blBlkName: string, blBlkType: string, blNofUnit: number, blMgrName: string, blMgrMobile: number, blMgrEmail: string, asMtType: string, asMtFRate: number, asMtDimBs: string, asUniMsmt: string, asbGnDate: string, bldUpdated: Date, aslpcType: string, aslpChrg: number, aslpsDate: Date, blBlockID: string, asiCrFreq:string) {
 
     this.BLBlkName = blBlkName;
     this.BLBlkType = blBlkType;
@@ -273,7 +273,7 @@ export class ViewBlockComponent implements OnInit {
     this.ASLPSDate = formatDate(aslpsDate, 'yyyy/MM/dd', 'en');
     this.ASLPChrg = aslpChrg;
     this.BLBlockID = blBlockID;
-    this.ASICRFREQ = asiCrFreq;
+    this.ASIcRFreq =asiCrFreq;
 
     console.log(this.BLBlkName);
     console.log(this.BLBlkType);
@@ -285,7 +285,7 @@ export class ViewBlockComponent implements OnInit {
     console.log(this.ASLPSDate);
     console.log(this.BLBlockID);
     console.log(this.ASBGnDate);
-    this.modalRef = this.modalService.show(template,
+    this.modalRef = this.modalService.show(editBlocktemplate,
       Object.assign({}, { class: 'gray modal-lg' }));
 
   }
@@ -308,7 +308,8 @@ export class ViewBlockComponent implements OnInit {
       ASLPCType: this.ASLPCType,
       ASLPChrg: this.ASLPChrg,
       BLBlockID: this.BLBlockID,
-      ASAssnID: this.currentAssociationID
+      ASAssnID: this.currentAssociationID,
+      ASIcRFreq:this.ASIcRFreq
     };
 
     console.log('editblockdata', this.editblockdata);

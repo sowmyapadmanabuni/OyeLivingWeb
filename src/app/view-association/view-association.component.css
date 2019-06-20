@@ -56,4 +56,9 @@
     color:red;
     font-size: 14px;
     font-family: Poppins;
-}        
+}    
+
+td{
+    white-space:pre-wrap; 
+    word-wrap:break-word;
+}

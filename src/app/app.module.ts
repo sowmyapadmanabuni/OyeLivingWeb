@@ -35,6 +35,8 @@ import { ViewFloorsComponent } from './view-floors/view-floors.component';
 import { BankComponent } from './bank/bank.component';
 import { CheckInvoiceAndDueDateDirective } from './check-invoice-and-due-date.directive';
 
+import {Ng2TelInputModule} from 'ng2-tel-input';
+
 
 @NgModule({
   declarations: [
@@ -76,7 +78,8 @@ import { CheckInvoiceAndDueDateDirective } from './check-invoice-and-due-date.di
     ToastrModule.forRoot(), 
     PaginationModule.forRoot(),
     NgxPaginationModule,
-    ProgressbarModule.forRoot()
+    ProgressbarModule.forRoot(),
+    Ng2TelInputModule
   ],
   providers: [ViewAssociationService, ViewBlockService, ViewUnitService, DashBoardService],
   bootstrap: [AppComponent]

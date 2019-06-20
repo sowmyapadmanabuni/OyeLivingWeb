@@ -4,8 +4,9 @@ import { AddBlockService } from '../services/add-block.service';
 import { GlobalServiceService } from '../global-service.service';
 import swal from 'sweetalert2';
 import { ViewChild } from '@angular/core';
+import $ from 'jquery';
 
-declare var $: any;
+//declare var jq:any;
 
 @Component({
   selector: 'app-add-blocks',
@@ -40,6 +41,7 @@ export class AddBlocksComponent implements OnInit {
   blocktypes: object[];
 
   minDate: Date;
+  minDateinNumber: number;
   startsFromMaxDate: Date;
 
   currentAssociationID: string;
@@ -84,22 +86,39 @@ export class AddBlocksComponent implements OnInit {
   }
 
   ngOnInit() {
-    $(document).ready(function () {
-      $("intlphone").click(function () {
-        alert('button clicked');
-      });
-    });
+
   }
 
+  ngAfterViewInit() {
+    $(document).ready(function () {
+      $("#jquery-intl-phone").click(function () {
+        alert('hello');
+      })
+    });
+  }
+  telInputObject(telinputobj) {
+    console.log(telinputobj);
+  }
+  hasError(errorobj) {
+    console.log(errorobj);
+  }
+  getNumber(numberobj) {
+    console.log(numberobj);
+  }
+  onCountryChange(countryobj) {
+    console.log(countryobj['dialCode']);
+  }
   onValueChange(value: Date): void {
     console.log(value);
     this.minDate = new Date(value);
-    this.minDate.setDate(this.minDate.getDate() + 1);
+    this.minDateinNumber=new Date(value).getTime();
+    console.log(this.minDate);
+    //this.minDate.setDate(this.minDate.getDate() + 1);
   }
 
   onDueDateValueChange(value: Date) {
     this.startsFromMaxDate = new Date(value);
-    this.startsFromMaxDate.setDate(this.startsFromMaxDate.getDate() + 1);
+    //this.startsFromMaxDate.setDate(this.startsFromMaxDate.getDate() + 1);
   }
 
   checkRate(rate) {
@@ -141,6 +160,7 @@ export class AddBlocksComponent implements OnInit {
             "ASMtDimBs": this.maintenanceValue,
             "ASMtFRate": this.flatRatevalue,
             "ASUniMsmt": this.measurements,
+            "ASIcRFreq":this.frequency,
             "ASBGnDate": formatDate(this.billGenerationDate, 'yyyy/MM/dd', 'en'),
             "ASLPCType": this.latePymtChargeType,
             "ASLPChrg": this.latePymtCharge,
