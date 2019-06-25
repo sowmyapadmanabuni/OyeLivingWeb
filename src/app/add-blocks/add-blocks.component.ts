@@ -43,6 +43,13 @@ export class AddBlocksComponent implements OnInit {
   minDate: Date;
   minDateinNumber: number;
   startsFromMaxDate: Date;
+  dueDateinNumber: number;
+  enableduedatevalidation: boolean;
+  duedatechanged: boolean;
+  invoicedatechanged: boolean;
+  startsFromMaxDateinNumber: number;
+  enablestartfromdatevalidation: boolean;
+  startsfromDateChanged: boolean;
 
   currentAssociationID: string;
   currentAssociationName: string;
@@ -59,6 +66,11 @@ export class AddBlocksComponent implements OnInit {
     this.frequency = '';
     this.latePymtChargeType = '';
     this.blocktype = '';
+    this.enableduedatevalidation = false;
+    this.duedatechanged = false;
+    this.invoicedatechanged = false;
+    this.enablestartfromdatevalidation = false;
+    this.startsfromDateChanged = false;
 
     this.latePymtChrgTypes = [
       { "name": "Monthly", "displayName": "Monthly" },
@@ -110,15 +122,70 @@ export class AddBlocksComponent implements OnInit {
   }
   onValueChange(value: Date): void {
     console.log(value);
-    this.minDate = new Date(value);
-    this.minDateinNumber=new Date(value).getTime();
-    console.log(this.minDate);
+    if (value != null) {
+      this.invoicedatechanged = true;
+      this.minDate = new Date(value);
+      this.minDateinNumber = new Date(value).getTime();
+      console.log('minDateinNumber', this.minDateinNumber);
+      if (this.duedatechanged) {
+        if (this.dueDateinNumber < this.minDateinNumber) {
+          this.enableduedatevalidation = true;
+        }
+        else if (this.dueDateinNumber > this.minDateinNumber) {
+          this.enableduedatevalidation = false;
+        }
+        else if (this.dueDateinNumber == this.minDateinNumber) {
+          this.enableduedatevalidation = false;
+        }
+      }
+
+    }
     //this.minDate.setDate(this.minDate.getDate() + 1);
   }
 
   onDueDateValueChange(value: Date) {
-    this.startsFromMaxDate = new Date(value);
+    this.enableduedatevalidation = false;
+    if (value != null) {
+      this.duedatechanged = true;
+      this.startsFromMaxDate = new Date(value);
+      this.dueDateinNumber = new Date(value).getTime();
+      console.log('dueDateinNumber', this.dueDateinNumber);
+      if (this.invoicedatechanged) {
+        if (this.dueDateinNumber < this.minDateinNumber) {
+          this.enableduedatevalidation = true;
+        }
+        else if (this.dueDateinNumber > this.minDateinNumber) {
+          this.enableduedatevalidation = false;
+        }
+        else if (this.dueDateinNumber == this.minDateinNumber) {
+          this.enableduedatevalidation = false;
+        }
+      }
+
+      if (this.startsfromDateChanged) {
+        if (this.startsFromMaxDateinNumber < this.dueDateinNumber) {
+          this.enablestartfromdatevalidation = true;
+        }
+        else if (this.startsFromMaxDateinNumber == this.dueDateinNumber) {
+          this.enablestartfromdatevalidation = false;
+        }
+      }
+    }
     //this.startsFromMaxDate.setDate(this.startsFromMaxDate.getDate() + 1);
+  }
+  onStartsFromDateValueChange(value: Date) {
+    if (value != null) {
+      this.startsfromDateChanged = true;
+      this.startsFromMaxDateinNumber = new Date(value).getTime();
+      if (this.duedatechanged) {
+        if (this.startsFromMaxDateinNumber < this.dueDateinNumber) {
+          this.enablestartfromdatevalidation = true;
+        }
+        else if (this.startsFromMaxDateinNumber == this.dueDateinNumber) {
+          this.enablestartfromdatevalidation = false;
+        }
+      }
+    }
   }
 
   checkRate(rate) {
@@ -160,7 +227,7 @@ export class AddBlocksComponent implements OnInit {
             "ASMtDimBs": this.maintenanceValue,
             "ASMtFRate": this.flatRatevalue,
             "ASUniMsmt": this.measurements,
-            "ASIcRFreq":this.frequency,
+            "ASIcRFreq": this.frequency,
             "ASBGnDate": formatDate(this.billGenerationDate, 'yyyy/MM/dd', 'en'),
             "ASLPCType": this.latePymtChargeType,
             "ASLPChrg": this.latePymtCharge,
@@ -195,6 +262,7 @@ export class AddBlocksComponent implements OnInit {
   }
 
   removeValidationClass(frm) {
+    this.enableduedatevalidation = false;
     frm.classList.remove('was-validated');
   }
 

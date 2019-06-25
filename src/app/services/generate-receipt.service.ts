@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {GlobalServiceService} from '../global-service.service';
 
 
 @Injectable({
@@ -8,31 +9,37 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class GenerateReceiptService {
 
   ipAddress: string;
-  currentAssociationID: number;
   url: string;
 
  constructor(private http: HttpClient) {
     this.ipAddress = 'http://apidev.oyespace.com/';
-    this.currentAssociationID = 1156;
   }
 
-  GetBlockListByAssocID(){
+  GetBlockListByAssocID(currentAssociationID){
       let headers = this.getHttpheaders();
-      this.url = `${this.ipAddress}oyeliving/api/v1/Block/GetBlockListByAssocID/${this.currentAssociationID}`
+      this.url = `${this.ipAddress}oyeliving/api/v1/Block/GetBlockListByAssocID/${currentAssociationID}`
      return this.http.get(this.url, { headers: headers });
   }
 
-  getCurrentBlockDetails(blBlockID){
+  getCurrentBlockDetails(blBlockID,currentAssociationID){
     console.log('blBlockID',blBlockID);
 
     let getInvoice = {
-      "ASAssnID" : this.currentAssociationID,
+      "ASAssnID" : currentAssociationID,
       "BLBlockID" : blBlockID
       }
       
       let headers = this.getHttpheaders();
       this.url = `${this.ipAddress}oyeliving/api/v1/payment/getpaymentlistbystatusandID`;
       return this.http.post(this.url, JSON.stringify(getInvoice), { headers: headers });
+  }
+
+  addPayment(newReceipt){
+    console.log('newReceipt-'+JSON.stringify(newReceipt));
+    //http://apidev.oyespace.com/oyeliving/api/v1/payment/add
+      let headers = this.getHttpheaders();
+      this.url = `${this.ipAddress}oyeliving/api/v1/payment/add`;
+      return this.http.post(this.url, JSON.stringify(newReceipt), { headers: headers });
   }
 
   getHttpheaders(): HttpHeaders {

@@ -39,7 +39,7 @@
                 <label id=label2>Block Type <span class="red">*</span></label>
                 <select class="ui dropdown search methodDropdown" name="blocktype" [(ngModel)]="blocktype"
                   #blocktypeControl='ngModel' required>
-                  <option value="">Select Frequency</option>
+                  <option value="">Select Block Type</option>
                   <option *ngFor="let blktype of blocktypes" [value]="blktype['name']">
                     {{blktype['displayName']}}
                   </option>
@@ -198,11 +198,16 @@
             <div class="col-sm-6 col-xs-12">
               <div class="form-group">
                 <label>Due Date <span class="red">*</span></label>
-                <input type="text" class="form-control" name="dueDate" #DueDateControl='ngModel' placeholder="Due Date"
+                <input type="text" class="form-control" [class.enableBorderColor]="enableduedatevalidation" [class.classForInvalid]="enableduedatevalidation" name="dueDate" #DueDateControl='ngModel' placeholder="Due Date"
                   [bsConfig]="bsConfig" [(ngModel)]="dueDate" bsDatepicker required [minDate]="minDate"
                   (bsValueChange)="onDueDateValueChange($event)" />
                 <p class="invalid-feedback">Due date required
                 </p>
+                <ng-container *ngIf='enableduedatevalidation'>
+                  <p class="invalidFeedback">Due date should be greater than or equal to
+                      invoice date
+                  </p>
+                </ng-container>
               </div>
             </div>
           </div>
@@ -252,9 +257,13 @@
                 <label>Starts From<span class="red">*</span></label>
 
                 <input class="form-control" type="text" name="startsFrom" #StartsFromDateControl='ngModel'
-                  placeholder="Starts From Date" [bsConfig]="bsConfig" [(ngModel)]="startsFrom" bsDatepicker required
-                  [minDate]='startsFromMaxDate' />
-                <p class="invalid-feedback">Select Date</p>
+                [class.classForInvalid]="enablestartfromdatevalidation" placeholder="Starts From Date" [bsConfig]="bsConfig" [(ngModel)]="startsFrom" bsDatepicker required
+                  [minDate]='startsFromMaxDate' (bsValueChange)="onStartsFromDateValueChange($event)"/>
+                  <p class="invalid-feedback">Select Date</p>
+                <ng-container *ngIf='enablestartfromdatevalidation'>
+                    <p class="invalidFeedback">Starts from date should be greater than or equal to due date</p>
+                </ng-container>
+                
               </div>
 
             </div>
@@ -283,10 +292,6 @@
   </div>
 </div>
 <!---->
-<input type="text"
-  ng2TelInput
-  [ng2TelInputOptions]="{initialCountry: 'us'}"
-  (hasError)="hasError($event)"
-  (ng2TelOutput)="getNumber($event)"
-  (intlTelInputObject)="telInputObject($event)"
+<input type="text" ng2TelInput [ng2TelInputOptions]="{initialCountry: 'us'}" (hasError)="hasError($event)"
+  (ng2TelOutput)="getNumber($event)" (intlTelInputObject)="telInputObject($event)"
   (countryChange)="onCountryChange($event)" />

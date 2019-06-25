@@ -65,7 +65,6 @@ export class ViewInvoiceComponent implements OnInit {
   isChecked: boolean;
   checkAll: boolean;
   description: string;
-  invoicevalue: number;
 
   securityfee: number;
   housekeepingfee: number;
@@ -75,6 +74,13 @@ export class ViewInvoiceComponent implements OnInit {
   fixedmaintenancefee: number;
   watermeterfee: number;
   unsoldrentalfees: number;
+  onetimemembershipfee:number;
+  onetimeoccupancyfees:number;
+  rentingfees:number;
+  OneTimeOnBoardingFees:number;
+  InvoiceValue:number;
+
+  invoiceDetails:object[];
 
 
   constructor(private viewinvoiceservice: ViewInvoiceService,
@@ -130,8 +136,12 @@ export class ViewInvoiceComponent implements OnInit {
     this.corpusfee = 0;
     this.commonareafee = 0;
     this.fixedmaintenancefee = 0;
-    this.watermeterfee = 0;
+    this.watermeterfee = 0; ////
     this.unsoldrentalfees = 0;
+    this.onetimemembershipfee=0;
+    this.onetimeoccupancyfees=0;
+    this.rentingfees=0;
+    this.OneTimeOnBoardingFees=0;
 
 
     this.invoiceID = inid;
@@ -183,28 +193,58 @@ export class ViewInvoiceComponent implements OnInit {
 
     this.viewinvoiceservice.invoiceDetails(inid, unUnitID)
       .subscribe(data => {
+        this.InvoiceValue=0;
         console.log('invoiceDetails--', data['data']['invoiceDetails']);
+        this.invoiceDetails = data['data']['invoiceDetails'];
         data['data']['invoiceDetails'].forEach(item => {
+
           if (item['idDesc'] == "common area electric bill") {
             this.commonareafee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
           }
           else if (item['idDesc'] == "Fixed Maintenance") {
             this.fixedmaintenancefee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
           }
           else if (item['idDesc'] == "generator bill") {
             this.generatorfee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
           }
           else if (item['idDesc'] == "security fees") {
             this.securityfee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
           }
           else if (item['idDesc'] == "unsold rental fees") {
             this.unsoldrentalfees = item['idValue'];
+            this.InvoiceValue += item['idValue'];
           }
           else if (item['idDesc'] == "corpus") {
             this.corpusfee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
           }
           else if (item['idDesc'] == "housekeeping") {
             this.housekeepingfee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "Water Meter") {
+            this.watermeterfee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "one time membership fee") {
+            this.onetimemembershipfee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "One Time OnBoarding Fees") {
+            this.OneTimeOnBoardingFees = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "one time occupancy fees") {
+            this.onetimeoccupancyfees = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "renting fees") {
+            this.rentingfees = item['idValue'];
+            this.InvoiceValue += item['idValue'];
           }
         })
       })

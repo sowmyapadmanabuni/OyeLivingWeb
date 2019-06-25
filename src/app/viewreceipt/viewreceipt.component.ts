@@ -1,5 +1,7 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import {GlobalServiceService} from '../global-service.service';
+import {ViewReceiptService} from '../services/view-receipt.service';
 
 @Component({
   selector: 'app-viewreceipt',
@@ -9,32 +11,22 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 export class ViewreceiptComponent implements OnInit {
   viewPayments: object[];
   modalRef: BsModalRef;
+  currentAssociationID: string;
 
-  constructor( private modalService: BsModalService) {
+  constructor( private modalService: BsModalService,
+    private globalservice:GlobalServiceService,
+    private viewreceiptservice:ViewReceiptService) {
 
-    this.viewPayments = [{
-      'unitIdentifier': 'UNIDEN001',
-      'invoiceNumber': 'INV001',
-      'pymtDate': '05-12-2019 10:13:12',
-      'amountPaid': 1000
-    },
-    {
-      'unitIdentifier': 'UNIDEN002',
-      'invoiceNumber': 'INV002',
-      'pymtDate': '05-13-2019 8:13:12',
-      'amountPaid': 2000
-    },
-    {
-      'unitIdentifier': 'UNIDEN003',
-      'invoiceNumber': 'INV003',
-      'pymtDate': '05-14-2019 9:13:12',
-      'amountPaid': 3000
-    }]
+    this.currentAssociationID=this.globalservice.getCurrentAssociationId();
 
-
+    //this.viewPayments = this.viewreceiptservice.getpaymentlist(this.currentAssociationID)
   }
 
   ngOnInit() {
+    this.viewreceiptservice.getpaymentlist(this.currentAssociationID)
+    .subscribe(data=>{
+      console.log(data);
+    })
   }
 
   viewReceipt(viewreceiptmodal: TemplateRef<any>,unitIdentifier,invoiceNumber,pymtDate,amountPaid){

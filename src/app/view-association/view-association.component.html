@@ -1,828 +1,777 @@
 <div class="row" id="row1">
   
-    <div class="col-sm-7">
-      <p style="font-family: JOSEFINE SANS">
-         MANAGE YOUR ASSOCIATIONS {{createAsssociationData}}
-      </p>
-    </div>
-  
+        <div class="col-sm-7">
+          <p style="font-family: JOSEFINE SANS">
+             MANAGE YOUR ASSOCIATIONS {{createAsssociationData}}
+          </p>
+        </div>
+      
+        
+        <div class="col-sm-5">
+             <button class="btn btn-primary" style="margin:12px" id="enroll_btn" (click)="enroll()">Enroll An Association</button>
+             <button class="btn btn-primary" id="join_btn" (click)="join()">Join An Association</button>
+        </div>
+      </div>
+      <!--------------------------------------->
+      <br>
+       <div *ngIf="viewAssociation_Table">
+           <table class="table table-striped">
+             <thead>
+                  <tr id="assnTableHead">
+                      <td>S.No.</td>
+                      <td>Association Name</td>
+                      <td>Property Name</td>
+                      <td>Locality</td>
+                      <td>No of Blocks</td>
+                      <td>No of Units</td>
+                      <td colspan="2">Action</td>
+                  </tr>
+             </thead>
+             <tbody>
+                  <tr *ngFor="let association of associations  | paginate: { itemsPerPage: 15, currentPage: p }; let i = index" style="font-family: Poppins;">
+                      <td>{{i+1}}</td>
+                      <td>{{association.asAsnName}}</td>
+                      <td>{{association.asPrpName}}</td>
+                      <td>{{association.asAddress}}</td>
+                      <td>{{association.asNofBlks}}</td>
+                      <td>{{association.asNofUnit}}</td>
+         
+                      <td><span class="fa fa-eye" (click)="openViewAssociation(viewreceiptmodal,association.asAsnName,association.asPrpName,association.asAddress,association.asNofUnit,association.asCountry,association.asPinCode,association.asState,association.asPrpType,association.asNofBlks,association.asRegrNum,association.asAsnLogo,association.asCity,association.aspanNum,association.aspanDoc,association.asAssnID,association.asgstNo)"> | </span>  
+                        <button type="button" class="smallBtn"
+                        (click)="OpenModal(template,view.asAsnName,view.asCountry,view.asAddress,view.asCity,view.asState,view.asPinCode,view.asPrpType,view.asPrpName,view.asNofBlks,view.asNofUnit,view.amType,view.noofAmenities,view.baBName,view.baIFSC,view.baActNo,view.baActType,view.asAssnID)">
+                        <i class="fa fa-pencil" title="editassociation"></i>
+                      </button>   
+                      </td>
+                  </tr>
     
-    <div class="col-sm-5">
-         <button class="btn btn-primary" style="margin:12px" id="enroll_btn" (click)="enroll()">Enroll An Association</button>
-         <button class="btn btn-primary" id="join_btn" (click)="join()">Join An Association</button>
-    </div>
-  </div>
-  <!--------------------------------------->
-  <br>
-   <div *ngIf="viewAssociation_Table">
-       <table class="table table-striped">
-         <thead>
-              <tr id="assnTableHead">
-                  <td>S.No.</td>
-                  <td>Association Name</td>
-                  <td>Property Name</td>
-                  <td>Locality</td>
-                  <td>No of Blocks</td>
-                  <td>No of Units</td>
-                  <td colspan="2">Action</td>
-              </tr>
-         </thead>
-         <tbody>
-              <tr *ngFor="let association of associations  | paginate: { itemsPerPage: 15, currentPage: p }; let i = index" style="font-family: Poppins;">
-                  <td>{{i+1}}</td>
-                  <td>{{association.asAsnName}}</td>
-                  <td>{{association.asPrpName}}</td>
-                  <td>{{association.asAddress}}</td>
-                  <td>{{association.asNofBlks}}</td>
-                  <td>{{association.asNofUnit}}</td>
-     
-                  <td><span class="fa fa-eye" (click)="openViewAssociation(viewreceiptmodal,association.asAsnName,association.asPrpName,association.asAddress,association.asNofUnit,association.asCountry,association.asPinCode,association.asState,association.asPrpType,association.asNofBlks,association.asRegrNum,association.asAsnLogo,association.asCity,association.aspanNum,association.aspanDoc,association.asAssnID,association.asgstNo)"> | </span>  
-                      <span class="fa fa-edit" (click)="OpenModal(template,association.asAsnName,association.asCountry,association.asAddress,association.asCity,association.asState,association.asPinCode,association.asPrpType,association.asPrpName,association.asNofBlks,association.asNofUnit,association.amType,association.noofAmenities,association.baBName,association.baIFSC,association.baActNo,association.baActType,association.asAssnID)">  </span>
-                  </td>
-              </tr>
-
-         </tbody>
-       </table>
-       <p class="text-center"><pagination-controls (pageChange)="p = $event"></pagination-controls></p>
-   </div>     
-  
-   <div *ngIf="enrollAssociation">
-                <form class="form-horizontal" name="crtAss" enctype="multipart/form-data"
-                    (ngSubmit)="onSubmit()" #f="ngForm" novalidate>
-                    <div class="row" style="border:1px solid #b33951; border-radius: 10px;">
-                        <div class="col-sm-12">
-                            <br>
-                            <h5 style="color:#b33951; font-family: Poppins">Association Details</h5>
-                            <br>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label id=label1>Association Name <span class="red">*</span></label>
-                                <input type="text" required name="ASAsnName" id="input15" autocomplete="off"
-                                    [(ngModel)]="crtAssn.name" #name="ngModel" class="form-control"
-                                    placeholder="Association Name" pattern="[A-Za-z\s]+"
-                                    style="text-transform: uppercase; font-family: Poppins; font-size: 13px;" />
-                                <p class="alerts" *ngIf="name.invalid && name.touched"> Valid Association name is
-                                    required</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <button style="position: absolute;top: 39%;left: 81%;" class="btn btn-danger"
-                                    (click)='removeSelectedfile()'><i class="fa fa-trash"></i> </button>
-                                <label id=label2>Association Logo <span class="red">*</span></label>
-                                <input type="file" required name="ASAsnLogo" [(ngModel)]="crtAssn.logo" #logo="ngModel"
-                                    class="form-control" style="font-family: Poppins" (change)='onFileSelected($event)'
-                                    pattern="(.*?)\.(png|jpeg|jpg)$" id="uploadFileinput">
-                                <p class="alerts" *ngIf="logo.invalid && logo.touched">Upload Logo of Max 2MB and
-                                    formats allowed are: PNG, JPG. JPEG and Resolution of 128x128px</p>
-
-
-                                <button class="btn btn-primary" (click)='onUpLoad()'
-                                    style="position:absolute;left:89%;top:39%" [disabled]='disableButton'>
-                                    <i class="fa fa-cloud-upload"></i>
-                                </button>
-                                <div *ngIf='dynamic > 0' class="row mb-2">
-                                    <progressbar [animate]="false" [value]="dynamic" type="success"><b>{{dynamic}}%</b>
-                                    </progressbar>
-                                    <small style="color:grey; font-size:12px;" *ngIf='isLargefile'>Upload Logo of Max
-                                        2MB and formats allowed are: PNG, JPG. JPEG and Resolution of 128x128px</small>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-
-                            <div class="form-group">
-                                <label id=label3>Country <span class="red">*</span></label>
-                                <select class="form-control" name="ASCountry" [(ngModel)]="crtAssn.country"
-                                    #country="ngModel" (change)="openPANfield()" style="font-family: Poppins">
-                                    <option ng-disabled="true" ng-selected="true" [value]="">Select Country</option>
-                                    <option *ngFor="let country of countries" [value]="country.name">{{country.name}}
-                                    </option>
-                                </select>
-                                <p class="alerts" *ngIf="country.invalid && country.touched"> Please Select country</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-
-                            <div class="form-group">
-                                <label id=label5>Pin/Zip/Postalcode <span class="red">*</span></label>
-                                <input type="text" required name="ASPinCode" autocomplete='crtAss.postalCode'
-                                    [(ngModel)]="crtAssn.postalCode" #postalCode="ngModel" class="form-control"
-                                    placeholder="Pin/Zip" style="font-family: Poppins" pattern="^\d{6,}$" minlength="5"
-                                    maxlength="6" />
-                                <small style="color:grey; font-size:12px;">Ex: 771828</small>
-                                <p class="alerts" *ngIf="postalCode.invalid && postalCode.touched"> Valid pincode is
-                                    required</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label id=label5>State <span class="red">*</span></label>
-                                <input type="text" required name="ASState" autocomplete='crtAss.state'
-                                    [(ngModel)]="crtAssn.state" #state="ngModel" class="form-control"
-                                    placeholder="State" style="font-family: Poppins" pattern="[a-zA-Z]*" />
-                                <p class="alerts" *ngIf="state.invalid && state.touched"> Valid State is required</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label id=label6>City <span class="red">*</span></label>
-                                <input type="text" required name="ASCity" autocomplete='crtAss.city'
-                                    [(ngModel)]="crtAssn.city" #city="ngModel" class="form-control" placeholder="City"
-                                    style="font-family: Poppins" pattern="[a-zA-Z]*" />
-                                <p class="alerts" *ngIf="city.invalid && city.touched"> Valid City is required</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label id=label7>Property Type <span class="red">*</span></label>
-                                <select class="form-control" name="ASPropType" [(ngModel)]="crtAssn.propertyType"
-                                    #propertyType="ngModel" style="font-family: Poppins">
-                                    <option ng-disabled="true" ng-selected="true" [value]="">Select Property Type
-                                    </option>
-                                    <option *ngFor="let propertyType of propertyTypes" [value]="propertyType.name">
-                                        {{propertyType.displayName}}</option>
-                                </select>
-                                <p class="alerts" *ngIf="propertyType.invalid && propertyType.touched"> Please Select
-                                    property type</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label id=label8>Property Name <span class="red">*</span></label>
-                                <input type="text" required name="ASPrpName" autocomplete='crtAss.propertyName'
-                                    [(ngModel)]="crtAssn.propertyName" #propertyName="ngModel" class="form-control"
-                                    placeholder="Property Name" style="font-family: Poppins" pattern="[a-zA-Z]*"
-                                    style="text-transform: uppercase; font-family: Poppins; font-size: 13px;" />
-                                <p class="alerts" *ngIf="propertyName.invalid && propertyName.touched">Valid property
-                                    name is required</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label id=label9>Locality <span class="red">*</span></label>
-                                <input type="text" required name="ASAddress" autocomplete='crtAssn.locality'
-                                    [(ngModel)]="crtAssn.locality" #locality="ngModel" class="form-control"
-                                    maxlength="255" placeholder="Locality " style="font-family: Poppins"
-                                    pattern="[A-Za-z\s]+" />
-                                <p class="alerts" *ngIf="locality.invalid && locality.touched"> Valid locality is
-                                    required</p>
+             </tbody>
+           </table>
+           <p class="text-center"><pagination-controls (pageChange)="p = $event"></pagination-controls></p>
+       </div>     
+      
+       <!--enroll-->
+       <div *ngIf="enrollAssociation">
+                    <form class="form-horizontal" name="crtAss" enctype="multipart/form-data"
+                        (ngSubmit)="onSubmit()" #f="ngForm" novalidate>
+                        <div class="row" style="border:1px solid #b33951; border-radius: 10px;">
+                            <div class="col-sm-12">
+                                <br>
+                                <h5 style="color:#b33951; font-family: Poppins">Association Details</h5>
                                 <br>
                             </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <h5 style="color:#b33951; font-family: Poppins;">Block & Unit Details</h5>
-                            <br>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label id=label10>Total No of Blocks <span class="red">*</span></label>
-                                <input type="text" required name="ASNofBlks" autocomplete='crtAss.totalNoBlocks'
-                                    [(ngModel)]="crtAssn.totalNoBlocks" #totalNoBlocks="ngModel" class="form-control"
-                                    placeholder="No Of Blocks" style="font-family: Poppins" pattern="[0-9]*" />
-                                <p class="alerts" *ngIf="totalNoBlocks.invalid && totalNoBlocks.touched"> Valid blocks
-                                    no is required</p>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label id=label1>Association Name <span class="red">*</span></label>
+                                    <input type="text" required name="ASAsnName" id="input15" autocomplete="off"
+                                        [(ngModel)]="crtAssn.name" #name="ngModel" class="form-control"
+                                        placeholder="Association Name" pattern="[A-Za-z\s]+"
+                                        style="text-transform: uppercase; font-family: Poppins; font-size: 13px;" />
+                                    <p class="alerts" *ngIf="name.invalid && name.touched"> Valid Association name is
+                                        required</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label id=label11>Total No of Units <span class="red">*</span></label>
-                                <input type="text" required name="ASNofUnit" autocomplete='crtAss.totalNoUnits'
-                                    [(ngModel)]="crtAssn.totalNoUnits" #totalNoUnits="ngModel" class="form-control"
-                                    placeholder="No Of Units" style="font-family: Poppins" pattern="[0-9]*" />
-                                <p class="alerts" *ngIf="totalNoUnits.invalid && totalNoUnits.touched"> Valid no units
-                                    are required</p>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <button style="position: absolute;top: 39%;left: 81%;" class="btn btn-danger"
+                                        (click)='removeSelectedfile()'><i class="fa fa-trash"></i> </button>
+                                    <label id=label2>Association Logo <span class="red">*</span></label>
+                                    <input type="file" required name="ASAsnLogo" [(ngModel)]="crtAssn.logo" #logo="ngModel"
+                                        class="form-control" style="font-family: Poppins" (change)='onFileSelected($event)'
+                                        pattern="(.*?)\.(png|jpeg|jpg)$" id="uploadFileinput">
+                                    <p class="alerts" *ngIf="logo.invalid && logo.touched">Upload Logo of Max 2MB and
+                                        formats allowed are: PNG, JPG. JPEG and Resolution of 128x128px</p>
+    
+    
+                                    <button class="btn btn-primary" (click)='onUpLoad()'
+                                        style="position:absolute;left:89%;top:39%" [disabled]='disableButton'>
+                                        <i class="fa fa-cloud-upload"></i>
+                                    </button>
+                                    <div *ngIf='dynamic > 0' class="row mb-2">
+                                        <progressbar [animate]="false" [value]="dynamic" type="success"><b>{{dynamic}}%</b>
+                                        </progressbar>
+                                        <small style="color:grey; font-size:12px;" *ngIf='isLargefile'>Upload Logo of Max
+                                            2MB and formats allowed are: PNG, JPG. JPEG and Resolution of 128x128px</small>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <br>
-                        <br>
-                        <div class="col-sm-12">
-                            <div class="row" *ngIf="PANdiv1">
-                                <div class="col-sm-12">
-                                    <h5 style="color:#b33951; font-family: Poppins;">PAN Details</h5>
+    
+                            <div class="col-sm-6">
+    
+                                <div class="form-group">
+                                    <label id=label3>Country <span class="red">*</span></label>
+                                    <select class="form-control" name="ASCountry" [(ngModel)]="crtAssn.country"
+                                        #country="ngModel" (change)="openPANfield()" style="font-family: Poppins">
+                                        <option disabled="true" [value]="">Select Country</option>
+                                        <option *ngFor="let country of countries" [value]="country.name">{{country.name}}
+                                        </option>
+                                    </select>
+                                    <p class="alerts" *ngIf="country.invalid && country.touched"> Please Select country</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+    
+                                <div class="form-group">
+                                    <label id=label5>Pin/Zip/Postalcode <span class="red">*</span></label>
+                                    <input type="text" required name="ASPinCode" autocomplete='crtAss.postalCode'
+                                        [(ngModel)]="crtAssn.postalCode" #postalCode="ngModel" class="form-control"
+                                        placeholder="Pin/Zip" style="font-family: Poppins" pattern="^\d{6,}$" minlength="5"
+                                        maxlength="6" />
+                                    <small style="color:grey; font-size:12px;">Ex: 771828</small>
+                                    <p class="alerts" *ngIf="postalCode.invalid && postalCode.touched"> Valid pincode is
+                                        required</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label id=label5>State <span class="red">*</span></label>
+                                    <input type="text" required name="ASState" autocomplete='crtAss.state'
+                                        [(ngModel)]="crtAssn.state" #state="ngModel" class="form-control"
+                                        placeholder="State" style="font-family: Poppins" pattern="[a-zA-Z\s]*" />
+                                    <p class="alerts" *ngIf="state.invalid && state.touched"> Valid State is required</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label id=label6>City <span class="red">*</span></label>
+                                    <input type="text" required name="ASCity" autocomplete='crtAss.city'
+                                        [(ngModel)]="crtAssn.city" #city="ngModel" class="form-control" placeholder="City"
+                                        style="font-family: Poppins" pattern="[a-zA-Z\s]*" />
+                                    <p class="alerts" *ngIf="city.invalid && city.touched"> Valid City is required</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label id=label7>Property Type <span class="red">*</span></label>
+                                    <select class="form-control" name="ASPropType" [(ngModel)]="crtAssn.propertyType"
+                                        #propertyType="ngModel" style="font-family: Poppins">
+                                        <option ng-disabled="true" ng-selected="true" [value]="">Select Property Type
+                                        </option>
+                                        <option *ngFor="let propertyType of propertyTypes" [value]="propertyType.name">
+                                            {{propertyType.displayName}}</option>
+                                    </select>
+                                    <p class="alerts" *ngIf="propertyType.invalid && propertyType.touched"> Please Select
+                                        property type</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label id=label8>Property Name <span class="red">*</span></label>
+                                    <input type="text" required name="ASPrpName" autocomplete='crtAss.propertyName'
+                                        [(ngModel)]="crtAssn.propertyName" #propertyName="ngModel" class="form-control"
+                                        placeholder="Property Name" style="font-family: Poppins" pattern="[a-zA-Z\s]*"
+                                        style="text-transform: uppercase; font-family: Poppins; font-size: 13px;" />
+                                    <p class="alerts" *ngIf="propertyName.invalid && propertyName.touched">Valid property
+                                        name is required</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label id=label9>Locality <span class="red">*</span></label>
+                                    <input type="text" required name="ASAddress" autocomplete='crtAssn.locality'
+                                        [(ngModel)]="crtAssn.locality" #locality="ngModel" class="form-control"
+                                        maxlength="255" placeholder="Locality " style="font-family: Poppins"
+                                        pattern="[A-Za-z\s]+" />
+                                    <p class="alerts" *ngIf="locality.invalid && locality.touched"> Valid locality is
+                                        required</p>
                                     <br>
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label id=label12>PAN Number<span class="red">*</span></label>
-                                        <input type="text" required name="PANNumber" autocomplete='crtAss.PANNumber'
-                                            [(ngModel)]="crtAssn.PANNumber" #PANNumber="ngModel" class="form-control"
-                                            placeholder="Association PAN Number" ng-change="checkPanNo(crtAssn.panNo)"
-                                            style="text-transform: uppercase; font-family: Poppins; font-size: 13px;"
-                                            pattern="^([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1})+$"(click)="pan()" minlength=10 maxlength=10 (keypress)=pan()/>
-                                        <small style="color:grey; font-size:12px;">Ex: PAAAA1234A</small>
-                                        <p class="alerts" *ngIf="PANNumber.invalid && PANNumber.touched"> Valid PAN
-                                            number is required</p>
+                            </div>
+                            <div class="col-sm-12">
+                                <h5 style="color:#b33951; font-family: Poppins;">Block & Unit Details</h5>
+                                <br>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label id=label10>Total No of Blocks <span class="red">*</span></label>
+                                    <input type="text" required name="ASNofBlks" autocomplete='crtAss.totalNoBlocks'
+                                        [(ngModel)]="crtAssn.totalNoBlocks" #totalNoBlocks="ngModel" class="form-control"
+                                        placeholder="No Of Blocks" style="font-family: Poppins" pattern="[0-9]*" />
+                                    <p class="alerts" *ngIf="totalNoBlocks.invalid && totalNoBlocks.touched"> Valid blocks
+                                        no is required</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label id=label11>Total No of Units <span class="red">*</span></label>
+                                    <input type="text" required name="ASNofUnit" autocomplete='crtAss.totalNoUnits'
+                                        [(ngModel)]="crtAssn.totalNoUnits" #totalNoUnits="ngModel" class="form-control"
+                                        placeholder="No Of Units" style="font-family: Poppins" pattern="[0-9]*" />
+                                    <p class="alerts" *ngIf="totalNoUnits.invalid && totalNoUnits.touched"> Valid no units
+                                        are required</p>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="col-sm-12">
+                                <div class="row" *ngIf="PANdiv1">
+                                    <div class="col-sm-12">
+                                        <h5 style="color:#b33951; font-family: Poppins;">PAN Details</h5>
+                                        <br>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label id=label12>PAN Number<span class="red">*</span></label>
+                                            <input type="text" required name="PANNumber" autocomplete='crtAssn.PANNumber'
+                                                [(ngModel)]="crtAssn.PANNumber" #PANNumber="ngModel" class="form-control"
+                                                placeholder="Association PAN Number" ng-change="checkPanNo(crtAssn.panNo)"
+                                                style="text-transform: uppercase; font-family: Poppins; font-size: 13px;"
+                                                pattern="^([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1})+$" (click)="pan()" minlength=10 maxlength=10 (keypress)=pan()/>
+                                            <small style="color:grey; font-size:12px;">Ex: PAAAA1234A</small>
+                                            <p class="alerts" *ngIf="PANNumber.invalid && PANNumber.touched"> Valid PAN
+                                                number is required</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label id=label13>GST Number <span class="red">*</span></label>
+                                            <input type="text" required name="GSTNumber" autocomplete='crtAss.GSTNumber'
+                                                [(ngModel)]="crtAssn.GSTNumber" #GSTNumber="ngModel" class="form-control"
+                                                placeholder="GST Number"
+                                                style="text-transform: uppercase; font-family: Poppins; font-size: 13px;"
+                                                pattern="^([0-9]{2}[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$"
+                                                minlegth=15 maxlength=15 />
+                                            <small style="color:grey; font-size:12px;">Ex: 22AAAAA0000A1Z5</small>
+                                            <p class="alerts" *ngIf="GSTNumber.invalid && GSTNumber.touched"> Valid GST
+                                                number is required</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <button style="position: absolute;top: 31%;left: 74%;" class="btn btn-danger"
+                                                (click)='removePanfile()'><i class="fa fa-trash"></i> </button>
+                                            <label id=label14>Upload scanned PAN Card<span class="red">*</span></label>
+                                            <input type="file" required name="uploadPANCard"
+                                                autocomplete='crtAss.uploadPANCard' [(ngModel)]="crtAssn.uploadPANCard"
+                                                #uploadPANCard="ngModel" class="form-control"
+                                                (change)='onFileSelected($event)' id="uploadPaninput"
+                                                style="font-family: Poppins" pattern="(.*?)\.(png|jpeg|jpg)$" />
+                                            <p class="alerts" *ngIf="uploadPANCard.invalid && uploadPANCard.touched"> Upload
+                                                Logo of Max 2MB and formats allowed are: PNG, JPG. JPEG and Resolution of
+                                                128x128px</p>
+                                            <p class="pull-right" style="margin-right:36px;"><button
+                                                    class="btn btn-primary upload" (click)='onUpLoad()' style="position:absolute; 
+                    top:31%"><i class="fa fa-cloud-upload"></i></button></p>
+                                            <div *ngIf='dynamic > 0' class="row mb-2">
+                                                <progressbar [animate]="false" [value]="dynamic" type="success">
+                                                    <b>{{dynamic}}%</b></progressbar>
+                                                <small style="color:grey; font-size:12px;" *ngIf='isLargefile'>Upload Logo
+                                                    of Max 2MB and formats allowed are: PNG, JPG. JPEG and Resolution of
+                                                    128x128px</small>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label id=label13>GST Number <span class="red">*</span></label>
-                                        <input type="text" required name="GSTNumber" autocomplete='crtAss.GSTNumber'
-                                            [(ngModel)]="crtAssn.GSTNumber" #GSTNumber="ngModel" class="form-control"
-                                            placeholder="GST Number"
-                                            style="text-transform: uppercase; font-family: Poppins; font-size: 13px;"
-                                            pattern="^([0-9]{2}[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$"
-                                            minlegth=15 maxlength=15 />
-                                        <small style="color:grey; font-size:12px;">Ex: 22AAAAA0000A1Z5</small>
-                                        <p class="alerts" *ngIf="GSTNumber.invalid && GSTNumber.touched"> Valid GST
-                                            number is required</p>
+                                <br>
+                                <div class="row" *ngIf="PANdiv2">
+                                    <div class="col-sm-12">
+                                        <h5 style="color:#b33951; font-family: Poppins;">Registration Details</h5>
+                                        <br>
                                     </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <button style="position: absolute;top: 31%;left: 74%;" class="btn btn-danger"
-                                            (click)='removePanfile()'><i class="fa fa-trash"></i> </button>
-                                        <label id=label14>Upload scanned PAN Card<span class="red">*</span></label>
-                                        <input type="file" required name="uploadPANCard"
-                                            autocomplete='crtAss.uploadPANCard' [(ngModel)]="crtAssn.uploadPANCard"
-                                            #uploadPANCard="ngModel" class="form-control"
-                                            (change)='onFileSelected($event)' id="uploadPaninput"
-                                            style="font-family: Poppins" pattern="(.*?)\.(png|jpeg|jpg)$" />
-                                        <p class="alerts" *ngIf="uploadPANCard.invalid && uploadPANCard.touched"> Upload
-                                            Logo of Max 2MB and formats allowed are: PNG, JPG. JPEG and Resolution of
-                                            128x128px</p>
-                                        <p class="pull-right" style="margin-right:36px;"><button
-                                                class="btn btn-primary upload" (click)='onUpLoad()' style="position:absolute; 
-                top:31%"><i class="fa fa-cloud-upload"></i></button></p>
-                                        <div *ngIf='dynamic > 0' class="row mb-2">
-                                            <progressbar [animate]="false" [value]="dynamic" type="success">
-                                                <b>{{dynamic}}%</b></progressbar>
-                                            <small style="color:grey; font-size:12px;" *ngIf='isLargefile'>Upload Logo
-                                                of Max 2MB and formats allowed are: PNG, JPG. JPEG and Resolution of
-                                                128x128px</small>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label id=label15>Association Registration Number<span
+                                                    class="red">*</span></label>
+                                            <input type="text" required name="assnRegisterNo"
+                                                autocomplete='crtAss.assnRegisterNo' [(ngModel)]="crtAssn.assnRegisterNo"
+                                                #assnRegisterNo="ngModel" class="form-control" style="font-family: Poppins"
+                                                pattern="[a-zA-Z0-9]*" />
+                                            <p class="alerts" *ngIf="assnRegisterNo.invalid && assnRegisterNo.touched">
+                                                Association Registration number is invalid</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <br>
-                            <div class="row" *ngIf="PANdiv2">
                                 <div class="col-sm-12">
-                                    <h5 style="color:#b33951; font-family: Poppins;">Registration Details</h5>
-                                    <br>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label id=label15>Association Registration Number<span
-                                                class="red">*</span></label>
-                                        <input type="text" required name="assnRegisterNo"
-                                            autocomplete='crtAss.assnRegisterNo' [(ngModel)]="crtAssn.assnRegisterNo"
-                                            #assnRegisterNo="ngModel" class="form-control" style="font-family: Poppins"
-                                            pattern="[a-zA-Z0-9]*" />
-                                        <p class="alerts" *ngIf="assnRegisterNo.invalid && assnRegisterNo.touched">
-                                            Association Registration number is invalid</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                                <br>
-                                <h5 style="color:#b33951; font-family: Poppins;">Bank Information</h5>
-                                <br>
-                            </div>
+                                <br><br>
+                                 <h5 style="color:#b33951; font-family: Poppins">Bank Information</h5>
+                                 <br>
+                              </div>
+                            
                             <div class="col-sm-12">
-                                            <app-bank (addBankites)='getBank($event)' (deletebank)='deletebank(event)' [bankites]="bankites"></app-bank>
-                       </div>
-
-                                            <!-- <td>
-                                                <p><span class="fa fa-trash fa-1x" (click)="deleteBank(i)"></span></p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="text" required name="BankName"
-                                                    autocomplete='crtAssn.BankName' placeholder="Bank Name"
-                                                    [(ngModel)]="BankName" #newBankNcontrol="ngModel"
-                                                    class="form-control"
-                                                    style="text-transform: uppercase; font-family: Poppins; font-size: 13px;"
-                                                    pattern="[A-Za-z\s]+" />
-                                                <p class="alerts"
-                                                    *ngIf="newBankNcontrol.invalid && newBankNcontrol.touched"> Bank
-                                                    name is invalid</p>
-                                            </td>
-                                            <td><input type="text" required name="IFSC" autocomplete='IFSC'
-                                                    placeholder="IFSC" [(ngModel)]="crtAssn.IFSC" class="form-control"
-                                                    #newIFSCNocontrol="ngModel"
-                                                    style="text-transform: uppercase; font-family: Poppins; font-size: 13px;"
-                                                    pattern="^[^\s]{4}\d{7}$" maxlength="11" />
-                                                <small style="color:grey; font-size:12px;">Ex: PAAA1111111</small>
-                                                <p class="alerts"
-                                                    *ngIf="newIFSCNocontrol.invalid && newIFSCNocontrol.touched"> IFSC
-                                                    is invalid</p>
-                                            </td>
-                                            <td><input type="text" required name="AccountNumber"
-                                                    autocomplete='AccountNumber' placeholder="Account Number"
-                                                    [(ngModel)]="crtAssn.AccountNumber" #newAccountNcontrol="ngModel"
-                                                    class="form-control" maxlength="20"
-                                                    style="text-transform: uppercase; font-family: Poppins; font-size: 13px;"
-                                                    pattern="[0-9]*" />
-
-                                                <p class="alerts"
-                                                    *ngIf="newAccountNcontrol.invalid && newAccountNcontrol.touched">
-                                                    Account Number is invalid</p>
-                                            </td>
-                                            <td><select class="form-control" required name="accountType"
-                                                    [(ngModel)]="accountType" #newaccountTcontrol="ngModel"
-                                                    style="font-family: Poppins">
-                                                    <option required ng-disabled="true" ng-selected="true" [value]=""
-                                                        style="color:#b33951">Select Account Type</option>
-                                                    <option *ngFor="let accountType of accountTypes"
-                                                        [value]="accountType.name">{{accountType.name}}</option>
-                                                </select>
-                                                <p class="alerts"
-                                                    *ngIf="newaccountTcontrol.invalid && newaccountTcontrol.touched">
-                                                    Please Select accountype</p>
-                                            </td>
-                                            <td>
-                                                <p><span class="fa fa-plus-square fa-1x" (click)="addBank()"></span>
-                                                </p>
-                                            </td>
-                                        </tr>
-                                </table>
+                                <app-bank [bankites]='bankites' (addnewbank)='getnewbank($event)' (deletebank)='deletenewbank($event)'></app-bank>
                             </div>
-                        </div>
- -->
-
-                        <div class="col-sm-12">
-                            <br>
-                            <h5 style="color:#b33951; font-family: Poppins;">Other Amenities</h5>
-                            <br>
-                        </div>
-                        <div class="col-sm-12">
-                        <app-new-amenity (addAmenities)='getAmenities($event)' (deleteamenity)='deleteamenity($event)' [amenities]="amenities"> </app-new-amenity>
-                        </div>
-
-
-                        <div class="col-sm-8"></div>
-                        <div class="col-sm-2">
-                            <br><br>
-                            <input type="submit" [disabled]="f.invalid" class="btn btn-danger btn-block"
-                             value="Submit" id="btn_createAssociation">
-                            <br>
-                        </div>
-                        <div class="col-sm-2">
-                            <br><br>
-                            <button type="reset" class="btn btn-primary btn-block " id="btn_rest">Reset</button>
-                            <br>
-                        </div>
-                        <div class="col-sm-1"></div>
-
-                    </div>
-                </form>
-            </div>
-           
- 
-            <div *ngIf="joinAssociation">
-                    <div class="card">
-                    <h5 style="color:black;padding:10px; font-family: Poppins;" class="card-body">Join An Association</h5>
-                    </div>
-                    <br>
-                    <br>
-                    <br>&nbsp;
-                    <div class="card" style="color:white;padding:0px 20px;background-color: #b8b7b7 ; font-family: Poppins;" >
-                           <h5 class="card-body" style="margin:-15px">Search Association</h5>
-                           </div>
-                           <br>
-
-                  <div class="form-group" >
-                    <input type="text"  name="searchBox"  class="form-control" [(ngModel)]="searchText" placeholder="Search by Association/ Locality/ Pincode" style="font-family: Poppins"/>
-                  </div>
-
-
-
-
-
-                 <div class="table-responsive-sm card">
-                       <table class="table table-striped">
-                               <thead>
-                                       <tr id="assnTable">
-                                         <th>Name</th>
-                                         <th>Email ID</th>
-                                         <th>PAN Number</th>
-                                         <th>Locality</th>
-                                         <th colspan="1">Action</th>
-                                       </tr>
-                                     </thead>
-                                     <tbody>
-                          <tr *ngFor="let association of associations | filter : searchText" style="font-family: Poppins;">
-                                    <td>{{association.asAsnName}}</td>
-                                    <td>{{association.asAsnEmail}}</td>
-                                    <td>{{association.aspanNum}}</td>
-                                    <td>{{association.asAddress}}</td>
-                                    <td><span class="fa fa-eye"></span>
-
-                                     </td>
-                            </tr>
-
-                                  </table>
-                                  </div>
-</div>
-
-<ng-template #viewreceiptmodal>
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">View association</h5>
-            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-                <div class="row" style="border:2px solid #b33951; padding:5px;">
-                <div class="col-sm-12">
-                                <h5 class="text-center">Association Name : <strong>{{associationname}}</strong></h5> 
-                                <br>                          
-                                <h5 style="color:#b33951">Enroll Information</h5>
+    
+                                 <div class="col-sm-12">
+                                    <app-new-amenity [newamenities]='newamenities' (addAmenities)='addAmenity($event)' (deleteamenity)='deleteAmenity($event)'></app-new-amenity>
+                                </div>
+                                
+                                  <br><br>
+                                <input type="submit" class="btn btn-danger btn-block"
+                                 value="Submit" id="btn_createAssociation">
                                 <br>
+                            <div class="col-sm-2">
+                                <br><br>
+                                <button type="reset" class="btn btn-primary btn-block " id="btn_rest">Reset</button>
+                                <br> 
                             </div>
-                            <div class="col-sm-4">
-                                <p>Association name :{{associationname}}</p>
-                            </div>
-                            <div class="col-sm-4">
-                                    <p>Uploaded File : <span>{{file}}</span></p>
+                            <div class="col-sm-1"></div>
+                        </div> 
+    
+                     </form>
+                </div> 
+    
+    
+                <!-- <div class="col-sm-12"> 
+                    <br>
+                    <h5 style="color:#b33951; font-family: Poppins;">Other Amenities</h5>
+                    <br>
+              </div>
+              
+                <div class="col-sm-12">
+                    <app-new-amenity (addAmenities)='getAmenities($event)' (deleteamenity)='deleteamenity($event)' [amenities]="amenities"> </app-new-amenity>
+                    </div>
+    
+                    </div>
+                    <br><br>
+                    <div class="row">
+                        <div class="col-sm-5"></div>
+                        <div class="col-sm-2">
+                    <input type="submit" [disabled]="f.invalid" class="btn btn-danger btn-block"
+                     value="Submit" id="btn_createAssociation"></div>
+                <div class="col-sm-2">
+                    <button type="reset" class="btn btn-primary btn-block " id="btn_rest">Reset</button>
+                </div>
+                <div class="col-sm-1"></div>
+            </div>
+    
+            </form>
+        </div> 
+     -->
+    
+    
+    
+    
+    
+    
+     
+    <div *ngIf="joinAssociation">
+            
+                <div class="row" style="border:1px solid #b33951; border-radius: 10px;">
+                     <div class="col-sm-12">
+                         <br>
+                         <h5 style="color:#b33951; font-family: Poppins;">Join An Association</h5>
+                         <br>
+                     </div>
+                     <div class="col-sm-8">
+                       <div class="form-group" >
+                         <input type="text"  name="searchBox"  class="form-control" [(ngModel)]="searchText" placeholder="Search by Association/ Locality/ Pincode" style="font-family: Poppins"/>
+                       </div>
+                     </div>
+                </div> 
+                <br><br> 
+                <h5 id="assn_list">List of Associations</h5>
+                <table class="table table-striped">
+                    <thead>
+                         <tr style="color:#b33951; font-family: Poppins; font-size:18px;">
+                             <td>Association Name</td>
+                             <td>Property Name</td>
+                             <td>Locality</td>
+                             <td>No of Units</td>
+                         </tr>
+                    </thead>
+                    <tbody>
+                         <tr *ngFor="let association of associations | filter : searchText" style="font-family: Poppins;">
+                             <td>{{association.asAsnName}}</td>
+                             <td>{{association.asPrpName}}</td>
+                             <td>{{association.asAddress}}</td>
+                             <td>{{association.asNofUnit}}</td>
+                         </tr>
+           
+                    </tbody>
+                  </table> 
+        
+    
+    </div>
+    
+    <ng-template #viewreceiptmodal>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">View association</h5>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <div class="row" style="border:2px solid #b33951; padding:5px;">
+                    <div class="col-sm-12">
+                                    <h5 class="text-center">Association Name : <strong>{{associationname}}</strong></h5> 
+                                    <br>                          
+                                    <h5 style="color:#b33951">Enroll Information</h5>
+                                    <br>
                                 </div>
                                 <div class="col-sm-4">
-                                        <p>Country : <span>{{country}}</span></p>
+                                    <p>Association name :{{associationname}}</p>
+                                </div>
+                                <div class="col-sm-4">
+                                        <p>Uploaded File : <span>{{file}}</span></p>
                                     </div>
-                                    <br>
-                                    <div class="col-sm-12"></div>
                                     <div class="col-sm-4">
-                                            <p>PinCode : <span>{{pincode}}</span></p>
-                                        </div> 
+                                            <p>Country : <span>{{country}}</span></p>
+                                        </div>
+                                        <br>
+                                        <div class="col-sm-12"></div>
                                         <div class="col-sm-4">
-                                                <p>State : <span>{{State}}</span></p>
+                                                <p>PinCode : <span>{{pincode}}</span></p>
                                             </div> 
                                             <div class="col-sm-4">
-                                                    <p>City : <span>{{city}}</span></p>
+                                                    <p>State : <span>{{State}}</span></p>
                                                 </div> 
-                                    
-                                    <br>
-                                    <div class="col-sm-12"></div>
                                                 <div class="col-sm-4">
-                                                        <p>Property Type : <span>{{propertyType}}</span></p>
-                                                    </div>
+                                                        <p>City : <span>{{city}}</span></p>
+                                                    </div> 
+                                        
+                                        <br>
+                                        <div class="col-sm-12"></div>
                                                     <div class="col-sm-4">
-                                                            <p>PropertyName : <span>{{propertyName}}</span></p>
+                                                            <p>Property Type : <span>{{propertyType}}</span></p>
                                                         </div>
                                                         <div class="col-sm-4">
-                                                            <p>Locality : <span>{{locality}}</span></p>
-                                                        </div>
-                                                    
-        
-                           
-        
-                            <!-- <div class="col-sm-4">
-                                <p>No of Units : <span>{{NoofUnits}}</span></p>
-                            </div> -->
-                            <!-- <div class="col-sm-4">
-                                    <p>Country : <span>{{country}}</span></p>
-                                </div> -->
-                                <!-- <div class="col-sm-4">
-                                        <p>PinCode : <span>{{pincode}}</span></p>
-                                    </div> -->
-                
-                    
-                    <div class="col-sm-12">
-                            <hr>
-                       </div>
-                       <div class="col-sm-12">
-                       <h5 style="color:#b33951">Blocks & Unit details</h5>
-                       </div>
-                       <!-- <div class="col-sm-4">
-                           <p>State : <span>{{State}}</span></p>
-                       </div> -->
-                       <br>
-                       <br>
-                       <!-- <div class="col-sm-4">
-                               <p>Property Type : <span>{{propertyType}}</span></p>
+                                                                <p>PropertyName : <span>{{propertyName}}</span></p>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <p>Locality : <span>{{locality}}</span></p>
+                                                            </div>
+                                                        
+                        <div class="col-sm-12">
+                           </div>
+                           <div class="col-sm-12">
+                           <h5 style="color:#b33951">Blocks & Unit details</h5>
+                           </div>
+                           <!-- <div class="col-sm-4">
+                               <p>State : <span>{{State}}</span></p>
                            </div> -->
-                           <div class="col-sm-4">
-                                <p>No of Units : <span>{{NoofUnits}}</span></p>
-                            </div>
-                           <div class="col-sm-4">
-                                <p>TotalNoBlocks : <span>{{blocks}}</span></p>
-                            </div> 
-                            <!-- <div class="col-sm-12">
-                                    <hr>
-                               </div>
-           
+                           <br>
+                           <br>
+                           <!-- <div class="col-sm-4">
+                                   <p>Property Type : <span>{{propertyType}}</span></p>
+                               </div> -->
                                <div class="col-sm-4">
-                                   <p>Pan details : <span>{{State}}</span></p>
-                               </div>
+                                    <p>No of Units : <span>{{NoofUnits}}</span></p>
+                                </div>
                                <div class="col-sm-4">
-                                       <p>Registration details : <span>{{regno}}</span></p>
+                                    <p>TotalNoBlocks : <span>{{blocks}}</span></p>
+                                </div> 
+                                <!-- <div class="col-sm-12">
+                                        <hr>
+                                   </div>
+               
+                                   <div class="col-sm-4">
+                                       <p>Pan details : <span>{{State}}</span></p>
                                    </div>
                                    <div class="col-sm-4">
-                                        <p>TotalNoBlocks : <span>{{blocks}}</span></p>
-                                    </div> -->
-                                    <div class="col-sm-12">
-                                            <hr>
+                                           <p>Registration details : <span>{{regno}}</span></p>
                                        </div>
-                                       <div class="col-sm-12">
-                                       <h5 style="color:#b33951">Pan and Registration details</h5>
-                                       </div>
-                                       <!-- <div class="col-sm-4">
-                                           <p>State : <span>{{State}}</span></p>
-                                       </div> -->
-                                       <br>
-                                       <br>
-                                       <!-- <div class="col-sm-4">
-                                               <p>Property Type : <span>{{propertyType}}</span></p>
+                                       <div class="col-sm-4">
+                                            <p>TotalNoBlocks : <span>{{blocks}}</span></p>
+                                        </div> -->
+                                        <div class="col-sm-12">
+    
+                                        </div>
+                                           <div class="col-sm-12">
+                                           <h5 style="color:#b33951">Pan and Registration details</h5>
+                                           </div>
+                                           <!-- <div class="col-sm-4">
+                                               <p>State : <span>{{State}}</span></p>
                                            </div> -->
-                                           <div class="col-sm-4">
-                                                <p>Pan or reg Number : <span>{{panno}}</span></p>
-                                            </div>
-                                           <div class="col-sm-4">
-                                                <p>GSTNumber : <span>{{gstno}}</span></p>
-                                            </div> 
-                                            <div class="col-sm-4">
-                                                    <p>Uploaded Pan : <span>{{pandoc}}</span></p>
+                                           <br>
+                                           <br>
+                                           <!-- <div class="col-sm-4">
+                                                   <p>Property Type : <span>{{propertyType}}</span></p>
+                                               </div> -->
+                                               <div class="col-sm-4">
+                                                    <p>Pan or reg Number : <span>{{panno}}</span></p>
+                                                </div>
+                                               <div class="col-sm-4">
+                                                    <p>GSTNumber : <span>{{gstno}}</span></p>
                                                 </div> 
-                                                
-                                                <div class="col-sm-12">
-                                                        <hr>
-                                                   </div>
-                                                   
-                                                   <div class="col-sm-12">
-                                                   <h5 style="color:#b33951">Bank Information</h5>
-                                                   </div>
-                                                   <br>
-                                                   <br>
-                                                   <div class="col-sm-4">
-                                                       <p>Bank Name: <span>{{BankName}}</span></p>
-                                                   </div> 
-                                                   <br>
-                                                   <br>
-                                                   <div class="col-sm-4">
-                                                           <p>IFSC : <span>{{IFSC}}</span></p>
+                                                <div class="col-sm-4">
+                                                        <p>Uploaded Pan : <span>{{pandoc}}</span></p>
+                                                    </div> 
+                                                    
+                                                    <div class="col-sm-12">
                                                        </div>
+                                                       
+                                                       <div class="col-sm-12">
+                                                       <h5 style="color:#b33951">Bank Information</h5>
+                                                       </div>
+                                                       <br>
+                                                       <br>
                                                        <div class="col-sm-4">
-                                                            <p>Account Number : <span>{{AccountNumber}}</span></p>
-                                                        </div>
+                                                           <p>Bank Name: <span>{{BankName}}</span></p>
+                                                       </div> 
+                                                       <br>
+                                                       <br>
                                                        <div class="col-sm-4">
-                                                            <p>Account Type: <span>{{accountType}}</span></p>
-                                                        </div> 
-                                                        <div class="col-sm-12">
-                                                                <hr>
-                                                           </div> 
-                                                        <div class="col-sm-12">
-                                                                <h5 style="color:#b33951">Amenities</h5>
-                                                                </div>
-                                                                <br>
-                                                                <br>
-                                                                <div class="col-sm-4">
-                                                                    <p>Amnety Type: <span>{{amenityType}}</span></p>
-                                                                </div> 
-                                                                <br>
-                                                                <br>
-                                                                <div class="col-sm-4">
-                                                                        <p>Amnety Number : <span>{{amenityNo}}</span></p>
+                                                               <p>IFSC : <span>{{IFSC}}</span></p>
+                                                           </div>
+                                                           <div class="col-sm-4">
+                                                                <p>Account Number : <span>{{AccountNumber}}</span></p>
+                                                            </div>
+                                                           <div class="col-sm-4">
+                                                                <p>Account Type: <span>{{accountType}}</span></p>
+                                                            </div> 
+                                                            <div class="col-sm-12">
+                                                                    
+                                                               </div> 
+                                                            <div class="col-sm-12">
+                                                                    <h5 style="color:#b33951">Amenities</h5>
                                                                     </div>
-                                                                   
-           
+                                                                    <br>
+                                                                    <br>
+                                                                    <div class="col-sm-4">
+                                                                        <p>Amnety Type: <span>{{amenityType}}</span></p>
+                                                                    </div> 
+                                                                    <br>
+                                                                    <br>
+                                                                    <div class="col-sm-4">
+                                                                            <p>Amnety Number : <span>{{amenityNo}}</span></p>
+                                                                        </div>
+                                                                       
+               
+                </div>
             </div>
+    
         </div>
-
-    </div>
-</ng-template>
-
-<ng-template #template>
-        <div class="modal-content">
-      
-          <div class="modal-header">
-            <h4 class="modal-title pull-right">Edit Association</h4>
-            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-xs-12">
-                <form name="editAssociation" autocomplete="off">
-                  <div class="row">
-                    <div class="col-sm-4 col-xs-12">
-                      <div class="from-group">
-                        <p>Association Name : <strong>{{ASAsnName}}</strong></p>
-                      </div>
-                    </div>
-                    <div class="col-sm-4 col-xs-12"></div>
-                    <div class="col-sm-4 col-xs-12" style="text-align:pull-right">
-                      <p>Date : <strong>{{newdate | date: "d/M/y"}}</strong></p>
-                    </div>
-                  </div>
-      
-                   <div> 
-                    <div class="row">
-                      <br>
-                      <div class="col-sm-1 col-xs-12"></div>
-                      <div class="col-sm-11  col-xs-12">
-                        <h4 class="headingOrange">Edit Association</h4>
-                        
-                      </div>
-                    </div>
-      
-                    <div class="row">
-                      <div class="col-sm-6 col-xs-12">
-                        <div class="form-group"
-                          [ngClass]="{'has-error' : associationnameControl.invalid && associationnameControl.touched}">
-                          <label>Association Name <span class="red">*</span></label>
-                          <input type="text" class="form-control" name="ASAsnName" [(ngModel)]="ASAsnName" #associationnameControl='ngModel' pattern="[a-zA-Z0-9-]*"
-                            disabled="true" required />
-                            <p class="alerts" *ngIf="associationnameControl.invalid && associationnameControl.touched">Association Name is required</p>
-                        </div>
-                      </div>
-      
-                      <div class="col-sm-6 col-xs-12">
-                          <div class="form-group" [ngClass]="{'has-error' : countryControl.invalid && countryControl.touched}">
-                          <label>Country <span class="red">*</span></label>
-                          <select class="form-control" name="ASCountry" [(ngModel)]="ASCountry" #countryControl="ngModel" (change)="openPANfield()" style="font-family: Poppins" >
-                              <option ng-disabled="true" ng-selected="true" [value]="">Select Country</option>
-                              <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>
-                          </select>
-                          <p class="alerts" *ngIf="countryControl.invalid && countryControl.touched"> Please Select country</p>      
-                        </div>
-                      </div>
-                    </div>
-      
-                    <div class="row">
-                      <div class="col-sm-4 col-xs-12">
-                        <div class="form-group"
-                          [ngClass]="{'has-error' : addressControl.invalid && addressControl.touched}">
-                          <label>Address<span class="red">*</span></label>
-                          <input type="text" class="form-control" name="ASAddress" [(ngModel)]="ASAddress"
-                            #addressControl='ngModel' placeholder="Address" pattern="[a-zA-Z0-9_]*" required />
-                            <p class="alerts" *ngIf="addressControl.invalid && addressControl.touched">Address is required</p>
-                        </div>
-                      </div>
-      
-                      <div class="col-sm-4 col-xs-12">
-                        <div class="form-group"
-                          [ngClass]="{'has-error' : cityControl.invalid && cityControl.touched}">
-                          <label>City<span class="red">*</span></label>
-                          <input type="text" class="form-control" name="ASCity" [(ngModel)]="ASCity"
-                            #cityControl='ngModel' placeholder="City" pattern="[a-zA-Z0-9-]*" required />
-                            <p class="alerts" *ngIf="cityControl.invalid && cityControl.touched">City is required</p>
-                        </div>
-                      </div>    
-      
-                      <div class="col-sm-4 col-xs-12">
-                        <div class="form-group"
-                          [ngClass]="{'has-error' : stateControl.invalid && stateControl.touched}">
-                          <label>State<span class="red">*</span></label>
-                          <input type="text" class="form-control" name="ASState" [(ngModel)]="ASState"
-                            #stateControl='ngModel' placeholder="State" pattern="[a-zA-Z0-9-]*" required />
-                            <p class="alerts" *ngIf="stateControl.invalid && stateControl.touched">State is required</p>
-                        </div>
-                      </div>
-                    </div>
-      
-                    <div class="row">
-                      <div class="col-sm-4 col-xs-12">
-                        <div class="form-group"
-                          [ngClass]="{'has-error' : pincodeControl.invalid && pincodeControl.touched}">
-                          <label>PinCode<span class="red">*</span></label>
-                          <input type="text" class="form-control" name="ASPinCode" [(ngModel)]="ASPinCode"
-                            #pincodeControl='ngModel'  placeholder="PinCode" pattern="[a-zA-Z0-9-]*" required />
-                            <p class="alerts" *ngIf="stateControl.invalid && stateControl.touched">State is required</p>
-                        </div>
-                      </div>
-      
-                      <div class="col-sm-4 col-xs-12">
-                        <div class="form-group"
-                          [ngClass]="{'has-error' : propTypeControl.invalid && propTypeControl.touched}">
-                          <label>Property Type <span class="red">*</span></label>
-                          <select class="form-control" name="ASPropType" [(ngModel)]="ASPrpType" #propTypeControl="ngModel" style="font-family: Poppins">
-                              <option ng-disabled="true" ng-selected="true" [value]="">Select Property Type</option>
-                              <option *ngFor="let propertyType of propertyTypes" [value]="propertyType.name">{{propertyType.displayName}}</option>
-                          </select>
-                          <p class="alerts" *ngIf="propTypeControl.invalid && propTypeControl.touched"> Please Select property type</p>
-                        </div>
-                      </div>
-      
-                      <div class="col-sm-4 col-xs-12">
-                        <div class="form-group"
-                          [ngClass]="{'has-error' : propNameControl.invalid && propNameControl.touched}">
-                          <label>Property Name <span class="red">*</span></label>
-                          <input type="text" class="form-control" name="ASPrpName" [(ngModel)]="ASPrpName"
-                            #propNameControl='ngModel' placeholder="Property Name" pattern="[a-zA-Z0-9-]*" required />
-                            <p class="alerts" *ngIf="propNameControl.invalid && propNameControl.touched">Property Name is required</p>
-                        </div>
-                      </div>
-                    </div>
-      
-                    <div class="row">
-                      <div class="col-sm-6 col-xs-12">
-                        <div class="form-group"
-                        [ngClass]="{'has-error' : noblockControl.invalid && noblockControl.touched}">
-                        <label>No Of Blocks <span class="red">*</span></label>
-                        <input type="text" class="form-control" name="ASNofBlks" [(ngModel)]="ASNofBlks"
-                          #noblockControl='ngModel' pattern="[0-9]*" placeholder="No Of Blocks" required />
-                          <p class="alerts" *ngIf="noblockControl.invalid && noblockControl.touched">Number Of Blocks is required</p>
-                      </div>
-                      </div>
-      
-                      <div class="col-sm-6 col-xs-12">
-                        <div class="form-group"
-                        [ngClass]="{'has-error' : nounitControl.invalid && nounitControl.touched}">
-                        <label>No Of Units <span class="red">*</span></label>
-                        <input type="text" class="form-control" name="ASNofUnit" [(ngModel)]="ASNofUnit"
-                          #nounitControl='ngModel' pattern="[0-9]*" placeholder="No Of Units" required />
-                          <p class="alerts" *ngIf="nounitControl.invalid && nounitControl.touched">Number Of Units is required</p>
-                      </div>
-                      </div>
-                    </div>
+    </ng-template>
     
-                    <div class="row">
-                      <div class="col-sm-6 col-xs-12">
-                        <div class="form-group"
-                        [ngClass]="{'has-error' : amenitytypeControl.invalid && amenitytypeControl.touched}">
-                        <label>Amenity Type <span class="red">*</span></label>
-                        <input type="text" class="form-control" name="AMType" [(ngModel)]="AMType"
-                          #amenitytypeControl='ngModel' placeholder="Amenity Type" pattern="[a-zA-Z0-9-]*" required />
-                          <p class="alerts" *ngIf="amenitytypeControl.invalid && amenitytypeControl.touched">Amenity Name is required</p>
-                      </div>
-                      </div>
-      
-                      <div class="col-sm-6 col-xs-12">
-                          <div class="form-group"
-                          [ngClass]="{'has-error' : noofamenityControl.invalid && noofamenityControl.touched}">
-                          <label>No Of Amenities <span class="red">*</span></label>
-                          <input type="text" class="form-control" name="NoofAmenities" [(ngModel)]="NoofAmenities"
-                            #noofamenityControl='ngModel' pattern="[0-9]*" placeholder="No Of Amenities" pattern="[A-Za-z\s]+" required />
-                            <p class="alerts" *ngIf="noofamenityControl.invalid && noofamenityControl.touched">No Of Amenities are required</p>
-                        </div>
-                      </div>
-                    </div>
-      
-    
-                    <div class="row">
-                      <div class="col-sm-6 col-xs-12">
-                        <div class="form-group"
-                        [ngClass]="{'has-error' : banknameControl.invalid && banknameControl.touched}">
-                        <label>Bank Name <span class="red">*</span></label>
-                        <input type="text" class="form-control" name="BABName" [(ngModel)]="BABName"
-                          #banknameControl='ngModel' placeholder="Bank Name" pattern="[A-Za-z\s]+" required />
-                          <p class="alerts" *ngIf="banknameControl.invalid && banknameControl.touched">Bank Name is required</p>
-                      </div>
-                      </div>
-      
-                      <div class="col-sm-6 col-xs-12">
-                          <div class="form-group"
-                          [ngClass]="{'has-error' : bankifscControl.invalid && bankifscControl.touched}">
-                          <label>IFSC <span class="red">*</span></label>
-                          <input type="text" class="form-control" name="BAIFSC" [(ngModel)]="BAIFSC"
-                            #bankifscControl='ngModel' placeholder="Bank IFSC" pattern="^[A-Za-z]{4}[a-zA-Z0-9]{7}$" required />
-                            <small>Ex: PAAA1111111</small>
-                            <p class="alerts" *ngIf="bankifscControl.invalid && bankifscControl.touched">IFSC is required</p>
-                        </div>
-                      </div>
-                    </div>
-    
+    <!--Edit Association-->
+    <ng-template #template>
+            <div class="modal-content">
+          
+              <div class="modal-header">
+                <h4 class="modal-title pull-right">Edit Association</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <form name="editAssociation" autocomplete="off">
                       <div class="row">
-                        <div class="col-sm-6 col-xs-12">
-                          <div class="form-group"
-                          [ngClass]="{'has-error' : accountnumberControl.invalid && accountnumberControl.touched}">
-                          <label>Account Number <span class="red">*</span></label>
-                          <input type="text" class="form-control" name="BAActNo" [(ngModel)]="BAActNo"
-                            #accountnumberControl='ngModel' placeholder="Account Number" pattern="[a-zA-Z0-9-]*" required />
-                            <p class="alerts" *ngIf="accountnumberControl.invalid && accountnumberControl.touched">Account Number is required</p>
-                        </div>
-                        </div>
-        
-                        <div class="col-sm-6 col-xs-12">
-                            <div class="form-group"
-                            [ngClass]="{'has-error' : accounttypeControl.invalid && accounttypeControl.touched}">
-                            <label>Account Type <span class="red">*</span></label>
-                            <select class="form-control" name="ASPropType" [(ngModel)]="ASPrpType" #accounttypeControl="ngModel" style="font-family: Poppins">
-                                <option disabled="true" selected="true" value="">Select Account Type</option>
-                                <option *ngFor="let item of accountTypes" [value]="item.name">{{item.name}}</option>
-                                <p class="alerts" *ngIf="accounttypeControl.invalid && accounttypeControl.touched">Account Type is required</p>
-                            </select>
+                        <div class="col-sm-4 col-xs-12">
+                          <div class="from-group">
+                            <p>Association Name : <strong>{{ASAsnName}}</strong></p>
                           </div>
                         </div>
-                    </div>
-    
-                      <div class="from-group">
-                        <div class="form-group pull-right">
-                          <br>
-                          <button type="submit" class="btn btn-primary" 
-                            (click)="UpdateAssociation(associationId)">Update</button>
+                        <div class="col-sm-4 col-xs-12"></div>
+                        <div class="col-sm-4 col-xs-12" style="text-align:pull-right">
+                          <p>Date : <strong>{{newdate | date: "d/M/y"}}</strong></p>
                         </div>
                       </div>
-      
-      
-                    </div>
-                  
-                 </form> 
+          
+                       <div> 
+                        <div class="row">
+                          <br>
+                          <div class="col-sm-1 col-xs-12"></div>
+                          <div class="col-sm-11  col-xs-12">
+                            <h4 class="headingOrange">Edit Association</h4>
+                            
+                          </div>
+                        </div>
+          
+                        <div class="row">
+                          <div class="col-sm-6 col-xs-12">
+                            <div class="form-group"
+                              [ngClass]="{'has-error' : associationnameControl.invalid && associationnameControl.touched}">
+                              <label>Association Name <span class="red">*</span></label>
+                              <input type="text" class="form-control" name="ASAsnName" [(ngModel)]="ASAsnName" #associationnameControl='ngModel' pattern="[a-zA-Z0-9-]*"
+                                disabled="true" required />
+                                <p class="alerts" *ngIf="associationnameControl.invalid && associationnameControl.touched">Association Name is required</p>
+                            </div>
+                          </div>
+          
+                          <div class="col-sm-6 col-xs-12">
+                              <div class="form-group" [ngClass]="{'has-error' : countryControl.invalid && countryControl.touched}">
+                              <label>Country <span class="red">*</span></label>
+                              <select class="form-control" name="ASCountry" [(ngModel)]="ASCountry" #countryControl="ngModel" (change)="openPANfield()" style="font-family: Poppins" >
+                                  <option ng-disabled="true" ng-selected="true" [value]="">Select Country</option>
+                                  <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>
+                              </select>
+                              <p class="alerts" *ngIf="countryControl.invalid && countryControl.touched"> Please Select country</p>      
+                            </div>
+                          </div>
+                        </div>
+          
+                        <div class="row">
+                          <div class="col-sm-4 col-xs-12">
+                            <div class="form-group"
+                              [ngClass]="{'has-error' : addressControl.invalid && addressControl.touched}">
+                              <label>Address<span class="red">*</span></label>
+                              <input type="text" class="form-control" name="ASAddress" [(ngModel)]="ASAddress"
+                                #addressControl='ngModel' placeholder="Address" pattern="[a-zA-Z0-9-]*" required />
+                                <p class="alerts" *ngIf="addressControl.invalid && addressControl.touched">Address is required</p>
+                            </div>
+                          </div>
+          
+                          <div class="col-sm-4 col-xs-12">
+                            <div class="form-group"
+                              [ngClass]="{'has-error' : cityControl.invalid && cityControl.touched}">
+                              <label>City<span class="red">*</span></label>
+                              <input type="text" class="form-control" name="ASCity" [(ngModel)]="ASCity"
+                                #cityControl='ngModel' placeholder="City" pattern="[a-zA-Z0-9-]*" required />
+                                <p class="alerts" *ngIf="cityControl.invalid && cityControl.touched">City is required</p>
+                            </div>
+                          </div>    
+          
+                          <div class="col-sm-4 col-xs-12">
+                            <div class="form-group"
+                              [ngClass]="{'has-error' : stateControl.invalid && stateControl.touched}">
+                              <label>State<span class="red">*</span></label>
+                              <input type="text" class="form-control" name="ASState" [(ngModel)]="ASState"
+                                #stateControl='ngModel' placeholder="State" pattern="[a-zA-Z0-9-]*" required />
+                                <p class="alerts" *ngIf="stateControl.invalid && stateControl.touched">State is required</p>
+                            </div>
+                          </div>
+                        </div>
+          
+                        <div class="row">
+                          <div class="col-sm-4 col-xs-12">
+                            <div class="form-group"
+                              [ngClass]="{'has-error' : pincodeControl.invalid && pincodeControl.touched}">
+                              <label>PinCode<span class="red">*</span></label>
+                              <input type="text" class="form-control" name="ASPinCode" [(ngModel)]="ASPinCode"
+                                #pincodeControl='ngModel'  placeholder="PinCode" pattern="[a-zA-Z0-9-]*" required />
+                                <p class="alerts" *ngIf="stateControl.invalid && stateControl.touched">State is required</p>
+                            </div>
+                          </div>
+          
+                          <div class="col-sm-4 col-xs-12">
+                            <div class="form-group"
+                              [ngClass]="{'has-error' : propTypeControl.invalid && propTypeControl.touched}">
+                              <label>Property Type <span class="red">*</span></label>
+                              <select class="form-control" name="ASPropType" [(ngModel)]="ASPrpType" #propTypeControl="ngModel" style="font-family: Poppins">
+                                  <option ng-disabled="true" ng-selected="true" [value]="">Select Property Type</option>
+                                  <option *ngFor="let propertyType of propertyTypes" [value]="propertyType.name">{{propertyType.displayName}}</option>
+                              </select>
+                              <p class="alerts" *ngIf="propTypeControl.invalid && propTypeControl.touched"> Please Select property type</p>
+                            </div>
+                          </div>
+          
+                          <div class="col-sm-4 col-xs-12">
+                            <div class="form-group"
+                              [ngClass]="{'has-error' : propNameControl.invalid && propNameControl.touched}">
+                              <label>Property Name <span class="red">*</span></label>
+                              <input type="text" class="form-control" name="ASPrpName" [(ngModel)]="ASPrpName"
+                                #propNameControl='ngModel' placeholder="Property Name" pattern="[a-zA-Z0-9-]*" required />
+                                <p class="alerts" *ngIf="propNameControl.invalid && propNameControl.touched">Property Name is required</p>
+                            </div>
+                          </div>
+                        </div>
+          
+                        <div class="row">
+                          <div class="col-sm-6 col-xs-12">
+                            <div class="form-group"
+                            [ngClass]="{'has-error' : noblockControl.invalid && noblockControl.touched}">
+                            <label>No Of Blocks <span class="red">*</span></label>
+                            <input type="text" class="form-control" name="ASNofBlks" [(ngModel)]="ASNofBlks"
+                              #noblockControl='ngModel' pattern="[0-9]*" placeholder="No Of Blocks" required />
+                              <p class="alerts" *ngIf="noblockControl.invalid && noblockControl.touched">Number Of Blocks is required</p>
+                          </div>
+                          </div>
+          
+                          <div class="col-sm-6 col-xs-12">
+                            <div class="form-group"
+                            [ngClass]="{'has-error' : nounitControl.invalid && nounitControl.touched}">
+                            <label>No Of Units <span class="red">*</span></label>
+                            <input type="text" class="form-control" name="ASNofUnit" [(ngModel)]="ASNofUnit"
+                              #nounitControl='ngModel' pattern="[0-9]*" placeholder="No Of Units" required />
+                              <p class="alerts" *ngIf="nounitControl.invalid && nounitControl.touched">Number Of Units is required</p>
+                          </div>
+                          </div>
+                        </div>
+        
+                        <div class="row">
+                          <div class="col-sm-6 col-xs-12">
+                            <div class="form-group"
+                            [ngClass]="{'has-error' : amenitytypeControl.invalid && amenitytypeControl.touched}">
+                            <label>Amenity Type <span class="red">*</span></label>
+                            <input type="text" class="form-control" name="AMType" [(ngModel)]="AMType"
+                              #amenitytypeControl='ngModel' placeholder="Amenity Type" pattern="[a-zA-Z0-9-]*" required />
+                              <p class="alerts" *ngIf="amenitytypeControl.invalid && amenitytypeControl.touched">Amenity Name is required</p>
+                          </div>
+                          </div>
+          
+                          <div class="col-sm-6 col-xs-12">
+                              <div class="form-group"
+                              [ngClass]="{'has-error' : noofamenityControl.invalid && noofamenityControl.touched}">
+                              <label>No Of Amenities <span class="red">*</span></label>
+                              <input type="text" class="form-control" name="NoofAmenities" [(ngModel)]="NoofAmenities"
+                                #noofamenityControl='ngModel' pattern="[0-9]*" placeholder="No Of Amenities" pattern="[A-Za-z\s]+" required />
+                                <p class="alerts" *ngIf="noofamenityControl.invalid && noofamenityControl.touched">No Of Amenities are required</p>
+                            </div>
+                          </div>
+                        </div>
+          
+        
+                        <div class="row">
+                          <div class="col-sm-6 col-xs-12">
+                            <div class="form-group"
+                            [ngClass]="{'has-error' : banknameControl.invalid && banknameControl.touched}">
+                            <label>Bank Name <span class="red">*</span></label>
+                            <input type="text" class="form-control" name="BABName" [(ngModel)]="BABName"
+                              #banknameControl='ngModel' placeholder="Bank Name" pattern="[A-Za-z\s]+" required />
+                              <p class="alerts" *ngIf="banknameControl.invalid && banknameControl.touched">Bank Name is required</p>
+                          </div>
+                          </div>
+          
+                          <div class="col-sm-6 col-xs-12">
+                              <div class="form-group"
+                              [ngClass]="{'has-error' : bankifscControl.invalid && bankifscControl.touched}">
+                              <label>IFSC <span class="red">*</span></label>
+                              <input type="text" class="form-control" name="BAIFSC" [(ngModel)]="BAIFSC"
+                                #bankifscControl='ngModel' placeholder="Bank IFSC" pattern="^[A-Za-z]{4}[a-zA-Z0-9]{7}$" required />
+                                <small>Ex: PAAA1111111</small>
+                                <p class="alerts" *ngIf="bankifscControl.invalid && bankifscControl.touched">IFSC is required</p>
+                            </div>
+                          </div>
+                        </div>
+        
+                          <div class="row">
+                            <div class="col-sm-6 col-xs-12">
+                              <div class="form-group"
+                              [ngClass]="{'has-error' : accountnumberControl.invalid && accountnumberControl.touched}">
+                              <label>Account Number <span class="red">*</span></label>
+                              <input type="text" class="form-control" name="BAActNo" [(ngModel)]="BAActNo"
+                                #accountnumberControl='ngModel' placeholder="Account Number" pattern="[a-zA-Z0-9-]*" required />
+                                <p class="alerts" *ngIf="accountnumberControl.invalid && accountnumberControl.touched">Account Number is required</p>
+                            </div>
+                            </div>
+            
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="form-group"
+                                [ngClass]="{'has-error' : accounttypeControl.invalid && accounttypeControl.touched}">
+                                <label>Account Type <span class="red">*</span></label>
+                                <select class="form-control" name="ASPropType" [(ngModel)]="ASPrpType" #accounttypeControl="ngModel" style="font-family: Poppins">
+                                    <option ng-disabled="true" ng-selected="true" [value]="">Select Account Type</option>
+                                    <option *ngFor="let accounttypeControl of bankAccountTypes" [value]="accounttypeControl.name">{{accounttypeControl.displayName}}</option>
+                                    <p class="alerts" *ngIf="accounttypeControl.invalid && accounttypeControl.touched">Account Type is required</p>
+                                </select>
+                              </div>
+                            </div>
+                        </div>
+        
+                          <div class="from-group">
+                            <div class="form-group pull-right">
+                              <br>
+                              <button type="submit" class="btn btn-primary" 
+                                (click)="UpdateAssociation()">Update</button>
+                            </div>
+                          </div>
+          
+          
+                        </div>
+                      
+                     </form> 
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </ng-template>
-
-
-
+          </ng-template>
     
-
     
-  
+    
+        
+    
+        
+      

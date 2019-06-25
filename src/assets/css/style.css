@@ -98,3 +98,27 @@ tbody tr td{ text-align:left;border-top:0px !important; border-bottom: 0px solid
 .red{
   color:red;
 }
+.clsAlignCenter{
+  text-align: center;
+}
+.clsthBorder{
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.clsBorder{
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+
+.clsTotalInvoice{
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+ul.clsTxtIndnt li{
+  list-style-type:none;
+}

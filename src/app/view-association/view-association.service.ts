@@ -41,10 +41,10 @@ export class ViewAssociationService {
 
 
 
-   createAssn(createAsssociationData)
+  createAssn(createAsssociationData)
   {
     console.log('createAsssociationData',createAsssociationData);
-    return this.http.post(this.scopeIP + 'oyeliving/api/v1/association/create', createAsssociationData,  {headers:this.headers});
+    return this.http.post(this.scopeIP + 'oyeliving/api/v1/association/create',JSON.stringify(createAsssociationData),{headers:this.headers});
   }
 
 

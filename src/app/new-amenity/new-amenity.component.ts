@@ -8,9 +8,12 @@ import { Amenity } from '../models/amenity';
 })
 export class NewAmenityComponent implements OnInit {
 
-  @Input() amenities: Amenity[];
-  @Output() addAmenities = new EventEmitter<object>();
-  @Output() deleteamenity = new EventEmitter<object>();
+  @Input() newamenities: any[];
+  @Input() newamenity:any={};
+  //"AMType": "Park",//this.am.newAMTypes,
+    //        "NoofAmenities": 1,//this.am.newNoofAmenitie,
+  @Output() addAmenities:EventEmitter<any>;
+  @Output() deleteamenity = new EventEmitter<any>();
   AmenityId: number;
   AmenityT: string;
   AmenityN: string;
@@ -18,24 +21,25 @@ export class NewAmenityComponent implements OnInit {
 
   constructor() {
     this.AmenityId = 0;
+    this.addAmenities=new EventEmitter<any>();
   }
 
   ngOnInit() {
   }
 
   ngOnChanges() {
-    console.log('amenities', this.amenities);
+
   }
 
   addAmenity() {
-    this.AmenityId += 1;
-    this.addAmenities.emit({ "AmenityId": this.AmenityId, "AmenityT": this.AmenityT, "AmenityN": this.AmenityN });
-    this.AmenityT = '';
-    this.AmenityN = '';
+    //this.AmenityId += 1;
+    this.addAmenities.emit(this.newamenity);
+    this.newamenity.AMType = '';
+    this.newamenity.NoofAmenities = '';
   }
 
-  deleteAmenity(AmenityId) {
-    this.deleteamenity.emit(AmenityId);
+  deleteAmenity(AMType) {
+    this.deleteamenity.emit(AMType);
   }
 
 }

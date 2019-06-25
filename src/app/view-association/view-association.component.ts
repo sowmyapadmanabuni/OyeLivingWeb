@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, TemplateRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { HttpClient, HttpHeaders, HttpEventType } from '@angular/common/http';
 import { ViewAssociationService } from './view-association.service';
@@ -9,7 +9,6 @@ import { Amenity } from '../models/amenity';
 import { ViewChild } from '@angular/core';
 import { ExpenseData } from '../models/expense-data';
 import { Bank } from '../models/bank';
-import Swal from 'sweetalert2';
 
 
 @Component({
@@ -25,6 +24,8 @@ export class ViewAssociationComponent implements OnInit {
   enrollAssociation: boolean = false;
   joinAssociation: boolean = false;
   viewAssociation_Table: boolean = true;
+  private newAttribute: any = {};
+
   //crtAssn:CreateAssn;
   selectedFile: File;
   @ViewChild('view-association') form: any;
@@ -32,6 +33,8 @@ export class ViewAssociationComponent implements OnInit {
   currentAssociationID: string;
   associations: any = [];
   crtAssn: any = {};
+  am: any = {};
+  bankDetails: any ={};
   createAsssociationData: any = {};
   association: any = {};
   amenity: any = {};
@@ -39,8 +42,9 @@ export class ViewAssociationComponent implements OnInit {
   PANdiv1: boolean = false;
   PANdiv2: boolean = false;
   amenityDetails: boolean = false;
-  amenities: Amenity[];
-  bankites: Bank[];
+  amenities: any[];
+  bankites: any[];
+  newamenities:any[];
   newBank: Bank;
   config: any;
   AmenityT: string;
@@ -88,6 +92,9 @@ export class ViewAssociationComponent implements OnInit {
   firstLetter: string;
   fifthLetter: string;
   editassndata: object;
+  BankId:number;
+ 
+  
   //  firstLetter = crtAssn.name.charAt(0).toUpperCase();
   //   fifthLetter = this.panNo.charAt(4).toUpperCase();
 
@@ -105,16 +112,25 @@ export class ViewAssociationComponent implements OnInit {
   AMType: string;
   NoofAmenities: string
   BABName: string;
+  BankN: string;
   BAIFSC: string;
   BAActNo: string;
   BAActType: string;
   AMID: number;
   BAActID: number;
+  newBABName: any;
+  newBAIFSC: any;
+  newAMTypes: any;
+  newNoofAmenitie:string;
+  newBAActNo: string;
+  newBAActType: string;
 
-  associationId:number;
+  accountTypes:object[];
+  bankings: any;
+  banks:number[];
 
-  constructor(private viewAssnService: ViewAssociationService,
-
+  constructor(
+    private viewAssnService: ViewAssociationService,
     private globalService: GlobalServiceService,
     private router: Router,
     private modalService: BsModalService) {
@@ -124,8 +140,8 @@ export class ViewAssociationComponent implements OnInit {
     this.disableButton = false;
     this.config = {
       itemsPerPage: 10,
-      currentPage: 1
-
+      currentPage: 1,
+      BankId : 0
     };
 
     this.isLargefile = false;
@@ -136,10 +152,22 @@ export class ViewAssociationComponent implements OnInit {
     this.AmenityId = '';
 
     this.bankites = [];
-    this.Bankname = '';
+    this.newamenities=[];
+    this.BankN = '';
     this.IFSC = '';
     this.AccountNumber = '';
-    this.accountType = '';
+    this.accountType ='';
+    this.newBABName='';
+    this.newBAIFSC='';
+    this.newAMTypes='';
+    this.newNoofAmenitie='';
+
+    this.accountTypes = [
+      { "name": "Saving" },
+      { "name": "Current" }
+    ];
+
+    this.banks=[];
   }
 
   pageChanged(event) {
@@ -175,31 +203,33 @@ export class ViewAssociationComponent implements OnInit {
         }
       });
   }
-  getAmenities(amenities: object) {
 
-    this.amenities.push(new Amenity(amenities['AmenityT'], amenities['AmenityN'], amenities['AmenityId']));
-    this.AmenityT = '';
-    this.AmenityN = '';
-    console.log('amenities', this.amenities);
-  }
-
-  deleteamenity(AmenityId) {
-    console.log('AmenityId', AmenityId);
-    this.amenities = this.amenities.filter(item => item['amenityId'] != AmenityId);
-  }
   getBank(bankities: object) {
 
-    this.bankites.push(new Bank(bankities['BankName'], bankities['IFSC'], bankities['AccountNumber'], bankities['accountType'], bankities['BankId']));
+    this.bankites.push(new Bank(bankities['BankName'], bankities['IFSC'], bankities['AccountNumber'], bankities['accountType']));
     this.BankName = '';
     this.IFSC = '';
     this.AccountNumber = '';
     this.accountType = '';
     console.log('bankites', this.bankites);
   }
-  deleteBank(BankId) {
-    console.log('BankId', BankId);
-    this.bankites = this.bankites.filter(item => item['BankId'] != BankId);
+  getnewbank(event) {
+//     BAActNo: "3453453453453453"
+// BAActType: "Saving"
+// BABName: "icici"
+// BAIFSC: "PAAA1111111"
+    console.log(event);
+    this.bankites.push(new Bank(event['BABName'], event['BAIFSC'], event['BAActNo'], event['BAActType']));
+    console.log('bankites',this.bankites);
   }
+  addbanks(e) {
+    console.log('e-' + e);
+    this.banks.push(e);
+  }
+  // deleteBank(BankId) {
+  //   console.log('BankId', BankId);
+  //   this.bankites = this.bankites.filter(item => item['BankId'] != BankId);
+  // }
   openViewAssociation(viewreceiptmodal: TemplateRef<any>, asAsnName, asPrpName, asAddress, asNofUnit, aSCountry, asPinCode, asState, asPrpType, asNofBlks, aspanNum, asRegrNum, asAsnLogo, asCity, aspanDoc, asAssnID, asgstNo) {
     console.log(asAsnName);
     console.log(asPrpName);
@@ -216,7 +246,6 @@ export class ViewAssociationComponent implements OnInit {
     console.log(aspanDoc);
     console.log('asAssnID', asAssnID);
     console.log(asgstNo);
-    console.log()
 
     this.viewAssnService.getAssociationDetail(asAssnID)
       .subscribe(data => {
@@ -287,10 +316,11 @@ export class ViewAssociationComponent implements OnInit {
   getAssociationDetails() {
     console.log(this.accountID)
     this.viewAssnService.getAssociationDetails(this.accountID).subscribe(res => {
-      console.log(res);
-      
-      this.associations = res['data'].associationByAccount;
-      console.log('associations',this.associations);
+      //console.log(JSON.stringify(res));
+      var data: any = res;
+      console.log(data.data.associationByAccount);
+      this.associations = data.data.associationByAccount;
+      console.log(this.associations);
     });
   }
   // getAssociationDetail(){
@@ -351,23 +381,50 @@ export class ViewAssociationComponent implements OnInit {
       }
     }
   }
-  // addAmenity() {
-  //   this.amenities.push(new Amenity(this.AmenityT,this.AmenityN));
-  //   this.AmenityT='';
-  //   this.AmenityN='';
-  //   console.log('amenities',this.amenities);
+  addAmenity(event) {
+    console.log('amenity',event);
+    this.newamenities.push(new Amenity(event['AMType'],event['NoofAmenities']));
+    console.log('newamenities',this.newamenities);
+
+  }
+
+  // getBank(bankities: object) {
+
+  //   addBank() {
+  //   this.BankId += 1;
+  //   this.addBankites.emit({ "BankName": this.BankName, "IFSC": this.IFSC,"AccountNumber": this.AccountNumber ,"accountType": this.accountType  });
+  //   this.BankName = '';
+  //   this.IFSC = '';
+  //   this.AccountNumber='';
+  //   this.accountType='';
+   
   // }
-  // addBank(){
-  //    this.bankites.push(new Bank(this.Bankname,this.IFSC,this.AccountNumber,this.accountType));
-  //    this.Bankname='';
-  //    this.IFSC='';
-  //    this.AccountNumber='';
-  //    this.accountType='';
-  //    console.log('bankites',this.bankites);
+ 
+  // deleteBank(BankId) {
+  //   this.bankites.splice(BankId, 1);
+  // }this.bankites.push(new Bank(bankities['BankName'], bankities['IFSC'], bankities['AccountNumber'], bankities['accountType'], bankities['BankId']));
+  //   this.BankName = '';
+  //   this.IFSC = '';
+  //   this.AccountNumber = '';
+  //   this.accountType = '';
+  //   console.log('bankites', this.bankites);
   // }
-  // deleteBank(index){
-  //   this.bankites.splice(index, 1);
-  // }
+    
+  addBank() {
+        this.BankId += 1;
+        this.bankings.push({"newBABName": this.newBABName, "newBAIFSC":this.newBAIFSC, "newBAActNo":this.newBAActNo, "newBAActType":this.newBAActType})
+        this.newBABName = '';
+        this.newBAIFSC = '';
+        this.newBAActNo = '';
+        this.newBAActType = '';        
+    }
+
+    deleteBank(BankId) {
+        this.bankings.splice(BankId, 1);
+    }
+
+
+
   onFileSelected(event) {
     this.isLargefile = false;
     this.isnotValidformat = false;
@@ -392,8 +449,12 @@ export class ViewAssociationComponent implements OnInit {
 
     this.EXPyCopy = expycopy;
   }
-  deleteAmenity(index) {
-    this.amenities.splice(index, 1);
+  deleteAmenity(AMType) {
+    console.log('AMType',AMType);
+   this.newamenities= this.newamenities.filter(item=>{
+     return item['AMType'] != AMType;
+    })
+    console.log('newamenities',this.newamenities);
   }
 
   removeSelectedfile() {
@@ -436,10 +497,7 @@ export class ViewAssociationComponent implements OnInit {
     { "name": "United Arab Emirates" }, { "name": "United Kingdom" }, { "name": "United States of America" },
     { "name": "Qatar" }, { "name": "Qatar" }
   ];
-  accountTypes: any = [
-    { "name": "Saving" },
-    { "name": "Current" }
-  ];
+
   propertyTypes: any = [
     { "name": "residential", "displayName": "Residential Property" },
     { "name": "commercial", "displayName": "Commercial Property" },
@@ -458,18 +516,18 @@ export class ViewAssociationComponent implements OnInit {
         "ASAddress": this.crtAssn.locality,
         "ASCountry": this.crtAssn.country,
         "ASCity": this.crtAssn.city,
-        "ASAsnLogo": this.crtAssn.logo,
+        "ASAsnLogo": "logo",
         "ASState": this.crtAssn.state,
         "ASPinCode": this.crtAssn.postalCode,
         "ASAsnName": this.crtAssn.name,
         "ASPrpName": this.crtAssn.propertyName,
-        "ASRegrNum": this.crtAssn.assnRegNo,
-        "PANNumber": this.crtAssn.PANNumber,
-        "ASPropType": this.crtAssn.propertyType,
+        "ASRegrNum":  "avcx",    //this.crtAssn.assnRegisterNo,
+        "ASPANNum": this.crtAssn.PANNumber,
+        "ASPrpType": this.crtAssn.propertyType,
         //"ASWebURL":"",
         "ASPANStat": "True",
         //"ASPANNum":"AAAAm1234A",
-        "ASPANNum": this.crtAssn.assnPANNo,
+        //"ASPANNum": this.crtAssn.assnPANNo,
         "ASNofBlks": this.crtAssn.totalNoBlocks,
         "ASNofUnit": this.crtAssn.totalNoUnits,
         "ASONStat": "False",
@@ -477,9 +535,9 @@ export class ViewAssociationComponent implements OnInit {
         "ASOLOStat": "False",
         "ASOTPStat": "False",
         "ASOPStat": "False",
-        "ASPANDoc": "qwq3234",
-        "uploadPANCard": this.crtAssn.uploadPANCard,
-        "assnRegisterNo": this.crtAssn.assnRegisterNo,
+        "ASPANDoc": "uploadPANCard",
+        //"aspanDoc": this.crtAssn.uploadPANCard,
+        //"ASRegrNum": this.crtAssn.assnRegisterNo,
         // "BankName": this.crtAssn.BankName,
         // "accountType": this.crtAssn.accountType,
         // "IFSC": this.crtAssn.IFSC,
@@ -494,40 +552,19 @@ export class ViewAssociationComponent implements OnInit {
         //"ASGSTNo":"",        
         "GSTNumber": this.crtAssn.GSTNumber,
         "ASGPSPnt": "12.12.123",
-        "ASDCreated": "2019-01-05",
-        "ASDUpdated": "2019-01-05",
-        "ASIsActive": "True",
+        // "ASDCreated": "2019-01-05",
+        // "ASDUpdated": "2019-01-05",
+        // "ASIsActive": "True",
         "ASFaceDet": "False",
-        "Amenities": [
-          {
-
-            "AMType": this.AmenityT,
-            "NoofAmenities": this.AmenityN
-
-          }
-        ]
-      },
-      "BankDetails": {
-        // "BankName": this.bank.BankN,
-        // "IFSC": this.bank.IFSCN,
-        // "AccountNumber": this.bank.AccountN,
-        // "accountType": this.bank.accountT,
-        // "BankNam": this.BankName,
-        // "IFS": this.IFSC,
-        // "AccountNumbe": this.AccountNumber,
-        // "accountTyp": this.accountType,
-
-        "BABName": this.BankName,
-        "BAIFSC": this.IFSC,
-        "BAActNo": this.AccountNumber,
-        "BAActType": this.accountType
-      }
-    };
-    console.log(JSON.stringify(this.createAsssociationData));
+        "ASAsnEmail":"jhg",
+        "Amenities": this.newamenities,
+      
+      "BankDetails": this.bankites
+    }
+  };
 
     this.viewAssnService.createAssn(this.createAsssociationData).subscribe(res => {
-      console.log("Done");
-      console.log(JSON.stringify(res));
+      console.log('success',res);
     },
       res => {
         console.log('error', res);
@@ -549,9 +586,16 @@ export class ViewAssociationComponent implements OnInit {
 
   }
 
+  deletenewbank(acno) {
+    console.log('acno',acno);
+  this.bankites= this.bankites.filter(item => {
+      //console.log('item',typeof item['BAActNo']);
+     return parseInt(item['BAActNo']) != parseInt(acno);
+    })
+  }
+
   OpenModal(template: TemplateRef<any>, asAsnName: string, asCountry: string, asAddress: string, asCity: string, asState, asPinCode, asPrpType, asPrpName, asNofBlks, asNofUnit, amType, noofAmenities, baBName, baIFSC, baActNo, baActType, asAssnID) {
     console.log('amType-', amType, 'noofAmenities-', noofAmenities);
-
     this.ASAsnName = asAsnName;
     this.ASCountry = asCountry;
     this.ASAddress = asAddress;
@@ -566,8 +610,6 @@ export class ViewAssociationComponent implements OnInit {
     this.BAIFSC = baIFSC;
     this.BAActNo = baActNo;
     this.BAActType = baActType;
-    this.associationId=asAssnID;
-
     console.log(asAsnName);
     console.log(asPrpName);
     console.log(asAddress);
@@ -580,12 +622,11 @@ export class ViewAssociationComponent implements OnInit {
     console.log(asAssnID);
     console.log(amType);
     console.log(baBName);
-    //console.log('amid',amid);
 
     this.viewAssnService.getAssociationDetails(asAssnID)
 
     this.viewAssnService.getAssociationDetailsByAssociationid(asAssnID).subscribe(res => {
-      console.log(JSON.stringify(res));
+      //console.log(JSON.str ingify(res));
       var data: any = res;
       console.log(res['data']['association']['amenities'][0].amType);
       console.log(res['data']['association']['amenities'][0].noofAmenities);
@@ -601,8 +642,6 @@ export class ViewAssociationComponent implements OnInit {
       this.BAActType = res['data']['association']['bankDetails'][0].baActType;
       console.log(res['data']['association'][0].asPrpType);
       this.ASPrpType = res['data']['association'][0].asPrpType;
-      //this.AMID = res['data']['association']['amenities'][0].amid;
-      console.log(res['data']['association']);
     });
 
     console.log('editassndata', this.editassndata)
@@ -610,60 +649,5 @@ export class ViewAssociationComponent implements OnInit {
     this.modalRef = this.modalService.show(template,
       Object.assign({}, { class: 'gray modal-lg' }));
   }
-
-    //Edit Association
-    UpdateAssociation(associationId){
-    
-      console.log(associationId);
-      this.editassndata = {
-        ASAsnName:this.ASAsnName,
-        ASCountry:this.ASCountry,
-        ASAddress:this.ASAddress,
-        ASCity:this.ASCity,
-        ASState:this.ASState,
-        ASPinCode:this.ASPinCode,
-        ASPrpType:this.ASPrpType,
-        ASPrpName:this.ASPrpName,
-        ASNofBlks:this.ASNofBlks,
-        ASNofUnit:this.ASNofUnit,
-        ASAssnID:associationId,
-        "Amenities":[{
-          AMType:this.AMType,
-          NoofAmenities:this.NoofAmenities,
-          AMID:this.AMID,
-          ASAssnID:associationId
-        }],
-        "BankDetails":[{
-          BABName:this.BABName,
-          BAIFSC:this.BAIFSC,
-          BAActType:this.BAActType,
-          BAActNo:this.BAActNo,
-          ASAssnID:associationId,
-          BAActID:this.BAActID
-        }]
-    };
-    console.log(JSON.stringify(this.editassndata));
-    this.viewAssnService.UpdateAssociation(this.editassndata).subscribe(res => {console.log("Done");
-    console.log(JSON.stringify(res));
-  //alert("Association Created Successfully")
-  Swal.fire({
-    title: 'Association Updated Successfuly',
-  }).then(
-    (result) => {
-  
-      if (result.value) {
-        //this.form.reset();
-        this.modalRef.hide();
-      
-      } else if (result.dismiss === swal.DismissReason.cancel) {
-        this.router.navigate(['']);
-      }
-    }
-  )
-  });
-    
-
-  
-    }
 
 }

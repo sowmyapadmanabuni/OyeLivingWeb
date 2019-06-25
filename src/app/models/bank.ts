@@ -1,10 +1,9 @@
 export class Bank {
     constructor(
-        private BankN,
-        private IFSCN,
-        private AccountN,
-        private accountT,
-        private BankId,
+        private BABName,
+        private BAIFSC,
+        private BAActNo,
+        private BAActType
     ){
  
     }

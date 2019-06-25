@@ -7,18 +7,23 @@ import {Bank} from '../models/bank';
   styleUrls: ['./bank.component.css']
 })
 export class BankComponent implements OnInit {
-  @Input()  bankites:Bank[];
-  @Output() addBankites = new EventEmitter<object>();
-  @Output() deletebank = new EventEmitter<object>();
+  @Input()  bankites:any[];
+  @Output() addBankites = new EventEmitter<number>();
+  @Output() deletebank:EventEmitter<any>;
+  @Output() addnewbank:EventEmitter<any>; 
+
   BankId:number;
   BankName:string; 
   IFSC:string;
   AccountNumber:string;
   accountType:string;
+  newBank:any={};
   
   constructor() {
     this.BankId = 0;
-   }
+    this.addnewbank=new EventEmitter<Object>();
+    this.deletebank=new EventEmitter<any>();
+  }
 
   ngOnInit() {
   }
@@ -28,17 +33,23 @@ export class BankComponent implements OnInit {
   }
  
   addBank() {
-    this.BankId += 1;
-    this.addBankites.emit({ "BankId": this.BankId, "BankName": this.BankName, "IFSC": this.IFSC,"AccountNumber": this.AccountNumber ,"accountType": this.accountType  });
-    this.BankName = '';
-    this.IFSC = '';
-    this.AccountNumber='';
-    this.accountType='';
-   
+    // this.BankId += 1;
+    // this.addBankites.emit(1);
+    // this.BankName = '';
+    // this.IFSC = '';
+    // this.AccountNumber='';
+    // this.accountType='';
+    this.addnewbank.emit(this.newBank);
+    this.newBank.BABName='';
+    this.newBank.BAIFSC='';
+    this.newBank.BAActNo='';
+    this.newBank.BAActType='';
+
   }
  
-  deleteBank(BankId) {
-    this.bankites.splice(BankId, 1);
+  deleteBank(BAActNo) {
+    console.log('BAActNo',BAActNo);
+    this.deletebank.emit(BAActNo);
   }
   accountTypes :any=[
     {"name":"Saving"}, 

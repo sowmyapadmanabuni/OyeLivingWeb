@@ -104,11 +104,11 @@
   </div>
 </div>
 
+<!-- Demo Modal-->
 <ng-template #template>
-  <!-- Demo Modal-->
   <div class="modal-content">
     <div class="modal-header">
-      <h4 class="modal-title" style="text-align:center" id="myModalLabel">View Invoice</h4>
+      <h4 class="modal-title" style="margin-left: 42%" id="myModalLabel">View Invoice</h4>
       <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -119,226 +119,216 @@
 
 
         <div class="row">
-          <div class="col-sm-2 col-xs-2">
-            <img alt="" class="img-responsive" style="max-width: 150px; float: left;" />
+          <div class="col-sm-6 col-xs-6">
+            <img alt="" class="img-responsive" src="../../assets/images/newLogo.png"
+              style="width:90px;height:50px;margin-right: 100%" />
+            <span>
+              {{associationDetails.asAsnName}}, {{associationDetails.asAddress}},
+              {{associationDetails.asCountry}}, {{associationDetails.asPinCode}}
+            </span>
           </div>
-          <div class="col-sm-10 col-xs-10">
-            <h4 style="margin: 34px 0px;">{{associationDetails.asAsnName}}, {{associationDetails.asAddress}}, <br />
-              {{associationDetails.asCountry}}, {{associationDetails.asPinCode}}</h4>
+          <div class="col-sm-6 col-xs-6">
+
+          </div>
+        </div>
+        <div class="row" style="margin-bottom: 30px">
+          <div class="col-sm-12 col-xs-12">
+            <label style="position: absolute;font-size:18px;left:46%;color: #f79321 !important;">INVOICE</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-xs-12">
+            <p>
+              <span class="pull-left"><b>Invoice Date :</b> {{invoiceDate | date: "d-M-y"}}</span>
+              <span class="pull-right"><b>Invoice No : </b> {{invoiceNumber}}</span>
+            </p>
           </div>
         </div>
 
-        <label style="display: block; text-align: center; font-size: 18px; margin-bottom: 5px;">INVOICE</label>
-        <p style="margin-bottom: 32px;"><span class="pull-left">Invoice Date :
-            {{invoiceDate | date: "d-M-y"}}</span> <span class="pull-right">Invoice No : {{invoiceNumber}}</span>
-        </p>
         <hr style="margin-top: 5px; height: 2px; background:#CCC;">
 
         <div class="row">
           <div class="col-sm-6 col-xs-6">
             <address style="margin-bottom: 0;">
-              <strong>To : </strong><br />
-              {{OwnerFirstName}} {{OwnerLastName}} <br />
-              {{OwnerEmail}} <br /> <br />
+              <strong>To : </strong>
+              <span>{{OwnerFirstName}} {{OwnerLastName}} </span> <br />
+              <span style="margin-left: 8%;color:blue">{{OwnerEmail}}</span>
             </address>
           </div>
-          <div class="col-sm-4 col-xs-4" style="text-align:right">
+          <div class="col-sm-3 col-xs-3">
 
           </div>
-          <div class="col-sm-2 col-xs-2" style="text-align:center">
-            <strong>Due Date:</strong><br />
-            <span class="show"> {{asdPyDate | date :  "d-M-y"}}</span> <br />
+          <div class="col-sm-3 col-xs-3" style="text-align:center;padding: 0">
+            <strong>Due Date:</strong>
+            <span class="show"> {{asdPyDate | date :  "d-M-y"}}</span>
           </div>
         </div>
+        <div class="row"
+          style="background-color:#007bff;height: 50px;width:99.5%;margin: auto;margin-top: 20px;border: 1px solid black">
+          <span style="position: absolute;left: 40%;margin-top: 1.3%;font-size: 1.5rem;color: white">Invoive for
+            {{invoiceNumber}}</span>
+        </div>
 
-        <div style="overflow-x:auto;">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">SL.No</th>
-                  <th scope="col">Description</th>
-                  <th scope="col">Amount</th>
-                  <th scope="col"></th>
-                </tr>
-              </thead>
-              <tbody>
+        <div class="row" style="width:99.5%;margin: auto;margin-top: 0">
+          <table style="width: 100%">
+            <thead>
+              <tr>
+                <th scope="col" class="clsAlignCenter clsthBorder">Sl.No</th>
+                <th scope="col" class="clsAlignCenter clsthBorder">Description</th>
+                <th scope="col" class="clsthBorder"><span style="margin-left: 20%">Amount</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor='let item of invoiceDetails;let i=index'>
+
                 <tr *ngIf='previousDue > 0' style="font-weight:bold">
-                  <td scope="row">1</td>
-                  <td>Previous Due</td>
-                  <td>₹ {{previousDue}}</td>
-                  <td></td>
+                  <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
+                  <td><span style="margin-left: 20%">Previous Due</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{previousDue}}</span></td>
                 </tr>
                 <tr *ngIf='discountedValue > 0' style="font-weight:bold">
-                  <td scope="row">2</td>
-                  <td>Discount</td>
-                  <td>₹ {{discountedValue}} </td>
-                  <td></td>
+                  <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
+                  <td><span style="margin-left: 20%">Discount</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{discountedValue}}</span> </td>
                 </tr>
-                <tr *ngIf='securityfee > 0' style="font-weight:bold">
-                  <td scope="row">3</td>
-                  <td>Security Fees</td>
-                  <td>₹ {{securityfee}}</td>
-                  <td></td>
+                <tr *ngIf="item['idDesc'] == 'Water Meter' && item['idValue'] > 0">
+                  <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
+                  <td><span style="margin-left: 20%">Water Meter</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
                 </tr>
-                <tr *ngIf='housekeepingfee > 0' style="font-weight:bold">
-                  <td scope="row">4</td>
-                  <td>Housekeeping</td>
-                  <td>₹ {{housekeepingfee}}</td>
-                  <td></td>
+                <tr *ngIf="item['idDesc'] == 'common area electric bill' && item['idValue'] > 0">
+                  <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
+                  <td><span style="margin-left: 20%">Common Area Electric Bill</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
                 </tr>
-                <tr>
-                <tr *ngIf='generatorfee > 0' style="font-weight:bold">
-                  <td scope="row">5</td>
-                  <td>Generator</td>
-                  <td>₹ {{generatorfee}}</td>
-                  <td></td>
+                <tr *ngIf="item['idDesc'] == 'corpus' && item['idValue'] > 0">
+                  <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
+                  <td><span style="margin-left: 20%">Corpus</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
                 </tr>
-                <tr *ngIf='corpusfee > 0' style="font-weight:bold">
-                  <td scope="row">6</td>
-                  <td>Corpus</td>
-                  <td>₹ {{corpusfee}}</td>
-                  <td></td>
+                <tr *ngIf="item['idDesc'] == 'generator bill' && item['idValue'] > 0">
+                  <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
+                  <td><span style="margin-left: 20%">Generator Bill</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
                 </tr>
-                <tr *ngIf='commonareafee > 0' style="font-weight:bold">
-                  <td scope="row">7</td>
-                  <td>Common Area Electric Bill</td>
-                  <td>₹ {{commonareafee}}</td>
-                  <td></td>
+                <tr *ngIf="item['idDesc'] == 'housekeeping' && item['idValue'] > 0">
+                  <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
+                  <td><span style="margin-left: 20%">Housekeeping</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
                 </tr>
-                <tr *ngIf='fixedmaintenancefee > 0' style="font-weight:bold">
-                  <td scope="row">8</td>
-                  <td>Fixed Maintenance</td>
-                  <td>₹ {{fixedmaintenancefee}}</td>
-                  <td></td>
+                <tr *ngIf="item['idDesc'] == 'one time membership fee' && item['idValue'] > 0">
+                  <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
+                  <td><span style="margin-left: 20%">One Time Membership Fee</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
                 </tr>
-                <tr *ngIf='watermeterfee > 0' style="font-weight:bold">
-                  <td scope="row">9</td>
-                  <td>Water Meter</td>
-                  <td>₹ {{watermeterfee}}</td>
-                  <td></td>
+                <tr *ngIf="item['idDesc'] == 'one time occupancy fees' && item['idValue'] > 0">
+                  <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
+                  <td><span style="margin-left: 20%">One Time Occupancy Fees</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
                 </tr>
-                <tr *ngIf='unsoldrentalfees > 0' style="font-weight:bold">
-                  <td scope="row">10</td>
-                  <td>Unsold Rental Fees</td>
-                  <td>₹ {{unsoldrentalfees}}</td>
-                  <td></td>
+                <tr *ngIf="item['idDesc'] == 'renting fees' && item['idValue'] > 0">
+                  <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
+                  <td><span style="margin-left: 20%">Renting Fees</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
                 </tr>
-                <tr>
-                  <td colspan="2" style="text-align: right;">Sub Total</td>
-                  <td>₹ {{totalAmountPaid()}}</td>
-                  <td></td>
+                <tr *ngIf="item['idDesc'] == 'security fees' && item['idValue'] > 0">
+                  <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
+                  <td><span style="margin-left: 20%">Security Fees</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
                 </tr>
-                <tr>
-                  <td colspan="2" style="text-align: right;">Tax</td>
-                  <td>₹ 00.00 </td>
-                  <td></td>
+                <tr *ngIf="item['idDesc'] == 'Fixed Maintenance' && item['idValue'] > 0">
+                  <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
+                  <td><span style="margin-left: 20%">Fixed Maintenance</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
                 </tr>
-                <tr>
-                  <td colspan="2" style="text-align: right;">Total Due</td>
-                  <td>₹ {{totalAmountPaid()}} </td>
-                  <td></td>
+                <tr *ngIf="item['idDesc'] == 'One Time OnBoarding Fees' && item['idValue'] > 0">
+                  <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
+                  <td><span style="margin-left: 20%">One Time OnBoarding Fees</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
                 </tr>
-              </tbody>
-            </table>
+                <tr *ngIf="item['idDesc'] == 'unsold rental fees' && item['idValue'] > 0">
+                  <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
+                  <td><span style="margin-left: 20%">Unsold Rental Fees</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
+                </tr>
+
+              </ng-container>
+            </tbody>
+          </table>
 
         </div>
-
+        <div class="row clsTotalInvoice" style="width:99.5%;margin: auto;height:50px">
+          <div style="border-right: 1px solid black;width: 76.6%;text-align: center;">
+            <span style="font-size:1.5rem;position: absolute;margin-top: 1%">Total Invoice Value</span>
+          </div>
+          <div>
+            <span style="font-size:1.5rem;">₹ {{InvoiceValue}}</span>
+          </div>
+        </div>
         <div class="row">
           <div class="col-sm-11 col-xs-11">
             <p style="text-align: right;">Total Due : <strong style="text-transform: capitalize;">
                 {{amountInWords | words}} Rupees Only</strong></p>
           </div>
         </div>
-        <br />
-        <strong style="color: red; text-align: left;    display: block;">Due upon receipt</strong>
 
         <!--div removed-->
         <div class="row">
-          <div class="col-xs-12">
-            <h4 style="margin-top: 5px; margin-bottom:0px;color: red; ">{{associationDetails.asAsnName}} Association
-            </h4>
-            <hr style="margin-top: 5px;">
-          </div>
+          <ul class="clsTxtIndnt">
+            <li>
+              <strong style="color:red;text-align:left;display:block;position: relative;">Due upon receipt</strong>
+            </li>
+            <li>
+              <h4 style="margin-top: 5px; margin-bottom:0px;color: red;position: relative; ">{{associationDetails.asAsnName}}
+                Association </h4>
+            </li>
+            <li>
+              <p style="color: red;position: relative;">Tel : {{associationDetails.asMgrMobile}}<br />
+                {{associationDetails.asAsnName}}, {{associationDetails.asAddress}}, {{associationDetails.asCountry}},
+                {{associationDetails.asPinCode}} <br /> {{associationDetails.asWebURL}} <br />
+                {{associationDetails.asAsnEmail}}</p>
+            </li>
+          </ul>
         </div>
 
-        <div class="row">
-
-          <div class="col-sm-3">
-            <p style="color: red;">Tel : {{associationDetails.asMgrMobile}}<br />
-              {{associationDetails.asAsnName}}, {{associationDetails.asAddress}}, {{associationDetails.asCountry}},
-              {{associationDetails.asPinCode}} <br /> {{associationDetails.asWebURL}} <br />
-              {{associationDetails.asAsnEmail}}</p>
-          </div>
-          <div class="col-sm-3">
-          </div>
-          <div class="col-sm-3"></div>
-          <div class="col-sm-3"></div>
-        </div>
-        <br />
-        <br />
-        <div class="row">
-          <div class="col-xs-12">
-            <p style="text-align: right; margin:8px 0px;" id="makePaymentButton"><strong><a href=""
-                  (click)="onButtonClick(totalAmountPaid($event))">Click here </a> to make the payment</strong>
-
+        <div class="row" style="margin-bottom: 15%">
+            <strong>Powered by OyeLiving </strong> 
+            <p style="position: absolute;margin-top:3%"><a href="https://oyespace.com" target="_blank"> <img src="../../assets/images/newLogo.png"
+              style="width:90px;height:50px;" /></a></p>
+            <p style="position: absolute;left: 70%" id="makePaymentButton"><strong><a href="" (click)="onButtonClick(totalAmountPaid($event))">Click here </a> to make the payment</strong>
             </p>
-          </div>
         </div>
 
-        <div class="paymentGatewayPage animateIt" *ngIf="showGateWay">
-          <div class="row" style="padding-top:20px">
-            <br><br><br><br><br>
-            <div style="text-align:center">
-              <!--center tag-->
-              <strong>
-                <h4>Please choose from the following Payment options</h4>
-              </strong>
-              <br><br>
-
-              <div class="col-xs-4">
-                <div class="gateWayLogo">
-                  <a href="" (click)="iciciBank($event,iciciModal,invValFinal)">
-                    <img src="assets/images/icici.jpg" alt="ICICI Bank" class="img-responsive" />
-                    <h6><b>₹ {{totalAmountPaid()}} + Service Fee & GST = ₹ {{invValFinal}}</b></h6>
-                  </a>
-                </div>
-              </div>
-
-              <div class="col-xs-4">
-                <div class="gateWayLogo">
-                  <a href="" (click)="razorpay(totalAmountPaid($event))">
-                    <img src="assets/images/razorpay.jpg" alt="Razorpay" class="img-responsive" />
-                    <h6><b>₹ {{totalAmountPaid()}} + Service Fee & GST = ₹ {{ravValFinal}} </b></h6>
-                  </a>
-                </div>
-              </div>
-
-              <div class="col-xs-4">
-                <div class="gateWayLogo">
-                  <a href="" (click)="instamojo(totalAmountPaid($event))">
-                    <img src="assets/images/instamojo.jpg" alt="Instamojo" class="img-responsive" />
-                    <h6><b>₹ {{totalAmountPaid()}} + Service Fee & GST = ₹ {{invValFinal}}</b></h6>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <!--center tag-->
-          </div>
-
+        <ng-container class="row paymentGatewayPage animateIt" *ngIf="showGateWay">
           <div class="row">
-            <div class="col-xs-12">
-              <div class="paymentGateway">
-
-              </div>
+            <strong>
+              <h4>Please choose from the following Payment options</h4>
+            </strong>
+          </div>
+        
+          <div class="row">
+            <div class="col-sm-4 col-xs-4">
+              <a href="" (click)="iciciBank($event,iciciModal,invValFinal)">
+                <img src="assets/images/icici.jpg" alt="ICICI Bank" class="img-responsive" />
+                <h6><b>₹ {{totalAmountPaid()}} + Service Fee & GST = ₹ {{invValFinal}}</b></h6>
+              </a>
+            </div>
+        
+            <div class="col-sm-4 col-xs-4">
+              <a href="" (click)="razorpay(totalAmountPaid($event))">
+                <img src="assets/images/razorpay.jpg" alt="Razorpay" class="img-responsive" />
+                <h6><b>₹ {{totalAmountPaid()}} + Service Fee & GST = ₹ {{ravValFinal}} </b></h6>
+              </a>
+            </div>
+        
+            <div class="col-sm-4 col-xs-4">
+              <a href="" (click)="instamojo(totalAmountPaid($event))">
+                <img src="assets/images/instamojo.jpg" alt="Instamojo" class="img-responsive" />
+                <h6><b>₹ {{totalAmountPaid()}} + Service Fee & GST = ₹ {{invValFinal}}</b></h6>
+              </a>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12">
-            <p><a href="https://oyespace.com" target="_blank"> <img src="assets/images/logo.png"
-                  style="max-width: 150px;" /><strong>Powered by OyeLiving </strong> </a></p>
-          </div>
-        </div>
+        </ng-container>
 
       </div>
       <br />
