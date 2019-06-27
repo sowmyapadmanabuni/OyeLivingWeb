@@ -36,6 +36,10 @@ import { BankComponent } from './bank/bank.component';
 import { CheckInvoiceAndDueDateDirective } from './check-invoice-and-due-date.directive';
 
 import {Ng2TelInputModule} from 'ng2-tel-input';
+import { ReportComponent } from './report/report.component';
+import { ViewreportComponent } from './viewreport/viewreport.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 
 @NgModule({
@@ -60,7 +64,11 @@ import {Ng2TelInputModule} from 'ng2-tel-input';
     AddBlocksComponent,
     ViewFloorsComponent,
     BankComponent,
-    CheckInvoiceAndDueDateDirective
+    CheckInvoiceAndDueDateDirective,
+    ReportComponent,
+    ViewreportComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

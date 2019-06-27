@@ -9,13 +9,30 @@
   </div>
 
   <div class="col-sm-4">
-      <select class="form-control" name="asAssnID" id="loadAssn" [(ngModel)]="asAssnID" (change)="loadAssociation(asAssnID)" required>
-         <option [value]="" style="color:#b33951">Select Association</option>
-         <option *ngFor="let item of associations" [value]="item['asAssnID']">{{item['asAsnName']}}</option>
+      <select class="ui dropdown search methodDropdown" name="loadAssociation" id="loadAssn" [(ngModel)]="association"  (ngModelChange)="loadAssociation(association)" required>
+        <option disabled="true" value="">Select Association</option>
+         <option *ngFor="let association of associations" [value]="association['asAsnName']">
+            {{association['asAsnName']}}
+          </option>
       </select>
   </div>
 </div>
 </div>
+<!-- <div class="col-sm-4 col-xs-12">
+    <div class="form-group">
+      <select class="ui dropdown search methodDropdown" name="loadAssociation" id="loadAssn" [(ngModel)]="association"
+        #frequencyControl='ngModel' required>
+        <option disabled="true" [value]="association">Select Association</option>
+        <option *ngFor="let association of associations" [value]="association['asAsnName']">
+          {{association['asAsnName']}}
+        </option>
+      </select>
+      <p class="alerts" *ngIf="association.invalid && association.touched">Invalid Invoice Frequency
+      </p>
+    </div>
+  </div> -->
+  
+
 <!--------------------------------------->
 
 <div class="row">
@@ -32,60 +49,70 @@
      <div class="col-sm-3 card card-body bg-light" (click)="assnAmountDue()">
          <h2 class="bh2 text-primary">
                 <div class="pull-right push-15-t push-15">
-                        <i class="fa fa-money fa-1x"></i>
+                       <img src="../assets/images/association_amount_due.png" height="40px">
                 </div>
-             <i class="fa fa-inr"></i>
-             <span *ngIf="totalAmounteDue"> {{totalAmounteDue}}</span> <span *ngIf="!totalAmounteDue"> 0</span> 
+                <span style="color:#8451E5"> <i class="fa fa-inr"></i></span>
+             <span *ngIf="amount" style="color:#8451E5">{{amount}}</span> <span style="color:#8451E5" *ngIf="!amount"> 0</span> 
          </h2>
-             Association Amount Due
+         <span style="color:#8451E5">Association Amount Due</span>
      </div> 
      <div class="col-sm-1 "></div> 
      <div class="col-sm-3 card card-body bg-light" (click)="members()">
          <h2 class="bh2 text-smooth">
                 <div class="pull-right push-15-t push-15">
-                        <i class="fa fa-users fa-1x"></i>
+                    <img src="../assets/images/members (1).png" height="25px">
                 </div>
-             {{totalMember}}</h2>
-             Members
+             <span style="color:#EE5753">{{totalMember}}</span></h2>
+             <span style="color:#EE5753">Members</span>
      </div> 
      <div class="col-sm-1 "></div> 
      <div class="col-sm-3 card card-body bg-light" (click)="tickets()">
          <h2 class="bh2 text-success">
                 <div class="pull-right push-15-t push-15">
-                        <i class="fa fa-ticket fa-1x text-success"></i>
+                        <img src="../assets/images/tickets.png" height="25px">
                  </div>
-             {{totalTickets}}</h2>
-             Ticket
+             <span style="color:#FF9565" *ngIf="totalTickets">{{totalTickets}}</span><span style="color:#FF9565" *ngIf="!totalTickets">0</span> </h2>
+             <span style="color:#FF9565">Ticket</span>
     </div> 
      <div class="col-sm-1 "></div> 
 </div>
 <div class="row " id="ticketsrow2">
      <div class="col-sm-3 card card-body bg-light" (click)="vehicles()">
          <h2 class="bh2 text-primary">
-                <div class="pull-right push-15-t push-15">
-                        <i class="fa fa-car fa-1x"></i>
+                <div class="pull-right push-15-t push-15"> 
+                    
+                        <img src="../assets/images/vehicles.png" height="25px">
                  </div> 
-             {{totalVehicles}}</h2>
-             Vehicles
+                 <span style="color:#3FB772" *ngIf="totalVehicles"> {{totalVehicles}}</span><span style="color:#3FB772" *ngIf="!totalVehicles">0</span></h2>
+                 <span style="color:#3FB772"> Vehicles</span>
      </div>  
-     <div class="col-sm-1 "></div> 
+     <!-- <div class="col-sm-1 "></div> 
      <div class="col-sm-3 card card-body bg-light">
          <h2 class="bh2 text-smooth"> 
                 <div class="pull-right push-15-t push-15">
                         <i class="fa fa-male fa-1x"></i>
                  </div> 
-            0</h2>
+            {{totalStaffs}}</h2>
          Staff
-     </div> 
+     </div>  -->
+     <div class="col-sm-1 "></div>
+        <div class="col-sm-3 card card-body bg-light" (click)="staffs()">
+            <h2 class="bh2 text-primary">
+                   <div class="pull-right push-15-t push-15">
+                        <img src="../assets/images/staff.png" height="25px">
+                    </div> 
+                    <span style="color:#474749" *ngIf="totalStaffs">{{totalStaffs}}</span><span style="color:#474749" *ngIf="!totalStaffs">0</span></h2>
+                    <span style="color:#474749">Staffs</span>
+        </div>  
      <div class="col-sm-1 "></div> 
      <div class="col-sm-3 card card-body bg-light">
          <h2 class="bh2 text-success"> 
                 <div class="pull-right push-15-t push-15">
-                        <i class="fa fa-address-book fa-1x"></i>
+                        <img src="../assets/images/visitors.png" height="25px">
                  </div> 
-            0
-        </h2>
-         Visitors
+    
+        <span style="color:#38BCDB" *ngIf="totalVisitors">{{totalVisitors}}</span><span style="color:#38BCDB" *ngIf="!totalVisitors">0</span> </h2>
+        <span style="color:#38BCDB"> Visitors</span>
         </div> 
      <div class="col-sm-1 "></div> 
 </div>

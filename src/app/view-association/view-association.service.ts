@@ -54,6 +54,10 @@ export class ViewAssociationService {
     return this.http.get(this.scopeIP + 'oyeliving/api/v1/GetAssociationListByAccountID/' + 21,  {headers:this.headers});
   }
 
+  getAssociationAllDetails() {
+    console.log();
+    return this.http.get(this.scopeIP + 'oyeliving/api/v1/association/getAssociationList', { headers: this.headers });
+  }
 
   privacyPolicyModel(viewreceiptmodal: TemplateRef<any>) {
     this.modalRef = this.modalService.show(viewreceiptmodal, Object.assign({}, { class: 'gray modal-lg' }));

@@ -1,184 +1,55 @@
-<div class="container">
-  <div class="row">
-    <div class="col-sm-4">
-      <h3>View Receipt</h3>
-    </div>
-    <div class="col-sm-4">
-      <input type="text" name="searchBoxData" [(ngModel)]="searchBoxData" class="form-control"
-        placeholder="Start Typing, this is dynamic search" />
-    </div>
-    <div class="col-sm-4">
-      <a routerLink="/generatereceipt">
-        <button type="button" class="btn btn-primary pull-right"><i class="fa fa-plus"></i>Generate Receipts</button>
-      </a>
-    </div>
-  </div>
-</div>
-
-<div class="card">  
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="table-responsive">
-                <table class="table" id="example">
-                    <thead>
-                        <tr>
-                            <th>Unit Identifier</th>
-                            <th>Invoice No</th>
-                            <th>Date of Payment</th>
-                            <th>Amount</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let view of viewPayments">
-                            <td>{{view['unitIdentifier']}}</td>
-                            <td>{{view['invoiceNumber']}}</td>
-                            <td>{{view['pymtDate'] | date : "M-d-y"}}</td>
-                            <td><i class="fa fa-inr"></i> {{view['amountPaid']}}</td>
-                            <td> <i style="cursor: pointer" (click)="viewReceipt(viewreceiptmodal,view['unitIdentifier'],view['invoiceNumber'],view['pymtDate'],view['amountPaid'])" class="fa fa-eye"></i> </td>
-                        </tr>                                 
-                    </tbody>
-                </table>
+<div class="main-wrapper animateIt">
+    <div class="container-fluid">
+        <div class="pageTitle">
+            <div class="row">
+                <div class="col-sm-4 col-xs-12">
+                    <h3>View Receipt</h3>
+                </div>
+                <div class="col-sm-4 col-xs-12">
+                    <input type="text" name="searchBoxData" [(ngModel)]="searchBoxData" class="form-control"
+                        placeholder="Start Typing, this is dynamic search" />
+                </div>
+                <div class="col-sm-4 col-xs-12">
+                    <a routerLink="/generatereceipt">
+                        <button type="button" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Generate Receipts</button>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-<ng-template #viewreceiptmodal>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Receipt</h5>
-                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-            </div>
-            <div class="modal-body">
-                <div class="row" id="exportthis">
-                    <div class="col-xs-12">
-                        <div class="invoiceOutside form-horizontal">
-                            <div class="row">
-                                <div class="col-sm-6 col-xs-12">
-                                    <h1>Receipt of Payment</h1>
-                                </div>
-                                <div class="col-sm-6 col-xs-12">
-                                    <h6><strong>Receipt No :</strong> receiptNo</h6>
-                                    <h6><strong>Date :</strong> date | date:'MMM dd, yyyy'</h6>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <img src="" class="img-responsive"/>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4 col-xs-12 pull-right hide">
-                                    <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-4 control-label">Site No :</label>
-                                        <div class="col-sm-8">
-                                          <input type="text" class="invInput" [(ngModel)]="siteNo" placeholder="Site No" disabled />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-7 col-xs-12">
-                                    <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-4 control-label">Received From</label>
-                                        <div class="col-sm-8">
-                                          <input type="text" class="invInput1" [(ngModel)]="receivedFrom" placeholder="Received From" disabled/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="col-sm-7 col-xs-12">
-                                    <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-4 control-label">For Payment of</label>
-                                        <div class="col-sm-8">
-                                          <input type="text" class="invInput1"  [(ngModel)]="forPaymentOf" placeholder="For Payment of" disabled />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-5 col-xs-12">
-                                    <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-4 control-label">Amount Paid</label>
-                                        <div class="col-sm-8">
-                                          <input type="text" class="invInput1" [(ngModel)]="amountPaid"  placeholder="Amount" disabled />                                          
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label for="inputEmail3" style="margin-left: -23px;" class="col-sm-3 control-label">Amount in Words</label>
-                                        <div class="col-sm-8">
-                                          <input type="text" class="invInput1" [(ngModel)]="amountPaid"  placeholder="Amount in Words" disabled />
-                                        </div>
-                                        <label for="inputEmail3" class="col-sm-1 control-label">Rupees</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" style="margin-top: 30px;">
-                                <div class="col-sm-5 col-xs-5">
-                                    <div class="form-group pull-left">
-                                        <label for="inputEmail3" class="col-sm-4 control-label">Year of</label>
-                                        <div class="col-sm-8">
-                                          <input type="text" class="invInput" [(ngModel)]="updateTime" placeholder="Year of" disabled />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-7 col-xs-7">
-                                    <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-6 control-label">Payment Mode</label>
-                                        <div class="col-sm-6">
-                                          <input type="text" class="invInput"  [(ngModel)]="paymentMode" placeholder="Payment Mode" disabled />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-5 col-xs-12 pull-right">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered">
-                                            <tbody>
-                                                <tr>
-                                                    <td>Account Due</td>
-                                                    <td><i class="fa fa-inr"></i> amountDue</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>This Payment</td>
-                                                    <td><i class="fa fa-inr"></i> amountPaid</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Balance Due</td>
-                                                    <td><i class="fa fa-inr"></i> balanceDue</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <p class="text-center">Electroniclly Generated, does not require Signature</p>
-                                    <span class="hide" style="float:right; font-weight: 600; margin-top: 30px;">Generated by 
-                                        <span style="color: #c55a11;">www.careofhomes.com</span> for JR Gardens</span>
-                                </div>
-                            </div>
-                            <div class="row hide">
-                                <div class="col-xs-12">
-                                    <img src="" class="img-responsive"  />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" style="margin-top: 50px;">
-                    <div class="col-xs-12">
-                         <button class="btn btn-primary btn-lg" (click)="export()">Print PDF</button>
+        <div class="card">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="table-responsive">
+                        <table class="table" id="example">
+                            <thead>
+                                <tr>
+                                    <th>Unit Identifier</th>
+                                    <th>Invoice No</th>
+                                    <th>Date of Payment</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let view of viewPayments">
+                                    <td>{{view['unUnitID']}}</td>
+                                    <td>{{view['inNumber']}}</td>
+                                    <td>{{view['pyDate'] | date : "M-d-y"}}</td>
+                                    <td><i class="fa fa-inr"></i> {{view['pyAmtPaid']}}</td>
+                                    <td> <i style="cursor: pointer"
+                                            (click)="viewReceipt(viewreceiptmodal,view['unUnitID'],view['inNumber'],view['pyDate'],view['pyAmtPaid'])"
+                                            class="fa fa-eye"></i> </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-</ng-template>
+    </div>
+</div>
+
+
 
 

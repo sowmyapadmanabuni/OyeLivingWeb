@@ -25,7 +25,8 @@ export class ViewreceiptComponent implements OnInit {
   ngOnInit() {
     this.viewreceiptservice.getpaymentlist(this.currentAssociationID)
     .subscribe(data=>{
-      console.log(data);
+      console.log(data['data']['payments']);
+      this.viewPayments=data['data']['payments']
     })
   }
 

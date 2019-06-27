@@ -10,18 +10,26 @@ import {AddUnitComponent} from './add-unit/add-unit.component';
 import {AddBlocksComponent} from './add-blocks/add-blocks.component';
 import {ViewFloorsComponent} from './view-floors/view-floors.component';
 import {ViewBlockComponent} from './view-block/view-block.component';
+import {ReportComponent} from './report/report.component';
+import {ViewreportComponent} from './viewreport/viewreport.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
-const routes:Routes=[{path:'',redirectTo:'/viewexpense',pathMatch:'full'},
-                     {path:'viewexpense',component:ViewExpensesComponent},
-                     {path:'addexpense',component:AddExpenseComponent},
-                     {path:'viewinvoice',component:ViewInvoiceComponent},
-                     {path:'viewreceipt',component:ViewreceiptComponent},
-                     {path:'generatereceipt',component:GenerateReceiptComponent},
-                     {path:'addunit',component:AddUnitComponent},
-                     {path:'addBlocks',component:AddBlocksComponent},
-                     {path:'viewFloors',component:ViewFloorsComponent},
-                     {path:'viewBlocks',component:ViewBlockComponent},
-                     {path:'**',component:PathNotFoundComponent}]
+const routes: Routes = [{ path: '', redirectTo: '/login', pathMatch: 'full' },
+{ path: 'login', component: LoginComponent },
+{ path: 'register', component: RegisterComponent },
+{ path: 'viewexpense', component: ViewExpensesComponent },
+{ path: 'addexpense', component: AddExpenseComponent },
+{ path: 'viewinvoice', component: ViewInvoiceComponent },
+{ path: 'viewreceipt', component: ViewreceiptComponent },
+{ path: 'generatereceipt', component: GenerateReceiptComponent },
+{ path: 'addunit', component: AddUnitComponent },
+{ path: 'addBlocks', component: AddBlocksComponent },
+{ path: 'viewFloors', component: ViewFloorsComponent },
+{ path: 'viewBlocks', component: ViewBlockComponent },
+{ path: 'report', component: ReportComponent },
+{ path: 'viewreport', component: ViewreportComponent },
+{ path: '**', component: PathNotFoundComponent }]
 
 @NgModule({
 imports:[RouterModule.forRoot(routes)],

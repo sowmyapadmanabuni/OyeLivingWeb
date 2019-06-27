@@ -311,6 +311,14 @@ export class ViewAssociationComponent implements OnInit {
     } else {
       this.crtAssn.matching = true;
     }
+
+    this.viewAssnService.getAssociationAllDetails()
+    .subscribe(item => {
+      this.associations = item;
+     // this.availableNoOfBlocks = item.length;
+      console.log('associations', this.associations);  
+
+    })
   }
 
   getAssociationDetails() {
@@ -449,6 +457,7 @@ export class ViewAssociationComponent implements OnInit {
 
     this.EXPyCopy = expycopy;
   }
+  
   deleteAmenity(AMType) {
     console.log('AMType',AMType);
    this.newamenities= this.newamenities.filter(item=>{

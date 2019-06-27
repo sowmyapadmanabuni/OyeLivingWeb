@@ -1,0 +1,41 @@
+<div class="loginbox">
+  <img src="../assets/images/Oyespace.png" class="avatar">
+  <h1>Get In</h1>
+  <form>
+    <!-- <p>Mobile Number</p> -->
+    <!-- <div class="input-group">
+      <input type="tel" #intlphone id="intlphone">  
+    </div> -->
+
+    <input type="text"
+ ng2TelInput
+ [ng2TelInputOptions]="{initialCountry: 'in'}"
+ (hasError)="hasError($event)"
+ (ng2TelOutput)="getNumber($event)"
+ (intlTelInputObject)="telInputObject($event)"
+ (countryChange)="onCountryChange($event)" 
+ name="mobilenumber"
+ [(ngModel)]='mobilenumber' (keypress)=_keyPress($event) maxlength="10" style="border-bottom: 1px solid #F08A33;"/>
+
+    <!-- <input type="text" name="mobile" [(ngModel)]="mobilenumber" placeholder="Enter Mobile Number"
+      style="width: auto;  border-bottom: 1px solid #F08A33;"> -->
+
+
+    <input type="submit" (click)="sendOTP()" #myButton1 id="myButton1" name="" value="Get OTP" style="width: 74px; height: 28px; font-size: small;margin-left: 12%;"><br><br>
+    <!-- <p>OTP</p> -->
+    <input type="text" [(ngModel)]="otp" name="otp" placeholder="OTP"
+      style="width: -webkit-fill-available;  border-bottom: 1px solid #F08A33;"><br>
+    <input type="submit" (click)="verifyOtp()" style="margin: 5% 0% 3% 23%;" name="" value="Get In"><br>
+    <!-- <a href="" (click)="resendOtp($event)">Resend OTP</a><br> -->
+    <a aria-disabled="true" id="otpBycall" href="" (click)="otpCall($event)">OTP by Call</a><br>
+    <!-- <a href="#">Don't have an account?</a> -->
+    <!-- <p>Resend in 60Sec</p> -->
+    <div id="some_div">
+        <!-- <p>Resend in 60Sec</p> -->
+      </div>
+    <!-- <p>resend in</p><countdown [config]="{leftTime: 60}"></countdown> -->
+    </form>
+
+  
+
+</div>
