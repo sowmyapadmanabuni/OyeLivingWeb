@@ -22,6 +22,8 @@ export class NewAmenityComponent implements OnInit {
   constructor() {
     this.AmenityId = 0;
     this.addAmenities=new EventEmitter<any>();
+    this.newamenity.AMType = '';
+    this.newamenity.NoofAmenities = '';
   }
 
   ngOnInit() {
@@ -33,6 +35,7 @@ export class NewAmenityComponent implements OnInit {
 
   addAmenity() {
     //this.AmenityId += 1;
+    //alert('new-amenity - addamenity');
     this.addAmenities.emit(this.newamenity);
     this.newamenity.AMType = '';
     this.newamenity.NoofAmenities = '';

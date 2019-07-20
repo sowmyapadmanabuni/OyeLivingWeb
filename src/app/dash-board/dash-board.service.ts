@@ -9,6 +9,7 @@ export class DashBoardService {
   scopeIP:string;
   scriptIP:string;
   headers:HttpHeaders;
+  mrmRoleID:number;
   public httpOptions = {
     headers: new HttpHeaders({
       'Content-Type':  'application/json',
@@ -16,7 +17,11 @@ export class DashBoardService {
       'Access-Control-Allow-Origin': "*"
     })
   };
+  acfName: any;
+  aclName: any;
 
+  memberdoesnotexist:boolean;
+  
   constructor(private http:HttpClient) {
     
     this.scopeIP="https://apidev.oyespace.com/";
@@ -28,8 +33,8 @@ export class DashBoardService {
                                   
    }//Constructor Ends
 
-   getAssociation(accountID:string){
-    return this.http.get(this.scopeIP + '/oyeliving/api/v1/GetAssociationListByAccountID/' +accountID ,  {headers:this.headers});
+   getAssociation(accountID){
+    return this.http.get(this.scopeIP + 'oyeliving/api/v1/GetAssociationListByAccountID/' +accountID ,  {headers:this.headers});
   }
   getAmount(associationID:string){
     let headers= new HttpHeaders().append('Content-Type',  'application/json')
@@ -38,8 +43,8 @@ export class DashBoardService {
      return this.http.get('http://apidev.oyespace.com/oyeliving/api/v1/GetPaymentsListByAssocID/' + associationID, {headers:headers} );
   }
 
-  getMembers(accountID:string){
-    return this.http.get(this.scopeIP + 'oyeliving/api/v1/Member/GetMemberListByAccountID/'+21,  {headers:this.headers});
+  getMembers(accountID){
+    return this.http.get(this.scopeIP + 'oyeliving/api/v1/Member/GetMemberListByAccountID/'+accountID,  {headers:this.headers});
   }
 
   getTickets(associationId:string){
@@ -69,6 +74,9 @@ getVisitors(associationID:string){
                                    .append('X-OYE247-APIKey','7470AD35-D51C-42AC-BC21-F45685805BBE')
                                    .append('Access-Control-Allow-Origin', "*");
    return this.http.get('http://apidev.oyespace.com/oyesafe/api/v1/VisitorLog/GetVisitorLogListByAssocID/'+associationID,{headers:headers});
+}
+getAccountFirstName(accountID){
+  return this.http.get(this.scopeIP + 'oyeliving/api/v1/GetAccountListByAccountID/'+accountID,  {headers:this.headers});
 }
 
 }//DashboardService Ends

@@ -3,7 +3,7 @@
     <div class="pageTitle">
       <div class="row">
         <div class="col-sm-4 col-sm-12 col-xs-12">
-          <h3>View Invoice</h3>
+          <h3>View Invoice for {{currentassociationname}} Association</h3>
         </div>
         <div class="col-sm-4 col-sm-12 col-xs-12">
           <div class="form-group">
@@ -43,7 +43,7 @@
                   <th>Invoice Number</th>
                   <th>Invoice Date</th>
                   <th>Invoice Billed</th>
-                  <th>Due Date</th>
+                  <!-- <th>Due Date</th> -->
                   <th>Current Invoice Amount</th>
                   <th>Action</th>
                   <th>
@@ -68,7 +68,7 @@
                     <span *ngIf="row.inIsActive == true"> YES</span>
                     <span *ngIf="row.inIsActive == false"> NO</span>
                   </td>
-                  <td>{{row.toDate | date:"d-M-y"}}</td>
+                  <!-- <td>{{row.toDate | date:"d-M-y"}}</td> -->
                   <td>
                     <i class="fa fa-inr"></i> {{row.inTotVal}}
                   </td>
@@ -128,7 +128,7 @@
             </span>
           </div>
           <div class="col-sm-6 col-xs-6">
-
+            <button class="mdButton1" style="position: absolute;margin-left: 58%;margin-top: 1%;" id="btnPrint" onclick="window.print()">Print Invoice</button>
           </div>
         </div>
         <div class="row" style="margin-bottom: 30px">
@@ -184,72 +184,72 @@
                 <tr *ngIf='previousDue > 0' style="font-weight:bold">
                   <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
                   <td><span style="margin-left: 20%">Previous Due</span></td>
-                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{previousDue}}</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{previousDue}}.00</span></td>
                 </tr>
                 <tr *ngIf='discountedValue > 0' style="font-weight:bold">
                   <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
                   <td><span style="margin-left: 20%">Discount</span></td>
-                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{discountedValue}}</span> </td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{discountedValue}}.00</span> </td>
                 </tr>
-                <tr *ngIf="item['idDesc'] == 'Water Meter' && item['idValue'] > 0">
+                <tr *ngIf="item['idDesc'] == 'water meter' && item['idValue'] > 0">
                   <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
                   <td><span style="margin-left: 20%">Water Meter</span></td>
-                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}.00</span></td>
                 </tr>
                 <tr *ngIf="item['idDesc'] == 'common area electric bill' && item['idValue'] > 0">
                   <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
                   <td><span style="margin-left: 20%">Common Area Electric Bill</span></td>
-                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}.00</span></td>
                 </tr>
                 <tr *ngIf="item['idDesc'] == 'corpus' && item['idValue'] > 0">
                   <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
                   <td><span style="margin-left: 20%">Corpus</span></td>
-                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}.00</span></td>
                 </tr>
                 <tr *ngIf="item['idDesc'] == 'generator bill' && item['idValue'] > 0">
                   <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
                   <td><span style="margin-left: 20%">Generator Bill</span></td>
-                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}.00</span></td>
                 </tr>
                 <tr *ngIf="item['idDesc'] == 'housekeeping' && item['idValue'] > 0">
                   <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
                   <td><span style="margin-left: 20%">Housekeeping</span></td>
-                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}.00</span></td>
                 </tr>
                 <tr *ngIf="item['idDesc'] == 'one time membership fee' && item['idValue'] > 0">
                   <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
                   <td><span style="margin-left: 20%">One Time Membership Fee</span></td>
-                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}.00</span></td>
                 </tr>
-                <tr *ngIf="item['idDesc'] == 'one time occupancy fees' && item['idValue'] > 0">
+                <tr *ngIf="item['idDesc'] == 'one time occupancy fee' && item['idValue'] > 0">
                   <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
                   <td><span style="margin-left: 20%">One Time Occupancy Fees</span></td>
-                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}.00</span></td>
                 </tr>
                 <tr *ngIf="item['idDesc'] == 'renting fees' && item['idValue'] > 0">
                   <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
                   <td><span style="margin-left: 20%">Renting Fees</span></td>
-                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}.00</span></td>
                 </tr>
                 <tr *ngIf="item['idDesc'] == 'security fees' && item['idValue'] > 0">
                   <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
                   <td><span style="margin-left: 20%">Security Fees</span></td>
-                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}.00</span></td>
                 </tr>
                 <tr *ngIf="item['idDesc'] == 'Fixed Maintenance' && item['idValue'] > 0">
                   <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
                   <td><span style="margin-left: 20%">Fixed Maintenance</span></td>
-                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}.00</span></td>
                 </tr>
-                <tr *ngIf="item['idDesc'] == 'One Time OnBoarding Fees' && item['idValue'] > 0">
+                <tr *ngIf="item['idDesc'] == 'one time onboarding fee' && item['idValue'] > 0">
                   <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
                   <td><span style="margin-left: 20%">One Time OnBoarding Fees</span></td>
-                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}.00</span></td>
                 </tr>
                 <tr *ngIf="item['idDesc'] == 'unsold rental fees' && item['idValue'] > 0">
                   <td scope="row" class="clsAlignCenter clsBorder">{{i}}</td>
                   <td><span style="margin-left: 20%">Unsold Rental Fees</span></td>
-                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}</span></td>
+                  <td class="clsBorder"><span style="margin-left: 20%">₹ {{item['idValue']}}.00</span></td>
                 </tr>
 
               </ng-container>
@@ -262,13 +262,13 @@
             <span style="font-size:1.5rem;position: absolute;margin-top: 1%">Total Invoice Value</span>
           </div>
           <div>
-            <span style="font-size:1.5rem;">₹ {{InvoiceValue}}</span>
+            <span style="font-size:1.5rem;;text-align: right">₹ {{InvoiceValue}}</span>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-11 col-xs-11">
-            <p style="text-align: right;">Total Due : <strong style="text-transform: capitalize;">
-                {{amountInWords | words}} Rupees Only</strong></p>
+            <p style="text-align: right;margin-top: 5px;">Amount in Words : <strong style="text-transform: capitalize;">
+                {{InvoiceValue | words}} Rupees Only</strong></p>
           </div>
         </div>
 
@@ -333,11 +333,11 @@
       </div>
       <br />
       <br />
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-xs-12">
           <button class="mdButton1 pull-right" id="btnPrint" onclick="window.print()">Print Invoice</button>
         </div>
-      </div>
+      </div> -->
 
 
     </div>

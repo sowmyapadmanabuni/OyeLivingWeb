@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GenerateReceiptService } from '../services/generate-receipt.service';
 import { GlobalServiceService } from '../global-service.service';
 import swal from 'sweetalert2';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-generate-receipt',
@@ -41,7 +42,8 @@ export class GenerateReceiptComponent implements OnInit {
   pyid: string;
 
   constructor(private generatereceiptservice: GenerateReceiptService,
-    private globalservice: GlobalServiceService) {
+    private globalservice: GlobalServiceService,
+    private router:Router) {
     this.blBlockID = '';
     this.unit = '';
     this.paymentmethod = '';
@@ -119,6 +121,10 @@ export class GenerateReceiptComponent implements OnInit {
 
   showMethod(paymentmethod) {
     this.checkField = paymentmethod;
+  }
+
+  gotoviewreceipt() {
+    this.router.navigate(['home/viewreceipt']);
   }
 
   rowDetails(pyid) {

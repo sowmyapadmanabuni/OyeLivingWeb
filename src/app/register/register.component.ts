@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import {RegisterService} from '../services/register.service';
 import swal from 'sweetalert2';
+import {LoginAndregisterService} from '../services/login-andregister.service';
 
 @Component({
   selector: 'app-register',
@@ -26,9 +27,14 @@ export class RegisterComponent implements OnInit {
   public countrydata: object;
   @ViewChild('myButton1') myButton1: any;
   modalRef: BsModalRef;
+  terms:boolean;
 
   constructor(private modalService: BsModalService,
-    private requestService: RegisterService ) { }
+    private requestService: RegisterService,
+    private loginandregisterservice:LoginAndregisterService,
+    private router:Router ) {
+      this.terms=false;
+     }
 
   ngOnInit() {
   }
@@ -48,8 +54,11 @@ export class RegisterComponent implements OnInit {
     console.log(countryobj);
   }
 
-
-
+  validateCheckBox(event){
+    console.log('event',event);
+    console.log('event.target.validity.valueMissing',event.target.validity.valueMissing);
+    event.target.setCustomValidity(event.target.validity.valueMissing ? "" : "");
+  }
 
   getCountryData() {
     alert('test')
@@ -65,36 +74,47 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
+    var elemntterms1 = <HTMLInputElement>document.getElementById("terms1");
+    console.log('register-event',elemntterms1.validity.valueMissing);
+    elemntterms1.setCustomValidity(elemntterms1.validity.valueMissing ? "Please indicate that you accept the Terms and Conditions" : "");
 
-    let requestData = {
-      'ACFName': this.firstName,
-      'ACLName' : this.lastName,
-      'ACEmail': this.email,
-      'ACMobile': this.mobilenumber
+    if (!elemntterms1.validity.valueMissing) {
+      let requestData = {
+        'ACFName': this.firstName,
+        'ACLName': this.lastName,
+        'ACEmail': this.email,
+        'ACMobile': this.mobilenumber
+      }
+      console.log('requestData', JSON.stringify(requestData));
+
+
+      this.requestService.register(requestData)
+        .subscribe((response) => {
+          console.log('response', response);
+          swal.fire({
+            title: "Registered Successfully",
+            text: "",
+            type: "success",
+            showCancelButton: false,
+            confirmButtonColor: "#f69321",
+            confirmButtonText: "OK",
+          }).then((result) => {
+            if (result.value) {
+
+              this.firstName = '';
+              this.lastName = '';
+              this.email = '';
+              this.mobilenumber = '';
+              this.router.navigate(['home']);
+            }
+          });
+        },
+          () => {
+            swal.fire('Error', 'Something went wrong!', 'error');
+
+          })
     }
-    console.log('requestData',JSON.stringify(requestData));
-   
-   
-   this.requestService.register(requestData)
-   .subscribe((response)=>{
-     alert('inside success');
-     console.log('response',response);
-    swal.fire({
-      title: "Registered Successfully",
-      text: "",
-      type: "success",
-      showCancelButton: false,
-      confirmButtonColor: "#f69321",
-      confirmButtonText: "OK",
-    });
-    this.firstName='';
-    this.lastName='';
-    this.email='';
-    this.mobilenumber='';
-   },
-   () => {
-    swal.fire('Error', 'Something went wrong!', 'error')
-   })
+    
    
    }
 

@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , ElementRef, ViewChild} from '@angular/core';
 import {DashBoardService} from './dash-board.service';
 import {GlobalServiceService} from '../global-service.service';
 import { AppComponent } from '../app.component';
+import {LoginAndregisterService} from '../services/login-andregister.service';
+import {Router, NavigationEnd} from '@angular/router';
 
 @Component({
   selector: 'app-dash-board',
@@ -14,8 +16,9 @@ export class DashBoardComponent implements OnInit {
   allTicketByAssociation=[];
   allVehicleListByAssn=[];
   allStaffByAssn=[];
+  account=[];
   allVisitorsByAssn=[];
-  accountID:string;
+  accountID:number;
   totalMember:string;
   associationID:string;
   totalTickets:string;
@@ -27,19 +30,33 @@ export class DashBoardComponent implements OnInit {
   memberDeatils:boolean=false;
   ticketDetails:boolean=false;
   vehicleDetails:boolean=false;
-  currentAssociationName:string="Association Not Selected";
+  currentAssociationName:string;
   association:string;
   amt:any[];
+  mrmRoleID:number;
+  staffDetails: boolean;
+  visitorDetails: boolean;
+  allvisitorByAssn:any=[];
+  
+  @ViewChild('amounts') public amounts:ElementRef;
+@ViewChild('member') public member:ElementRef;
+@ViewChild('ticket') public ticket:ElementRef;
+@ViewChild('vehicle') public vehicle:ElementRef;
+@ViewChild('staff') public staff:ElementRef;
+@ViewChild('visitor') public visitor:ElementRef;
+  acfName: any;
+  aclName: any;
  
 
   constructor(private dashBrdService: DashBoardService, private appComponent:AppComponent,
-     private globalService:GlobalServiceService) { 
+     private globalService:GlobalServiceService,
+     private loginandregisterservice:LoginAndregisterService,
+     private router: Router) { 
+      this.accountID=this.globalService.acAccntID;
        this.association='';
-
      }
 
   ngOnInit() {
-    this.accountID="21";
     this.getAssociation();
     this.getAmount();
     this.getMembers();
@@ -47,16 +64,19 @@ export class DashBoardComponent implements OnInit {
     this.getVehicle();
     this.getStaff();
     this.getVistors();
-
+    this.getAccountFirstName();
   }
 
   getAssociation(){
-    console.log(this.accountID);
+    console.log('this.accountID',this.accountID);
     this.dashBrdService.getAssociation(this.accountID).subscribe(res => {
       //console.log(JSON.stringify(res));
       var data:any = res;
       this.associations = data.data.associationByAccount;
       console.log('associations',this.associations);
+      },
+      res=>{
+        console.log('Error in getting Associations',res);
       });
   }
   getAmount(){
@@ -81,14 +101,33 @@ export class DashBoardComponent implements OnInit {
     })
   }
 
-  getMembers(){
-      this.dashBrdService.getMembers(this.accountID).subscribe(res => {
-        //console.log(JSON.stringify(res));
-        var data:any = res;
-        this.allMemberByAccount = data.data.memberListByAccount;
-        console.log('allMemberByAccount',this.allMemberByAccount);
-        this.totalMember= data.data.memberListByAccount.length;
-        });
+  // getMembers(){
+  //     this.dashBrdService.getMembers(this.accountID).subscribe(res => {
+  //       //console.log(JSON.stringify(res));
+  //       var data:any = res;
+  //       this.allMemberByAccount = data.data.memberListByAccount;
+  //       console.log('allMemberByAccount',this.allMemberByAccount);
+  //      this.mrmRoleID= this.allMemberByAccount[0]['mrmRoleID'];
+  //      this.dashBrdService.mrmRoleID=this.mrmRoleID;
+  //       this.totalMember= data.data.memberListByAccount.length;
+  //       });
+  // }
+
+  getMembers() {
+    this.dashBrdService.getMembers(this.accountID).subscribe(res => {
+      //console.log(JSON.stringify(res));
+      var data: any = res;
+      this.allMemberByAccount = data.data.memberListByAccount;
+      console.log('allMemberByAccount', this.allMemberByAccount);
+      this.mrmRoleID = this.allMemberByAccount[0]['mrmRoleID'];
+      this.dashBrdService.mrmRoleID = this.mrmRoleID;
+      this.totalMember = data.data.memberListByAccount.length;
+    },
+      (res) => {
+        console.log(res);
+        this.dashBrdService.memberdoesnotexist = true;
+
+      });
   }
 
   getTickets() {
@@ -106,6 +145,19 @@ export class DashBoardComponent implements OnInit {
 
     });
   }
+
+  getAccountFirstName(){
+    this.dashBrdService.getAccountFirstName(this.accountID).subscribe(res => {
+      //console.log(JSON.stringify(res));
+      var data:any = res;
+      this.account = data.data.account;
+      console.log('account',this.account);
+     this.acfName= this.account[0]['acfName'];
+     this.aclName= this.account[0]['aclName'];
+     this.dashBrdService.acfName=this.acfName;
+     this.dashBrdService.aclName=this.aclName;
+      });
+}
 
   getVehicle(){
       this.dashBrdService.getVehicle(this.associationID).subscribe(res => {
@@ -135,7 +187,7 @@ export class DashBoardComponent implements OnInit {
         this.totalVisitors = "0";
       }
       else if (res['data']['visitorLog']) {
-        this.allStaffByAssn=res['data']['visitorLog'];
+        this.allvisitorByAssn=res['data']['visitorLog'];
       this.totalVisitors=res['data']['visitorLog'].length;
         
      }
@@ -143,8 +195,8 @@ export class DashBoardComponent implements OnInit {
   }
 
   loadAssociation(associationName:string){
-    this.appComponent.myMenus=true;
-    //console.log("Selected AssociationName: " + JSON.stringify(this.associations));
+    //this.appComponent.myMenus=true;
+    console.log("AssociationName: ",associationName);
     this.currentAssociationName = associationName;
     this.associations.forEach(association => {
       if(association.asAsnName == associationName)
@@ -166,31 +218,63 @@ export class DashBoardComponent implements OnInit {
   }
 
   assnAmountDue(){
-  this.AssociationAmountDue=true;
-  this.memberDeatils=false;
-  this.ticketDetails=false;
-  this.vehicleDetails=false;
-  }
-
-  members(){
-    this.AssociationAmountDue=false;
-    this.memberDeatils=true;
+    this.AssociationAmountDue=true;
+    this.memberDeatils=false;
     this.ticketDetails=false;
     this.vehicleDetails=false;
-  }
+    this.staffDetails=false;
+    this.visitorDetails=false;
+    this.amounts.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+    }
+   
+    members(){
+      this.AssociationAmountDue=false;
+      this.memberDeatils=true;
+      this.ticketDetails=false;
+      this.vehicleDetails=false;
+      this.staffDetails=false;
+      this.visitorDetails=false;
+      this.member.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+   
+    }
+   
+    tickets(){
+      this.AssociationAmountDue=false;
+      this.memberDeatils=false;
+      this.ticketDetails=true;
+      this.vehicleDetails=false;
+      this.staffDetails=false;
+      this.visitorDetails=false;
+      this.ticket.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+    }
+   
+   vehicles(){
+       this.vehicleDetails=true;
+       this.AssociationAmountDue=false;
+       this.memberDeatils=false;
+       this.ticketDetails=false;
+       this.staffDetails=false;
+       this.visitorDetails=false;
+       this.vehicle.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+   }
 
-  tickets(){
-    this.AssociationAmountDue=false;
-    this.memberDeatils=false;
-    this.ticketDetails=true;
-    this.vehicleDetails=false;
-  }
-
- vehicles(){
-     this.vehicleDetails=true;
-     this.AssociationAmountDue=false;
-     this.memberDeatils=false;
-     this.ticketDetails=false;
+ staffs(){
+  this.staffDetails=true;
+  this.vehicleDetails=false;
+  this.AssociationAmountDue=false;
+  this.memberDeatils=false;
+  this.ticketDetails=false;
+  this.visitorDetails=false;
+  this.staff.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+ }
+ visitors(){
+  this.visitorDetails=true;
+  this.staffDetails=false;
+  this.vehicleDetails=false;
+  this.AssociationAmountDue=false;
+  this.memberDeatils=false;
+  this.ticketDetails=false;
+  this.visitor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
  }
 
 }

@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-4">
       <p>
-        <span id="currAssn"> UNITS FOR {{currentAssociationName}}</span>
+        <span id="currAssn">CREATE UNIT FOR {{currentAssociationName}} ASSOCIATION</span>
       </p>
     </div>
     <div class="col-3">
@@ -25,7 +25,8 @@
       </div>
     </div>
     <div class="col-2">
-      <button class="btn btn-primary" style="margin:12px" routerLink='/addunit'>Add Unit</button>
+      <button class="btn btn-primary" style="margin:12px" (click)='gotoAddunit()'>
+        <i class="fa fa-plus"></i>Add Unit</button>
     </div>
   </div>
 </div>
@@ -57,8 +58,8 @@
         <td>{{item.unUniName}}</td>
         <td>{{item.unUniType}}</td>
         <td>{{item.unDimens}} SqFt</td>
-        <td>{{(item.owner.length > 0 ? item.owner[0].uofName : '' )}}</td>
-        <td>{{(item.owner.length > 0 ? item.owner[0].uoEmail : '' )}}</td>
+        <td>{{(item.owner.length > 0 ? item.owner[0].uofName : ((item.tenant.length > 0) ? item.tenant[0].utfName :''))}}</td>
+        <td>{{(item.owner.length > 0 ? item.owner[0].uoEmail : ((item.tenant.length > 0) ? item.tenant[0].utEmail :''))}}</td>
         <!--
              <td>{{unit.unOcStat}} </td>
              <td>{{unit.unOwnStat}} </td>
@@ -115,7 +116,7 @@
                         <p>Calculation Type : <span>{{viewUnitRow.calculationType}}</span></p><!---->
                     </div>
                     <div class="col-sm-4">
-                        <p>Ownership Status : <span>{{viewUnitRow.ownershipStatus}}</span></p>
+                        <p>Occupancy Status : <span>{{viewUnitRow.ownershipStatus}}</span></p>
                     </div>
                 </div>
             </div> <!---------Modal Body close----------> 

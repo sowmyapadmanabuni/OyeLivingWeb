@@ -1,7 +1,7 @@
-<div class="pageTitle">
+<!-- <div class="pageTitle">
   <div class="row">
     <div class="col-sm-4 col-xs-12">
-      <h3>Add Expenses</h3>
+      <h3>Add Expenses For {{currentAssociationName}}</h3>
     </div>
     <div class="col-sm-3 col-xs-12 pull-left">
       <div class="form-group" [ngClass]="{'has-error' : blockNameControl.invalid && blockNameControl.touched}">
@@ -23,9 +23,10 @@
           class="fa fa-times"></i>cancel</button>
     </div>
   </div>
-</div>
+</div> -->
 
-<div *ngIf="expensedata.BLBlockID != ''" class="card" style="min-height: 500px;">
+<!-- <div *ngIf="expensedata.BLBlockID != ''" class="card" style="min-height: 500px;"> -->
+<div class="card" style="min-height: 500px;">
   <fieldset class="scheduler-border">
     <legend class="scheduler-border headingOrange">Expenses Details</legend>
     <form #addExpense="ngForm" (ngSubmit)="addExp()">
@@ -36,7 +37,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-sm-3 col-xs-12">
           <div class="form-group"
             [ngClass]="{'has-error' : purchaserderControl.invalid && purchaserderControl.touched}">
@@ -86,7 +87,7 @@
           </div>
         </div>
 
-      </div>
+      </div> -->
 
       <div class="row">
 
@@ -181,7 +182,7 @@
 
       <div class="row">
 
-        <div class="col-sm-6 col-xs-12">
+        <div class="col-sm-6 col-xs-12" *ngIf='otherThanSingleUnit'>
           <div class="form-group"
             [ngClass]="{'has-error' : distributionControl.invalid && distributionControl.touched}">
             <label>Select Distribution Type <span class="red">*</span></label>
@@ -196,6 +197,18 @@
               Please Select Distribution Type</p>
           </div>
         </div>
+        <!---->
+        <div class="col-sm-6 col-xs-12" *ngIf='isSingleUnit'>
+          <div class="form-group">
+            <label>Select Distribution Type <span class="red">*</span></label>
+            <select disabled='true' class="ui dropdown search methodDropdown" name="EXDisType">
+              <option value="Actuals">
+                Actuals
+              </option>
+            </select>
+          </div>
+        </div>
+        <!---->
 
         <div class="col-sm-6 col-xs-12" [hidden]="applies != 'Single Unit'">
           <div class="form-group" [ngClass]="{'has-error' : unitControl.invalid && unitControl.touched}">
@@ -203,7 +216,7 @@
             <select class="ui dropdown search methodDropdown" name="UnUniIden" [(ngModel)]="expensedata.UnUniIden"
               #unitControl='ngModel' [required]="applicabletoControl.value == 'Single'">
               <option disabled="true" selected="true" value="">Select Unit </option>
-              <option *ngFor='let item of ascUnit' [value]="item['unUnitID']">
+              <option *ngFor='let item of ascUnit' [value]="item['unUniName']">
                 {{item['unUniName']}}
               </option>
             </select>
@@ -219,7 +232,7 @@
         <div class="col-sm-6 col-xs-12">
           <div class="form-group" [ngClass]="{'has-error' : bankControl.invalid && bankControl.touched}">
             <label for="validationBABName">Select Bank <span class="red">*</span></label>
-            <select name="BABName" [required]="checkField != 'Cash'" id="validationBABName" [(ngModel)]="expensedata.BABName" #bankControl='ngModel' class="custom-select form-control">
+            <select name="BABName" [disabled]="checkField == 'Cash'" id="validationBABName" [(ngModel)]="expensedata.BABName" #bankControl='ngModel' class="custom-select form-control">
               <option value=''>Bank</option>
               <option *ngFor='let bank of bankList' [value]="bank">
                 {{bank}}
@@ -397,7 +410,8 @@
       <div class="row">
           <label>Invoice / Payment Copy<span class="red"></span></label>
       </div>
-      <div class="row">
+      <div class="row" style="display: flex">
+          <img id="imgthumbnail" src="../../assets/images/default_thumbnail.png" width="50px" height="50px" alt="">
         <input type="file" id="uploadFileinput" class="form-control" (change)='onFileSelected($event)' />
         <button class="btn btn-primary" (click)='onUpLoad()' style="position:absolute;margin-left:92%;top:45%" [disabled]='disableButton'>
           <i class="fa fa-cloud-upload"></i>

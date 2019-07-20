@@ -1,11 +1,19 @@
 
+
+
+
+
 .backgr{
     background: url('../../assets/images/MarketWest.jpg');
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    filter: blur(8px);
+  /* -webkit-filter: blur(8px); */
+  /* -webkit-filter: grayscale(100%); */
+  opacity: 2;
 
 }
-
-
-
 
 .loginbox{
     width: 420px;
@@ -88,7 +96,7 @@ h1{
 {
     color: #ffc107;
 }
-          
+         
           .intl-tel-input {
             display: table-cell;
           }

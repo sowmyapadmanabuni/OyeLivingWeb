@@ -13,14 +13,14 @@ export class ViewInvoiceService {
   url: string;
 
   constructor(private http: HttpClient) {
-    this.ipAddress = 'http://apidev.oyespace.com/';
+    this.ipAddress = 'http://apidev.oyespace.com';
   }
 
   /*----------------------Block List By association ID -----------------*/
   GetBlockListByAssocID(currentAssociationID) {
     console.log('currentAssociationID',currentAssociationID);
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/Block/GetBlockListByAssocID/${currentAssociationID}`
+    this.url = `${this.ipAddress}/oyeliving/api/v1/Block/GetBlockListByAssocID/${currentAssociationID}`
     return this.http.get(this.url, { headers: headers })
       .pipe(map(data => {
         return data['data'].blocksByAssoc.map(item => {
@@ -56,21 +56,23 @@ export class ViewInvoiceService {
   getCurrentBlockDetails(blockId,currentAssociationID) {
     console.log('getCurrentBlockDetails', blockId);
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/invoice/view/${currentAssociationID}/${blockId}`;
+    this.url = `${this.ipAddress}/oyeliving/api/v1/invoice/view/${currentAssociationID}/${blockId}`;
     return this.http.get(this.url, { headers: headers });
   }
 
   viewInvoice(blockid,currentAssociationID) {
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/invoice/view/${currentAssociationID}/${blockid}`;
+    this.url = `${this.ipAddress}/oyeliving/api/v1/invoice/view/${currentAssociationID}/${blockid}`;
     
 
     return this.http.get(this.url, { headers: headers });
   }
 
   invoiceDetails(InvoiceId,UnitID){
+    console.log('InvoiceId-',InvoiceId);
+    console.log('UnitID-',UnitID);
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/invoice/details/${InvoiceId}/${UnitID}`;
+    this.url = `${this.ipAddress}/oyeliving/api/v1/invoice/details/${InvoiceId}/${UnitID}`;
    return this.http.get(this.url, { headers: headers });
 
 //http://apidev.oyespace.com/oyeliving/api/v1/invoice/details/{InvoiceId}/{UnitID}
@@ -78,14 +80,14 @@ export class ViewInvoiceService {
 
   GetUnitListByUnitID(unitID) {
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/Unit/GetUnitListByUnitID/${unitID}`;
+    this.url = `${this.ipAddress}/oyeliving/api/v1/Unit/GetUnitListByUnitID/${unitID}`;
     return this.http.get(this.url, { headers: headers });
   }
 
   GetAmountBalance(unUnitID) {
     console.log('GetAmountBalance', unUnitID);
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/Payment/GetAmountBalance/${unUnitID}`;
+    this.url = `${this.ipAddress}/oyeliving/api/v1/Payment/GetAmountBalance/${unUnitID}`;
     return this.http.get(this.url, { headers: headers });
   }
 
@@ -97,7 +99,7 @@ export class ViewInvoiceService {
 
   getassociationlist(asdPyDate, blMgrMobile,currentAssociationID) {
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/association/getassociationlist/${currentAssociationID}`;
+    this.url = `${this.ipAddress}/oyeliving/api/v1/association/getassociationlist/${currentAssociationID}`;
     return this.http.get(this.url, { headers: headers })
       .pipe(map(data => {
         return new AssociationDetails(
@@ -115,7 +117,7 @@ export class ViewInvoiceService {
 
   UpdateInvoiceDiscountValueAndInsert(discountData) {
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/UpdateInvoiceDiscountValueAndInsert`;
+    this.url = `${this.ipAddress}/oyeliving/api/v1/UpdateInvoiceDiscountValueAndInsert`;
     return this.http.post(this.url, JSON.stringify(discountData), { headers: headers });
   }
 
@@ -125,7 +127,7 @@ export class ViewInvoiceService {
     };
     console.log('json.stringify', JSON.stringify(invoiceID));
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/GetInvoiceOwnerListByInvoiceId`
+    this.url = `${this.ipAddress}/oyeliving/api/v1/GetInvoiceOwnerListByInvoiceId`
     return this.http.post(this.url, JSON.stringify(invoiceID), { headers: headers });
   }
 

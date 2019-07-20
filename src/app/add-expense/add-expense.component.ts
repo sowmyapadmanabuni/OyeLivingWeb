@@ -63,6 +63,11 @@ export class AddExpenseComponent implements OnInit {
   disableButton: boolean;
 
   currentAssociationID:string;
+  currentAssociationName:string;
+
+  isSingleUnit:boolean;
+  otherThanSingleUnit:boolean;
+  defaultThumbnail:string;
 
   constructor(private addexpenseservice: AddExpenseService,
     private router: Router,
@@ -70,6 +75,7 @@ export class AddExpenseComponent implements OnInit {
     private globalservice:GlobalServiceService) {
 
       this.currentAssociationID=this.globalservice.getCurrentAssociationId();
+      this.currentAssociationName=this.globalservice.getCurrentAssociationName();
     this.expensedata = new ExpenseData();
     this.selectedFile = null;
     this.blockName = '';
@@ -84,7 +90,7 @@ export class AddExpenseComponent implements OnInit {
     this.dateandTime = new Date();
     this.expensedata.ASAssnID = this.currentAssociationID;
     this.expensedata.BLBlockID = '';
-    this.expensedata.POID = '';
+    //this.expensedata.POID = '';
     this.expensedata.EXHead = '';
     this.expensedata.EXRecurr = '';
     this.expensedata.EXApplTO = '';
@@ -102,6 +108,10 @@ export class AddExpenseComponent implements OnInit {
     this.isLargefile = false;
     this.isnotValidformat = false;
     this.disableButton = false;
+    this.isSingleUnit=false;
+    this.otherThanSingleUnit=true;
+
+    this.defaultThumbnail='../../assets/images/default_thumbnail.png';
 
     this.expenseHead = [
       { 'name': '', 'displayName': 'Corpus', 'id': 1 },
@@ -137,7 +147,8 @@ export class AddExpenseComponent implements OnInit {
       { 'name': 'Unsold Tenant Occupied Units', 'displayName': 'Unsold Tenant Occupied Units' },
       { 'name': 'All Sold Units', 'displayName': 'All Sold Units' },
       { 'name': 'All UnSold Units', 'displayName': 'All UnSold Units' },
-      { 'name': 'All Occupied Units', 'displayName': 'All Occupied Units' }
+      { 'name': 'All Occupied Units', 'displayName': 'All Occupied Units' },
+      { 'name': 'All Vacant Unit', 'displayName': 'All Vacant Unit' }
     ]
 
     this.methodArray = [{ 'name': 'Cash', 'displayName': 'Cash', 'id': 1 },
@@ -147,8 +158,7 @@ export class AddExpenseComponent implements OnInit {
     ]
 
     this.distributionTypes = [{ "name": "Dimension Based","displayName":"Dimension Based" }, 
-    { "name": "Per Unit","displayName":"Per Unit" },
-     { "name": "Actuals","displayName":"Actuals" }];
+    { "name": "Per Unit","displayName":"Per Unit" }];
 
     this.bankList = [
       'Allahabad Bank',
@@ -197,7 +207,10 @@ export class AddExpenseComponent implements OnInit {
     this.minDemandDraftDate = new Date();
     this.minDemandDraftDate.setDate(this.minDemandDraftDate.getDate() - 80);
 
-    this.bsConfig = Object.assign({}, { containerClass: 'theme-orange' });
+    this.bsConfig = Object.assign({}, { containerClass: 'theme-orange',
+     dateInputFormat: 'DD-MM-YYYY',
+     showWeekNumbers:false,
+     isAnimated: true});
 
   }
 
@@ -219,14 +232,14 @@ export class AddExpenseComponent implements OnInit {
     this.addexpenseservice.getAssociationList(this.currentAssociationID);
     //this.addexpenseservice.applicableTo('applicableTo');
   }
-  poDetails(POID) {
-    let purchaseOrders = this.purchaseOrders.find(po => po['poid'] == POID);
-    console.log(purchaseOrders);
-    this.expensedata.POEAmnt = purchaseOrders['poEstAmt'];
-    this.expensedata.VNName = purchaseOrders['poPrfVen'];
-    this.expensedata.BPIden = purchaseOrders['bpIden'];
-    this.expensedata.EXRABudg = 0;
-  }
+  // poDetails(POID) {
+  //   let purchaseOrders = this.purchaseOrders.find(po => po['poid'] == POID);
+  //   console.log(purchaseOrders);
+  //   this.expensedata.POEAmnt = purchaseOrders['poEstAmt'];
+  //   this.expensedata.VNName = purchaseOrders['poPrfVen'];
+  //   this.expensedata.BPIden = purchaseOrders['bpIden'];
+  //   this.expensedata.EXRABudg = 0;
+  // }
   prerequisitesAddUnit(blBlockID) {
     console.log('prerequisitesAddUnit', blBlockID);
     this.blockID = blBlockID;
@@ -245,12 +258,21 @@ export class AddExpenseComponent implements OnInit {
         });
   }
   gotoViewexpense() {
-    this.router.navigate(['viewexpense']);
+    this.router.navigate(['home/viewexpense']);
   }
   applicableTo(EXApplTO: string) {
     this.applies = EXApplTO;
+    if (EXApplTO == 'Single Unit') {
+      this.isSingleUnit = true;
+      this.otherThanSingleUnit=false;
+      this.expensedata.EXDisType='Actuals';
+    } 
+    else if(EXApplTO != 'Single Unit'){
+      this.otherThanSingleUnit=true;
+      this.isSingleUnit = false;
+    }
     //  $scope.ascUnit = '';
-    this.addexpenseservice.GetUnitListByBlockID(this.blockID)
+    this.addexpenseservice.GetUnitListByBlockID(this.viewexpensesservice.currentBlockId)
       .subscribe(data => {
         this.ascUnit = data;
       })
@@ -274,13 +296,28 @@ export class AddExpenseComponent implements OnInit {
       this.isLargefile = true;
       this.disableButton = true;
     }
+    let imgthumbnailelement = <HTMLInputElement>document.getElementById("imgthumbnail");
     let splitarr = this.selectedFile['name'].split('.')
     let currentdate = new Date();
     let expycopy = splitarr[0] + '_' + currentdate.getTime().toString() + '.' + splitarr[1];
 
+    let reader  = new FileReader();
+
+    reader.onloadend = function () {
+      imgthumbnailelement.src  = reader.result as string;;
+    }
+    if (this.selectedFile) {
+      reader.readAsDataURL(this.selectedFile);
+    } else {
+      imgthumbnailelement.src = "";
+    }
+  
+
     this.expensedata.EXPyCopy = expycopy;
   }
   removeSelectedfile() {
+    let imgthumbnailelement = <HTMLInputElement>document.getElementById("imgthumbnail");
+    imgthumbnailelement.src = this.defaultThumbnail;
     const dataTransfer = new ClipboardEvent('').clipboardData || new DataTransfer();
     dataTransfer.items.add('', '');
     console.log('dataTransfer', dataTransfer);
@@ -308,6 +345,7 @@ export class AddExpenseComponent implements OnInit {
   }
 
   addExp() {
+    this.expensedata.BLBlockID=this.viewexpensesservice.currentBlockId;
     this.expensedata.EXDate = formatDate(this.EXDate, 'yyyy/MM/dd', 'en');
     if (this.checkField == 'Cash') {
       this.expensedata.EXChqDate = null;
@@ -339,7 +377,7 @@ export class AddExpenseComponent implements OnInit {
                 //this.form.reset();
                 this.resetForm();
               } else if (result.dismiss === swal.DismissReason.cancel) {
-                this.router.navigate(['viewexpense']);
+                this.router.navigate(['home/viewexpense']);
               }
             }
           )
@@ -360,7 +398,7 @@ export class AddExpenseComponent implements OnInit {
       e.preventDefault();
     }
     this.form.reset();
-    this.expensedata.POID = '';
+    //this.expensedata.POID = '';
     this.expensedata.EXHead = '';
     this.expensedata.EXRecurr = '';
     this.expensedata.EXApplTO = '';

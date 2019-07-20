@@ -18,20 +18,20 @@ export class AddUnitComponent implements OnInit {
 
   unitTypes:object[];
   unitType:string;
-  unitno:number;
-  unitdimension:number;
-  unitrate:number;
+  unitno:string;
+  unitdimension:string;
+  unitrate:string;
   calculationtype:string;
   occupency:string;
   ownerFirtname:string;
   ownerLastname:string;
-  ownerMobnumber:number;
-  ownerAltnumber:number;
+  ownerMobnumber:string;
+  ownerAltnumber:string;
   ownerEmail:string;
   ownerAltemail:string;
   tenantFirtname:string;
   tenantLastname:string;
-  tenantMobnumber:number;
+  tenantMobnumber:string;
   tenantEmail:string;
   occupencys:object[];
   tenantDetails: boolean = false;
@@ -39,13 +39,20 @@ export class AddUnitComponent implements OnInit {
   currentAssociationID:string;
   allBlocksLists: any[];
 
+  accountID:number;
+  toggleunitvehicleinformation:boolean;
+
   constructor(private viewUniService: ViewUnitService,
     private globalservice:GlobalServiceService) {
+      this.currentAssociationName=this.globalservice.getCurrentAssociationName();
+      this.accountID=this.globalservice.acAccntID;
+      this.toggleunitvehicleinformation=true;
 
     this.blBlockID = '';
     this.occupency='';
     this.unitType='';
     this.calculationtype='';
+    this.blockID='';
 
     this.unitTypes = [
       { "name": "Flat" },
@@ -59,12 +66,27 @@ export class AddUnitComponent implements OnInit {
     ];
 
     this.occupencys = [
-      { "name": "Sold Owner Occupied" },
-      { "name": "Sold Tenant Occupied" },
-      { "name": "Sold Vacant" },
-      { "name": "UnSold Vacant" },
-      { "name": "UnSold Tenant Occupied" }
+      { "name": "Sold Owner Occupied Unit" },
+      { "name": "Sold Tenant Occupied Unit" },
+      { "name": "Sold Vacant Unit" },
+      { "name": "UnSold Vacant Unit" },
+      { "name": "UnSold Tenant Occupied Unit" }
     ];
+
+    this.unitno='';
+    this.unitrate='';
+    this.unitdimension='';
+
+    this.ownerFirtname='';
+    this.ownerLastname='';
+    this.ownerMobnumber='';
+    this.ownerAltnumber='';
+    this.ownerEmail='';
+    this.ownerAltemail='';
+    this.tenantFirtname='';
+    this.tenantLastname='';
+    this.tenantMobnumber='';
+    this.tenantEmail='';
 
    }
 
@@ -95,26 +117,42 @@ export class AddUnitComponent implements OnInit {
   tenantOwnerdiv(occupency) {
     this.occupency=occupency;
     this.occupencys.forEach(item => {
-      if (occupency == 'Unsold Vaccant') {
-        this.tenantDetails = true;
+      if (occupency == 'UnSold Vacant Unit') {
+        this.tenantDetails = false;
         this.ownerDetails = false;
+        this.toggleunitvehicleinformation=false;
       }
-      else if (occupency == 'Unsold Tenant Occupied') {
+      else if (occupency == 'UnSold Tenant Occupied Unit') {
         this.tenantDetails = true;
         this.ownerDetails = false;
+        this.toggleunitvehicleinformation=true;
+      }
+      else if (occupency == 'Sold Tenant Occupied Unit') {
+        this.tenantDetails = true;
+        this.ownerDetails = true;
+        this.toggleunitvehicleinformation=true;
       }
       else {
         this.tenantDetails = false;
         this.ownerDetails = true;
+        this.toggleunitvehicleinformation=true;
       }
     })
+  }
+
+  _keyPress(event: any) {
+    const pattern = /[0-9]/;
+    let inputChar = String.fromCharCode(event.charCode);
+    if (!pattern.test(inputChar)) {
+        event.preventDefault();
+    }
   }
 
   createUnit() {
     let createUnitData =
     {
       "ASAssnID": this.currentAssociationID,
-      "ACAccntID": 21,
+      "ACAccntID": this.accountID,
       "units": [
         {
           "UNUniName": this.unitno,
@@ -126,7 +164,6 @@ export class AddUnitComponent implements OnInit {
           "UNSldDate": "2019-03-02",
           "UNDimens": this.unitdimension,
           "UNCalType": this.calculationtype,
-          "FLFloorID": 1,
           "BLBlockID": this.blockID,
           "Owner":
           [{
@@ -146,13 +183,22 @@ export class AddUnitComponent implements OnInit {
             "UOEmail4": "null",
             "UOCDAmnt": ""
           }],
-          "Tenant":
+          "unitbankaccount":
+          {
+            "UBName": "",
+            "UBIFSC": "",
+            "UBActNo": "",
+            "UBActType": "",
+            "UBActBal": 0,
+            "BLBlockID": this.blockID
+          },
+        "Tenant":
           [{
 
             "UTFName":this.tenantFirtname,
             "UTLName": this.tenantLastname,
             "UTMobile": this.tenantMobnumber,
-            "UTISDCode": "",
+            "UTISDCode": "+91",
             "UTMobile1": "",
             "UTEmail": this.tenantEmail,
             "UTEmail1": ""
@@ -182,6 +228,24 @@ export class AddUnitComponent implements OnInit {
       (response) => {
         console.log(response);
       });
+
+      // this.unitno='';
+      // this.unitrate='';
+      // this.unitdimension='';
+  
+      // this.ownerFirtname='';
+      // this.ownerLastname='';
+      // this.ownerMobnumber='';
+      // this.ownerAltnumber='';
+      // this.ownerEmail='';
+      // this.ownerAltemail='';
+      // this.tenantFirtname='';
+      // this.tenantLastname='';
+      // this.tenantMobnumber='';
+      // this.tenantEmail='';
+      // this.occupency='';
+      // this.unitType='';
+      // this.calculationtype='';
 
   }
 

@@ -18,3 +18,9 @@ legend.scheduler-border {
 .btn-primary {
     margin-right: 5px;
 }
+
+#uploadFileinput{
+    width: 95% !important;
+    margin-left: 49px !important;
+    margin-top: -45px !important;
+}

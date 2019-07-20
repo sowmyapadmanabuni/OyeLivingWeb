@@ -168,6 +168,7 @@ export class AddExpenseService {
   }
 
   createExpense(expensedata:ExpenseData){
+    console.log('expensedata',expensedata);
     let headers = this.getHttpheaders();
     this.url = `${this.ipAddress}oyeliving/api/v1/Expense/Create`
    return this.http.post(this.url, JSON.stringify(expensedata), { headers: headers });

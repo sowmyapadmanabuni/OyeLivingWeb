@@ -1,9 +1,9 @@
 export class ExpenseData {
 
-    POID:string;
-    EXRABudg:number;
-    POEAmnt:number;
-    BPIden:string;
+    //POID:string;
+    //EXRABudg:number;
+    //POEAmnt:number;
+    //BPIden:string;
     EXHead:string;
     EXDesc:string;
     EXDate:string;
@@ -19,7 +19,7 @@ export class ExpenseData {
     EXChqDate:string;
     INNumber:string;
     EXPyCopy:string;
-    VNName:string;
+    //VNName:string;
     INGenDate:Date;
     EXDisType:string;
     UnUniIden:string;

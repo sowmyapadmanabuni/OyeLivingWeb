@@ -7,6 +7,8 @@ export class GlobalServiceService {
 
    currentAssociationId:string;
    currentAssociationName:string;
+   acAccntID:number;
+   
   constructor() { }
 
 
@@ -19,6 +21,14 @@ public getCurrentAssociationId(){
 public setCurrentAssociationId(associationId:string)
 {
   this.currentAssociationId = associationId;
+}
+
+public setAccountID(acAccntID){
+  this.acAccntID=acAccntID;
+}
+
+public getacAccntID(){
+  return this.acAccntID;
 }
 
 public getCurrentAssociationName(){

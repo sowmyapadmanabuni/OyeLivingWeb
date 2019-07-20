@@ -1,7 +1,7 @@
 <div class="pageTitle">
   <div class="row">
     <div class="col-sm-4 col-xs-12">
-      <h3>View Expenses</h3>
+      <h3>View Expenses for {{currentassociationname}}</h3>
     </div>
     <div class="col-sm-3 col-xs-12 pull-left">
       <div class="form-group">
@@ -29,17 +29,21 @@
   <table class="table" id="example">
     <thead>
       <tr>
-        <th>Unit Identifier</th>
+        <th>Sl No</th>
+        <th>Expense Head</th>
         <th>Applicability</th>
-        <th>Date</th>
+        <th>Unit Identifier</th>
+        <th>Date Added</th>
         <th>Amount</th>
         <th>Added By</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor='let view of viewexpensesByBlockId | paginate: { itemsPerPage: 10, currentPage: p }'>
-        <td>{{view.unUniIden}}</td>
+      <tr *ngFor='let view of viewexpensesByBlockId | paginate: { itemsPerPage: 10, currentPage: p };let i=index'>
+        <td>{{i+1}}</td>
+        <td>{{view.exHead}}</td>
         <td>{{view.exApplTO}}</td>
+        <td>{{view.unUniIden}}</td>
         <td>{{view.exDate | date:"M/d/y"}}</td>
         <td>{{'₹ '+view.expAmnt}}</td>
         <td>{{view.mgrName}}</td>
@@ -92,8 +96,10 @@
               <div class="col-sm-12">
                 <h5 class="headingOrange">Edit Expense Head</h5>
               </div>
-
-              <div class="row">
+              <div class="col-sm-12">
+                <hr>
+              </div>
+              <!-- <div class="row">
                 <div class="col-sm-3 col-xs-12">
                   <div class="form-group"
                     [ngClass]="{'has-error' : purchaserderControl.invalid && purchaserderControl.touched}">
@@ -144,9 +150,9 @@
                       #estimatedamountControl='ngModel' disabled="true" required />
                   </div>
                 </div>
-              </div>
+              </div> -->
 
-              <div class="row">
+              <div class="row" style="padding-left:15px;padding-right:15px;">
                 <div class="col-sm-4 col-xs-12">
                   <div class="form-group"
                     [ngClass]="{'has-error' : expenseheadControl.invalid && expenseheadControl.touched}">
@@ -193,7 +199,7 @@
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row" style="padding-left:15px;padding-right:15px;">
                 <div class="col-sm-4 col-xs-12">
                   <div class="form-group"
                     [ngClass]="{'has-error' : applicabletoControl.invalid && applicabletoControl.touched}">
@@ -229,7 +235,7 @@
                   </div>
                 </div>
 
-                <div class="col-sm-6 col-xs-12">
+                <div class="col-sm-4 col-xs-12">
                   <div class="form-group"
                     [ngClass]="{'has-error' : paybymethodControl.invalid && paybymethodControl.touched}">
                     <label>Select Payment Method <span class="red">*</span></label>
@@ -244,7 +250,8 @@
                       Please Select Method</p>
                   </div>
                 </div>
-
+              </div> 
+              <div class="row" style="padding-left:15px;padding-right:15px;">
                 <div class="col-sm-4 col-xs-12">
                   <div class="form-group" [ngClass]="{'has-error' : amountControl.invalid && amountControl.touched}">
                     <label>Amount Paid <span class="red">*</span></label>
@@ -260,10 +267,10 @@
                     </div>
                   </div>
                 </div>
-              </div>
+             
 
-              <div class="row">
-                <div class="col-sm-6 col-xs-12" [hidden]="applies != 'All'">
+             
+                <div class="col-sm-4 col-xs-12" [hidden]="applies != 'All'">
                   <div class="form-group"
                     [ngClass]="{'has-error' : distributionControl.invalid && distributionControl.touched}">
                     <label>Select Distribution Type <span class="red">*</span></label>
@@ -280,7 +287,7 @@
                   </div>
                 </div>
 
-                <div class="col-sm-6 col-xs-12" [hidden]="applies != 'Single'">
+                <div class="col-sm-4 col-xs-12" [hidden]="applies != 'Single'">
                   <div class="form-group" [ngClass]="{'has-error' : unitControl.invalid && unitControl.touched}">
                     <label>Select Unit <span class="red">*</span></label>
                     <select class="ui dropdown search methodDropdown" name="unUniIden"
@@ -297,7 +304,7 @@
 
               </div>
 
-              <div class="row" *ngIf="checkField == 'Cheque'">
+              <div class="row" *ngIf="checkField == 'Cheque'" style="padding-left:15px;padding-right:15px;">
                 <div class="col-sm-6 col-xs-12">
                   <div class="form-group"
                     [ngClass]="{'has-error' : editchequenoControl.invalid && editchequenoControl.touched}">
@@ -318,14 +325,14 @@
                     <label>Cheque Date <span class="red">*</span></label>
                     <input type="text" class="form-control" name="EXChqDate" #chequedateControl='ngModel'
                       placeholder="Cheque Date" required [(ngModel)]="editexpensedata.EXChqDate" #dp="bsDatepicker"
-                      bsDatepicker [(bsValue)]="editexpensedata.EXChqDate" [minDate]="minDate" />
+                      bsDatepicker [bsConfig]='bsConfig' [(bsValue)]="editexpensedata.EXChqDate" [minDate]="minDate" placement="top"/>
                     <p class="alerts" *ngIf="chequedateControl.invalid && chequedateControl.touched"> Please Select
                       Cheque Date</p>
                   </div>
                 </div>
               </div>
 
-              <div class="row" *ngIf="checkField == 'DemandDraft'">
+              <div class="row" *ngIf="checkField == 'DemandDraft'" style="padding-left:15px;padding-right:15px;">
 
                 <div class="col-sm-6 col-xs-12">
                   <div class="form-group" [ngClass]="{'has-error' : ddnoControl.invalid && ddnoControl.touched}">
@@ -346,7 +353,7 @@
                     <label>Demand Draft Date <span class="red">*</span></label>
                     <input type="text" class="form-control" name="DemandDraftDate" #demandDraftDateControl='ngModel'
                       placeholder="Demand Draft Date" required [bsConfig]="bsConfig" [(ngModel)]="DemandDraftDate"
-                      #dp="bsDatepicker" bsDatepicker [(bsValue)]="DemandDraftDate" [minDate]="minDemandDraftDate" />
+                      #dp="bsDatepicker" [bsConfig]='bsConfig' bsDatepicker [(bsValue)]="DemandDraftDate" [minDate]="minDemandDraftDate" />
                     <p class="alerts" *ngIf="demandDraftDateControl.invalid && demandDraftDateControl.touched"> Please
                       Select
                       DemandDraft Date</p>
@@ -355,23 +362,22 @@
 
               </div>
 
-              <div class="row">
+              <div class="row" style="padding-left:15px;padding-right:15px;">
                 <div class="col-sm-6 col-xs-12">
                   <div class="form-group"
                     [ngClass]="{'has-error' : expendituredateControl.invalid && expendituredateControl.touched}">
                     <label>Expenditure Date <span class="red">*</span></label>
                     <input type="text" class="form-control" name="EXDate" #expendituredateControl='ngModel'
-                      placeholder="Expenditure Date " required [(ngModel)]="editexpensedata.EXDate" #dp="bsDatepicker"
-                      bsDatepicker [(bsValue)]="editexpensedata.EXDate"
-                      [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" />
+                      placeholder="Expenditure Date " required [(ngModel)]="editexpensedata.EXDate"
+                      bsDatepicker [bsConfig]='bsConfig' placement="top"/>
                     <p class="alerts" *ngIf="expendituredateControl.invalid && expendituredateControl.touched">
                       Please Select Expenditure Date</p>
 
                   </div>
                 </div>
-              </div>
+              
 
-              <div class="row">
+              
                 <div class="col-sm-6 col-xs-12">
                   <div class="row">
                     <label>Invoice / Payment Copy<span class="red"></span></label>
@@ -393,16 +399,16 @@
               </div>
 
 
-              <div class="row">
+              
                 <div class="from-group">
-                  <div class="form-group pull-right">
+                  <div class="form-group pull-right" style="padding-right:15px;">
                     <br>
                     <button type="submit" class="btn btn-primary" (click)="modalRef.hide()"
                       (click)="updateExpense()">Update</button>
                   </div>
                 </div>
 
-              </div>
+             
           </form>
         </div>
       </div>

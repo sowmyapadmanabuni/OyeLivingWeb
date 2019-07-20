@@ -1,7 +1,9 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, EventEmitter, Output } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import {GlobalServiceService} from '../global-service.service';
+import {DashBoardService} from '../dash-board/dash-board.service';
 
 @Component({
   selector: 'app-login',
@@ -14,17 +16,39 @@ export class LoginComponent implements OnInit {
   mobile: number;
   mobilenumber: number;
   otp: number;
-  ipAddress = 'http://apidev.oyespace.com/';
+  ipAddress = 'http://apidev.oyespace.com';
   inpt: any;
   public countrydata: object;
   @ViewChild('myButton1') myButton1: any;
+  @Output() toggleMyMenus:EventEmitter<string>;
+  returnUrl: string;
 
-  constructor(private http: HttpClient, public router: Router) { }
+  constructor(private http: HttpClient, public router: Router,
+    private globalserviceservice: GlobalServiceService, private route: ActivatedRoute,
+    private dashboardservice:DashBoardService) {
+      //alert('inside login component');
+    // redirect to home if already logged in
+    if (this.globalserviceservice.acAccntID) {
+      //alert('globalserviceservice.acAccntID'+this.globalserviceservice.acAccntID);
+      //alert('this.globalserviceservice.acAccntID has value'+this.globalserviceservice.acAccntID);
+      this.router.navigate(['home']);
+    }
+    else{
+      //alert('inside else part in login component...');
+      //alert('this.globalserviceservice.acAccntID'+this.globalserviceservice.acAccntID);
+      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'home';
+      //alert('returnURL-'+this.returnUrl);
+      //this.router.navigate([this.returnUrl]);
+    }
+  }
 
   ngOnInit() {
+     // get return url from route parameters or default to '/'
+     //this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
   }
 
   sendOTP() {
+    //alert('inside sendOTP');
     let headers = this.getHttpheaders();
     let url = `${this.ipAddress}/oyeliving/api/v1/account/sendotp`
     // document.getElementById("myButton1").value="Resend";
@@ -36,39 +60,41 @@ export class LoginComponent implements OnInit {
 
     var timeLeft = 30;
     var elem = document.getElementById('some_div');
+    var element = <HTMLInputElement>document.getElementById("myButton1");
 
     var timerId = setInterval(countdown, 1000);
 
     function countdown() {
       if (timeLeft == 0) {
         clearTimeout(timerId);
-
-        var element = <HTMLInputElement>document.getElementById("myButton1");
-        element.disabled = true;
-        element.value = "Resend";
+        if(element.value != null){
+          element.disabled=false;
+          element.value = "Resend";
+         
+          }
         // doSomething();
       } else {
+        element.disabled=true;
         elem.innerHTML = timeLeft - 1 + ' seconds to resend';
         timeLeft--;
-        var myButton1element = <HTMLInputElement>document.getElementById("myButton1");
-        myButton1element.disabled = true;
-        var otpBycallelement = <HTMLInputElement>document.getElementById("otpBycall");
-        otpBycallelement.disabled = true;
-
+        if (timeLeft == 0) {
+          console.log('timeLeft == 0',timeLeft);
+          clearTimeout(timerId);
+          if(element.value != null){
+            element.disabled=false;
+            element.value = "Resend";
+            }
+        }
       }
+      var x = document.getElementById("snackbar");
+   x.className = "show";
+   setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
     }
 
     console.log(mobileNoData);
     return this.http.post(url, JSON.stringify(mobileNoData), { headers: headers })
       .subscribe(data => { console.log(data) })
   }
-
-
-
-
-
-
-
 
   getHttpheaders(): HttpHeaders {
     const headers = new HttpHeaders()
@@ -78,12 +104,10 @@ export class LoginComponent implements OnInit {
     return headers;
   }
 
-
-
-
   verifyOtp() {
+    //alert('inside verifyOtp...');
     let headers = this.getHttpheaders();
-    let url = `${this.ipAddress}oyeliving/api/v1/account/verifyotp`
+    let url = `${this.ipAddress}/oyeliving/api/v1/account/verifyotp`
     var otpdata = {
       // CountryCode : this.code,
       CountryCode: this.code,
@@ -100,15 +124,34 @@ export class LoginComponent implements OnInit {
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
             text: 'Please register your Number!',
-            footer: '<a href>Why do I have this issue?</a>'
+            // footer: '<a href>Why do I have this issue?</a>'
           }).then((result) => {
             if (result.value) {
-              this.router.navigate(['register']);
+             this.router.navigate(['register']);
             }
           })
         }
-      })
+       else if (data['data'] != null){
+         //alert('inside verifyotp..data!= null');
+        console.log('acAccntID',data['data']['account']['acAccntID']);
+        this.globalserviceservice.acAccntID=data['data']['account']['acAccntID'];
+        //alert('assigned accountid to globalserviceservice.acAccntID');
+        //alert('displaying globalserviceservice.acAccntID'+this.globalserviceservice.acAccntID);
+        //this.dashboardservice.getMembers(this.globalserviceservice.acAccntID).subscribe(res => {
+          //alert('assigning mrmRoleID...');
+          //this.dashboardservice.mrmRoleID = res['data'].memberListByAccount[0]['mrmRoleID'];
+          //alert('displaying dashboardservice.mrmRoleID..'+this.dashboardservice.mrmRoleID);
+          //this.router.navigate(['home']);
+        //},
+        //res=>{
+          //alert('dashboardservice.mrmRoleID'+this.dashboardservice.mrmRoleID);
+        //});
 
+        //alert('navigate to home component...');
+        this.router.navigate(['home']);
+        }
+      })
+     
   }
 
 
@@ -136,7 +179,6 @@ export class LoginComponent implements OnInit {
 
   resendOtp(e) {
     e.preventDefault();
-    alert('inside resendOtp');
     let headers = this.getHttpheaders();
     let url = `${this.ipAddress}oyeliving/api/v1/account/resendotp`
     var reSendOtpData = {
@@ -172,14 +214,23 @@ export class LoginComponent implements OnInit {
 
 
   getCountryData() {
-    alert('test')
+    //alert('test')
   }
-  _keyPress(event: any) {
+  _keyPress(event) {
+    if(event.keyCode == 13) {
+      this.sendOTP();
+     }
     const pattern = /[0-9]/;
     let inputChar = String.fromCharCode(event.charCode);
     if (!pattern.test(inputChar)) {
         event.preventDefault();
     }
+  }
+
+  keyPressToDashboard(event){
+    if(event.keyCode == 13) {
+      this.verifyOtp();
+     }
   }
 
 }

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewUnitService } from './view-unit.service';
-import { switchAll } from 'rxjs/operators';
-//import {AlertsService} from 'angular-alert-module';
 import Swal from 'sweetalert2';
 //import * as swal from 'sweetalert2';
 import { GlobalServiceService } from '../global-service.service';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -17,7 +16,7 @@ export class ViewUnitComponent implements OnInit {
   addUnit2NDPage: boolean = false;
   blockID: string;
   addmyVehicle: boolean = false;
-  ACAccntID: string;
+  ACAccntID: number;
   ASAssnID: string;
   associationID: string;
   currentAssociationID: string;
@@ -57,16 +56,20 @@ export class ViewUnitComponent implements OnInit {
   occupency:string;
   ownerFirtname:string;
   ownerLastname:string;
-  ownerMobnumber:number;
-  ownerAltnumber:number;
+  ownerMobnumber:string;
+  ownerAltnumber:string;
   ownerEmail:string;
   ownerAltemail:string;
   tenantFirtname:string;
   tenantLastname:string;
-  tenantMobnumber:number;
+  tenantMobnumber:string;
   tenantEmail:string;
 
-  constructor(private viewUniService: ViewUnitService, private globalService: GlobalServiceService) {
+  constructor(private viewUniService: ViewUnitService,
+     private globalService: GlobalServiceService,
+     private router:Router) {
+    this.ACAccntID=this.globalService.acAccntID;
+    this.currentAssociationID=this.globalService.getCurrentAssociationId();
     //pagination
     this.config = {
       itemsPerPage: 10,
@@ -101,6 +104,18 @@ export class ViewUnitComponent implements OnInit {
       { "name": "Unsold Vaccant" },
       { "name": "Unsold Tenant Occupied" }
     ];
+
+    this.tenantFirtname='';
+    this.tenantLastname='';
+    this.tenantMobnumber='';
+    this.tenantEmail='';
+
+    this.ownerFirtname='';
+    this.ownerLastname='';
+    this.ownerMobnumber='';
+    this.ownerAltnumber='';
+    this.ownerEmail='';
+    this.ownerAltemail='';
   }
 
 
@@ -168,6 +183,11 @@ export class ViewUnitComponent implements OnInit {
     this.parkings.splice(index, 1);
   }
 
+  gotoAddunit(){
+    //alert('inside go to addunit');
+    this.router.navigate(['home/addunit']);
+  }
+
   tenantOwnerdiv(occupency) {
     this.occupencys.forEach(item => {
       if (occupency == 'Unsold Vaccant') {
@@ -189,8 +209,8 @@ export class ViewUnitComponent implements OnInit {
   createUnit() {
     let createUnitData =
     {
-      "ASAssnID": 1156,
-      "ACAccntID": 21,
+      "ASAssnID": this.currentAssociationID,
+      "ACAccntID": this.ACAccntID,
       "units": [
         {
           "UNUniName": this.unitno,
@@ -202,7 +222,7 @@ export class ViewUnitComponent implements OnInit {
           "UNSldDate": "2019-03-02",
           "UNDimens": this.unitdimension,
           "UNCalType": this.calculationtype,
-          "FLFloorID": 1,
+          "FLFloorID": 1, //
           "BLBlockID": this.blockID,
           "Owner":
           {
@@ -225,12 +245,12 @@ export class ViewUnitComponent implements OnInit {
           "Tenant":
           {
 
-            "UTFName":this.tenantFirtname,
-            "UTLName": this.tenantLastname,
-            "UTMobile": this.tenantMobnumber,
+            "UTFName":""/*this.tenantFirtname,*/,
+            "UTLName": ""/*this.tenantLastname,*/,
+            "UTMobile": ""/*this.tenantMobnumber,*/,
             "UTISDCode": "",
             "UTMobile1": "",
-            "UTEmail": this.tenantEmail,
+            "UTEmail": ""/*this.tenantEmail,*/,
             "UTEmail1": ""
           },
           "UnitParkingLot":

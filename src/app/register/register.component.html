@@ -1,4 +1,6 @@
 <div class="backgr">
+
+  </div>
   <div class="loginbox">
       <!-- <img src="../assets/images/avatarr.png" class="avatar"> -->
       <h1 style="margin-top: -5%;">Register</h1>
@@ -7,46 +9,59 @@
         <!-- <div class="input-group">
           <input type="tel" #intlphone id="intlphone">  
         </div> -->
-        
+       
         <input type="text" name="mobile" [(ngModel)]="firstName" placeholder="First Name"
           style="width: 140px;  border-bottom: 1px solid #F08A33;" required />
           <input type="text" name="mobile" [(ngModel)]="lastName" placeholder="Last Name"
           style="width: 140px;border-bottom: 1px solid #F08A33;margin: 0% 0% 0% 16%;" required /><br>
-    
-        <input type="text"
-     ng2TelInput
-     [ng2TelInputOptions]="{initialCountry: 'in'}"
-     (hasError)="hasError($event)"
-     (ng2TelOutput)="getNumber($event)"
-     (intlTelInputObject)="telInputObject($event)"
-     (countryChange)="onCountryChange($event)" 
-     name="mobilenumber"
-     [(ngModel)]='mobilenumber' (keypress)=_keyPress($event) maxlength="10" style="border-bottom: 1px solid #F08A33; width: 360px;"/>
-    
-        
-    
-    
+   
+          <input [ngClass]="{'has-error' : mobilenumbers.invalid && mobilenumbers.touched}"
+          type="text" (keypress)=_keyPress($event)
+       ng2TelInput
+       [ng2TelInputOptions]="{initialCountry: 'in'}"
+       (hasError)="hasError($event)"
+       (ng2TelOutput)="getNumber($event)"
+       (intlTelInputObject)="telInputObject($event)"
+       (countryChange)="onCountryChange($event)"
+       name="mobilenumber"
+       placeholder="Mobile Number"
+       #mobilenumbers='ngModel'
+       id="mobnum"
+       pattern="^[6-9]{1}[0-9]{9}$" required
+       [ngClass]="{ 'is-invalid': f.submitted && lastName.invalid }"
+       [(ngModel)]='mobilenumber' maxlength="10"ç style="border-bottom: 1px solid #F08A33;"/>
+       <p class="alerts" *ngIf="mobilenumbers.invalid && mobilenumbers.touched" style=" position: absolute; font-size: 11px; color: red; margin: -2% 0% 0% 2%;">Enter valid number</p>
+   
+       
+   
+   
         <!-- <input type="submit" (click)="sendOTP()" id="myButton1" name="" value="Get Mobile OTP" style="width: 74px; height: 28px; font-size: small;margin-left: 12%;"> -->
   
         <input type="text" [(ngModel)]="email" name="email" placeholder="E-mail Address"
           style="width: -webkit-fill-available; margin-top: 7%;  border-bottom: 1px solid #F08A33;" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" ><br>
-        <input type="submit" (click)="register()" style="margin: 2% 0% 3% 23%;" name="" value="Register" required /><br>
+          <form ngNativeValidate>
+            <input type="checkbox" name="terms" value="terms" id="terms1" (click)='validateCheckBox($event)' required />
+            <label for="love" style="margin: -40%;font-size: 12px;"> I have read and accepted the <a data-toggle="modal"
+                (click)='privacyPolicyModel(privacyPolicy)'>privacy policy</a> and <a data-toggle="modal"
+                (click)='termsConditionModel(termsCondition)'>terms of use</a></label>
+            <input type="submit" (click)='register()' style="margin: 2% 0% 3% 23%;" value="Register" />
+          </form>
+        <br>
         <!-- <a href="" (click)="resendOtp($event)">Resend OTP</a><br> -->
         <!-- <a id="otpBycall" href="" (click)="otpCall($event)">OTP by Call</a><br> -->
         <!-- <a href="#">Don't have an account?</a> -->
         <!-- <p>Resend in 60Sec</p> -->
-        <input type="checkbox" name="terms" value="terms" id="terms1" required /><label for="love" style="margin: -40%;font-size: 12px;"> I have read and accepted the <a data-toggle="modal" (click)='privacyPolicyModel(privacyPolicy)'>privacy policy</a> and <a data-toggle="modal" (click)='termsConditionModel(termsCondition)'>terms of use</a></label>
+       
         <div id="some_div">
            
             <!-- <p>Resend in 60Sec</p> -->
           </div>
         <!-- <p>resend in</p><countdown [config]="{leftTime: 60}"></countdown> -->
         </form>
-    
-      
-    
+   
+     
+   
     </div>
-  </div>
   
   <ng-template #privacyPolicy>
       <div class="modal-header">

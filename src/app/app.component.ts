@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
+import {setTheme} from 'ngx-bootstrap/utils';
 
 @Component({
   selector: 'app-root',
@@ -6,7 +8,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'OYESPACE. You Live It. We Manage It';
   
-  myMenus:boolean=true;
+  constructor(private router: Router) {
+    setTheme('bs4'); // or 'bs4'
+    this.router.navigate(['home']);
+  }
+
 }

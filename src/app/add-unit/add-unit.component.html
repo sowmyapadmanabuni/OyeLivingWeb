@@ -62,6 +62,19 @@
                   </div>
                 </div>
                 <div class="col-sm-3 col-xs-12">
+                    <div class="form-group">
+                      <label id=label5>Calculation Type <span class="red">*</span></label>
+                      <select class="form-control" name="calculationtype" id="calculationtype"
+                        [(ngModel)]="calculationtype" #calculationtypeControl="ngModel" required>
+                        <option disabled="true" selected="true" value="" style="color:#b33951">Select Calculation Types
+                        </option>
+                        <option *ngFor="let calculationType of calculationTypes" [value]="calculationType.name">
+                          {{calculationType.displayName}}</option>
+                      </select>
+                      <p class="alerts" *ngIf="calculationtypeControl.invalid && calculationtypeControl.touched"> Please select calculation type</p>
+                    </div>
+                  </div>
+                <div class="col-sm-3 col-xs-12">
                   <div class="form-group">
                     <label id=label3>Unit Dimension <span class="red">*</span></label>
                     <input type="text" name="unitdimension" id="unitdimension" [(ngModel)]="unitdimension"
@@ -79,22 +92,8 @@
                       required</p>
                   </div>
                 </div>
-                <div class="col-sm-3 col-xs-12">
-                  <div class="form-group">
-                    <label id=label5>Calculation Type <span class="red">*</span></label>
-                    <select class="form-control" name="calculationtype" id="calculationtype"
-                      [(ngModel)]="calculationtype" #calculationtypeControl="ngModel" required>
-                      <option disabled="true" selected="true" value="" style="color:#b33951">Select Calculation Types
-                      </option>
-                      <option *ngFor="let calculationType of calculationTypes" [value]="calculationType.name">
-                        {{calculationType.displayName}}</option>
-                    </select>
-                    <p class="alerts" *ngIf="calculationtypeControl.invalid && calculationtypeControl.touched"> Please select calculation type</p>
-                  </div>
-                </div>
               </div>
               <div class="row">
-
                 <div class="col-sm-4 col-xs-12">
                   <div class="form-group">
                     <label id=label6>Occupancy & Ownership Status <span class="red">*</span></label>
@@ -111,18 +110,15 @@
                 <div class="col-sm-4 col-xs-12" *ngIf="occupency == 'Sold Owner Occupied'">
                   <div class="form-group">
                     <label>Unit Sold Date <span class="red">*</span></label>
-
                   </div>
                 </div>
                 <div class="col-sm-4 col-xs-12" *ngIf="occupency == 'Sold Tenant Occupied'">
                   <div class="form-group">
                     <label>Unit Occupied Date <span class="red">*</span></label>
-
                   </div>
                 </div>
               </div>
             </fieldset>
-
             <fieldset class="scheduler-border" *ngIf="ownerDetails">
               <legend class="scheduler-border headingOrange">Unit Owner Information</legend>
               <div class="row">
@@ -151,7 +147,7 @@
                     <label id=label9>Owner Mobile Number <span class="red">*</span></label>
                     <input type="text" name="ownerMobnumber" id="ownerMobnumber" [(ngModel)]="ownerMobnumber"
                       #ownerMobnumberControl="ngModel" class="form-control" placeholder="Owner mobile number"
-                      minlength=10 maxlength=10 pattern="[0-9]*" required/>
+                      minlength=10 maxlength=10 pattern="[0-9]*" required (keypress)=_keyPress($event)/>
                       <p class="alerts" id="phonenum" type="tel" pattern="[0-9]+" *ngIf="ownerMobnumberControl.invalid && ownerMobnumberControl.touched"> Valid 10 digit mobile number is required</p>                  
                   </div>
                 </div>
@@ -171,7 +167,7 @@
                     <label id=label11>Owner Altername Mobile Number</label>
                     <input type="text" name="ownerAltnumber" id="ownerAltnumber" [(ngModel)]="ownerAltnumber"
                       #ownerAltnumberontrol="ngModel" class="form-control" placeholder="Owner altername mobile no"
-                      minlength=10 maxlength=10 pattern="[0-9]*" required/>
+                      minlength=10 maxlength=10 pattern="[0-9]*" required (keypress)=_keyPress($event)/>
                       <p class="alerts" *ngIf="ownerAltnumberontrol.invalid && ownerAltnumberontrol.touched">Mobile number is invalid</p>
                   </div>
                 </div>
@@ -186,7 +182,6 @@
                 </div>
               </div>
             </fieldset>
-
             <fieldset class="scheduler-border" *ngIf="tenantDetails">
               <legend class="scheduler-border headingOrange">Unit Tenant Information</legend>
               <div>
@@ -216,7 +211,7 @@
                       <label id=label23>Tenant Mobile Number <span class="red">*</span></label>
                       <input type="text" name="tenantMobnumber" id="tenantMobnumber" [(ngModel)]="tenantMobnumber"
                         #tenantMobnumberControl="ngModel" class="form-control" placeholder="Tenant mobile number"
-                        minlength=10 maxlength=10 pattern="[0-9]*" required/>
+                        minlength=10 maxlength=10 pattern="[0-9]*" required (keypress)=_keyPress($event)/>
                         <p class="alerts" *ngIf="tenantMobnumberControl.invalid && tenantMobnumberControl.touched"> Valid mobile number is required</p>
                     </div>
                   </div>
@@ -232,65 +227,59 @@
                 </div>
               </div>
             </fieldset>
-
-            <fieldset class="scheduler-border">
+            <fieldset class="scheduler-border" *ngIf='toggleunitvehicleinformation'>
               <legend class="scheduler-border headingOrange">Unit Vehicle Information</legend>
-              <table class="table" style="background-color: whitesmoke">
+              <table class="table">
                 <tr id="label16">
-
                   <td>Parking Lot Number</td>
                   <td>Vehicle Number</td>
-                  <td>Action</td>
+                  <!-- <td>Action</td> -->
                 </tr>
-                <tr *ngFor="let parking of parkings; let i = index">
+                <!-- <tr *ngFor="let parking of parkings; let i = index">
                   <td>
                     <input type="text" name="parkingNo" id="parkingNo" [(ngModel)]="parkingNo"
                       #parkingNoControl="ngModel" class="form-control" placeholder="Parking Lot number"
                       style="font-family: Poppins" pattern="[A-Za-z0-9]*" />
-                  </td>
+                  </td> &nbsp; &nbsp;
                   <td>
                     <input type="text" name="vehicleNo" id="vehicleNo" [(ngModel)]="vehicleNo"
                       #vehicleNoControl="ngModel" class="form-control" placeholder="Vehicle number"
                       style="font-family: Poppins; text-transform: uppercase" pattern="[A-Z0-9]*" />
                   </td>
                   <td>
-                    <p><span class="fa fa-trash fa-1x" (click)="deleteParking()"></span></p>
                   </td>
-                </tr>
+                </tr> -->
                 <tr>
                   <td>
                     <input type="text" name="newParkingNo" id="newParkingNo" [(ngModel)]="newParkingNo"
                       #parkingNoControl="ngModel" class="form-control" placeholder="Parking Lot number"
                       style="font-family: Poppins" pattern="A-Za-z0-9]*" />
-                  </td>
+                  </td> &nbsp;
                   <td>
                     <input type="text" name="newVehicleNo" id="newVehicleNo" [(ngModel)]="newVehicleNo"
                       #vehicleNoControl="ngModel" class="form-control" placeholder="Vehicle number"
                       style="font-family: Poppins; text-transform: uppercase" pattern="[A-Z0-9]*" />
                   </td>
                   <td>
-                    <p><span class="fa fa-plus-square fa-1x" (click)="addParking()"></span></p>
+                    <!-- <p><span class="fa fa-plus-square fa-1x" (click)="addParking()"></span></p> -->
                   </td>
                 </tr>
               </table>
             </fieldset>
             <div class="from-group">
               <div class="form-group pull-right">
-                <input type="submit" class="mdButton1" value="Add Unit"/>
+                <input type="submit" class="mdButton1" value="Add Unit"/> &nbsp;
                 <button type="reset" class="mdButton1">Reset</button>
               </div>
             </div>
           </form>
-
-
-
-
         <!---->
       
     </div>
     <div class="card" *ngIf="blBlockID == ''">
-      <h1 style="text-align :center">Please select Blocks and Floors to continue</h1>
+      <h1 style="text-align :center">Please select Blocks to continue</h1>
     </div>
+
 
   </div>
 </div>

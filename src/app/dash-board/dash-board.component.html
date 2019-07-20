@@ -9,12 +9,19 @@
   </div>
 
   <div class="col-sm-4">
-      <select class="ui dropdown search methodDropdown" name="loadAssociation" id="loadAssn" [(ngModel)]="association"  (ngModelChange)="loadAssociation(association)" required>
-        <option disabled="true" value="">Select Association</option>
-         <option *ngFor="let association of associations" [value]="association['asAsnName']">
-            {{association['asAsnName']}}
-          </option>
-      </select>
+    <div class="form-group">
+      <label>Association</label>
+      <input class="form-control" list="browsers" name="association" [(ngModel)]="currentAssociationName"
+       (change)='loadAssociation(currentAssociationName)' placeholder="Search Association" #associationControl='ngModel' required>
+      <datalist id="browsers">
+        <option value="">Select Association</option>
+        <option *ngFor="let association of associations" [value]="association['asAsnName']">
+          {{association['asAsnName']}}
+        </option>
+      </datalist>
+      <p class="invalid-feedback">Select Association</p>
+  
+    </div>
   </div>
 </div>
 </div>
@@ -35,14 +42,51 @@
 
 <!--------------------------------------->
 
-<div class="row">
-     <div class="col-sm-12" id="mydiv1">
-      <img src="../assets/images/dasboardPic2.jpg" height="250px" width="100%" id="dashboardPic">
-      <div id="mydiv2">
-       <!-- <h5> Hi {{name}} <span style="display: inline-block;" ng-if="roleIs == 6">Admin</span></h5>--> 
-        <h4 class="text-center"><i class="fa fa-building-o"></i> {{currentAssociationName}}</h4>
-      </div>
-    </div>
+<div class="row"  *ngIf='dashBrdService.mrmRoleID == 1'>
+  <div class="col-sm-12" id="mydiv1">
+   <img src="../assets/images/dasboardPic2.jpg" height="250px" width="100%" id="dashboardPic">
+   <div id="mydiv2">
+    <!-- <h5> Hi {{name}} <span style="display: inline-block;" ng-if="roleIs == 6">Admin</span></h5>--> 
+     <h4 class="text-center"><i class="fa fa-building-o"></i> {{currentAssociationName | uppercase}}</h4>
+     <br>
+    <h4 class=“text-center” style="margin-top: 9%;"> {{acfName}} &nbsp; {{aclName}} (Admin)</h4>
+   </div>
+ </div>
+</div>
+
+<div class="row"  *ngIf='dashBrdService.mrmRoleID == 2'>
+  <div class="col-sm-12" id="mydiv1">
+   <img src="../assets/images/dasboardPic2.jpg" height="250px" width="100%" id="dashboardPic">
+   <div id="mydiv2">
+    <!-- <h5> Hi {{name}} <span style="display: inline-block;" ng-if="roleIs == 6">Admin</span></h5>--> 
+     <h4 class="text-center"><i class="fa fa-building-o"></i> {{currentAssociationName}}</h4>
+     <br>
+    <h4 class=“text-center” style="margin-top: 9%;"> {{acfName}} {{aclName}} (Resident)</h4>
+   </div>
+ </div>
+</div>
+
+<div class="row"  *ngIf='dashBrdService.memberdoesnotexist'>
+  <div class="col-sm-12" id="mydiv1">
+   <img src="../assets/images/dasboardPic2.jpg" height="250px" width="100%" id="dashboardPic">
+   <div id="mydiv2">
+    <!-- <h5> Hi {{name}} <span style="display: inline-block;" ng-if="roleIs == 6">Admin</span></h5>--> 
+     <h4 class="text-center"><i class="fa fa-building-o"></i> {{currentAssociationName}}</h4>
+     <br>
+    <h4 class=“text-center” style="margin-top: 9%;"> {{acfName}} &nbsp; {{aclName}} ()</h4>
+   </div>
+ </div>
+</div>
+<div class="row"  *ngIf='dashBrdService.mrmRoleID == 3'>
+<div class="col-sm-12" id="mydiv1">
+<img src="../assets/images/dasboardPic2.jpg" height="250px" width="100%" id="dashboardPic">
+<div id="mydiv2">
+ <!-- <h5> Hi {{name}} <span style="display: inline-block;" ng-if="roleIs == 6">Admin</span></h5>--> 
+  <h4 class="text-center"><i class="fa fa-building-o"></i> {{currentAssociationName}}</h4>
+  <br>
+ <h4 class=“text-center” style="margin-top: 9%;"> {{acfName}} &nbsp; {{aclName}} (Resident)</h4>
+</div>
+</div>
 </div>
 
 <div class="row" id="ticketsrow1">
@@ -57,14 +101,17 @@
          <span style="color:#8451E5">Association Amount Due</span>
      </div> 
      <div class="col-sm-1 "></div> 
-     <div class="col-sm-3 card card-body bg-light" (click)="members()">
-         <h2 class="bh2 text-smooth">
-                <div class="pull-right push-15-t push-15">
-                    <img src="../assets/images/members (1).png" height="25px">
-                </div>
-             <span style="color:#EE5753">{{totalMember}}</span></h2>
-             <span style="color:#EE5753">Members</span>
-     </div> 
+     <!---->
+      <div class="col-sm-3 card card-body bg-light" (click)='members()'>
+        <h2 class="bh2 text-smooth">
+          <div class="pull-right push-15-t push-15">
+            <img src="../assets/images/members (1).png" height="25px">
+          </div>
+          <span style="color:#EE5753">{{totalMember}}</span>
+        </h2>
+        <span style="color:#EE5753;display: block">Members</span>
+      </div>
+     <!---->
      <div class="col-sm-1 "></div> 
      <div class="col-sm-3 card card-body bg-light" (click)="tickets()">
          <h2 class="bh2 text-success">
@@ -105,7 +152,7 @@
                     <span style="color:#474749">Staffs</span>
         </div>  
      <div class="col-sm-1 "></div> 
-     <div class="col-sm-3 card card-body bg-light">
+     <div class="col-sm-3 card card-body bg-light" (click)="visitors()">
          <h2 class="bh2 text-success"> 
                 <div class="pull-right push-15-t push-15">
                         <img src="../assets/images/visitors.png" height="25px">
@@ -117,7 +164,7 @@
      <div class="col-sm-1 "></div> 
 </div>
 
-<!----------------------ASociation Amount Dues---------------------------------->
+<div  #amounts id="amounts">
 <div class="row" *ngIf="AssociationAmountDue">
     <div class="col-sm-12">
         <br><br>
@@ -128,7 +175,7 @@
                 <thead>
                     <tr>   
                         <th>View Invoice</th>
-                        <th>Unit ID</th>
+                        <!-- <th>Unit ID</th> -->
                         <th>First Name</th>
                         <th>Amount Paid</th>
                         <th>Amount Due</th>
@@ -137,7 +184,7 @@
                 <tbody>
                     <tr dir-paginate="let all of alldetails | itemsPerPage: pageSize" current-page="currentPage" >
                         <td><a href=""><i class="si si-eye"></i> </a></td>
-                        <td>{{all.unitID}}</td>
+                        <!-- <td>{{all.unitID}}</td> -->
                         <td>{{all.firstName}}</td>
                         <td>{{all.amountPaid}}</td>
                         <td>{{all.amountDue}}</td>
@@ -146,7 +193,9 @@
             </table>
     </div>
 </div>
+</div>
 <!--------------------Memebers---------------------->
+<div #member id="member">
 <div class="row" *ngIf="memberDeatils">
   <div class="col-sm-12">
       <br><br>
@@ -155,26 +204,32 @@
           <table class="table table-hover" style="margin-top: 10px;">
             <thead>
               <tr>   
-                  <th>Member ID</th>
-                  <th>Account ID</th>
+                  <!-- <th>Member ID</th>
+                  <th>Account ID</th> -->
                   <th>Member Role</th>
+                  <th>Member Name</th>
                   <th>Contact No</th>
-                  <th>Leave at Guard</th>
+                  <th>Unit Details</th>
+                  <!-- <th>Leave at Guard</th> -->
               </tr>
           </thead>
           <tbody>
-              <tr *ngFor="let allMember of allMemberByAccount" >
-                  <td>{{allMember.meMemID}}</td>
-                  <td>{{allMember.acAccntID}}</td>
-                  <td>{{allMember.mrmRoleID}}</td>
+              <tr *ngFor="let allMember of allMemberByAccount">
+                  <!-- <td>{{allMember.meMemID}}</td>
+                  <td>{{allMember.acAccntID}}</td> -->
+                  <td>{{allMember.mrmRoleID == 1 ? 'Admin' : 'Resident'}}</td>
+                  <td>{{acfName}} {{aclName}}</td>
                   <td>{{allMember.acMobile}}</td>
-                  <td>{{allMember.melvaGrd}}</td>
+                  <td>{{allMember.unUniName}}</td>
+                  <!-- <td>{{allMember.melvaGrd}}</td> -->
               </tr>
           </tbody>
        </table>
   </div>
 </div>
+</div>
 <!-----------------------Tickets -------------------------->
+<div #ticket id="ticket">
 <div class="row" *ngIf="ticketDetails">
   <br>
   <div class="col-sm-12">
@@ -190,7 +245,7 @@
                   <th>Comment</th>
                   <th>User Mobile</th>
                   <th>Status</th>                                    
-                  <th>Action</th>
+                  <!-- <th>Action</th> -->
               </tr>
           </thead>
           <tbody>
@@ -200,14 +255,16 @@
                   <td>{{ticketByAssociation.tkrbCmnts}}</td>
                   <td>{{ticketByAssociation.tkMobile}}</td>  
                   <td>{{ticketByAssociation.tkStat}}</td>                                  
-                  <td><a href="">More Details</a></td>
+                  <!-- <td><a href="">More Details</a></td> -->
               </tr>
           </tbody>
        </table>
   </div>
 </div>
+</div>
 <!-----------------------Documnetss -------------------------->
-<div class="row" *ngIf="vehicleDetails">
+<div #vehicle id="vehicle">
+<div class="row" #vehicle id="vehicle" *ngIf="vehicleDetails">
   <div class="col-sm-12">
       <br><br>
       <h5 id="tablehead1">Vehicle Details</h5>
@@ -219,7 +276,7 @@
                       <th>Vehicle Type</th>
                       <th>Vehicle Model</th>
                       <th>Sticker No</th>
-                      <th>Unit ID</th>
+                      <!-- <th>Unit ID</th> -->
                   </tr>
               </thead>
               <tbody>
@@ -228,9 +285,68 @@
                       <td>{{vehicleListByAssn.veType}}</td>
                       <td>{{vehicleListByAssn.veMakeMdl}}</td>
                       <td>{{vehicleListByAssn.veStickNo}}</td>  
-                      <td>{{vehicleListByAssn.unUnitID}}</td> 
+                      <!-- <td>{{vehicleListByAssn.unUnitID}}</td>  -->
                   </tr>
               </tbody>
        </table>
   </div>
+</div>
+</div>
+<div #staff id="staff">
+<div class="row"  *ngIf="staffDetails">
+  <div class="col-sm-12">
+      <br><br>
+      <h5 id="tablehead1">Staff Details</h5>
+      <br>
+          <table class="table table-hover" style="margin-top: 10px;">
+              <thead>
+                  <tr>   
+                      <!-- <th>wkWorkID</th> -->
+                      <th>Staff Name</th>
+                      <th>Designation</th>
+                      <th>ID Card Number</th>
+                      <th>Contact Number</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let totalStaff of allStaffByAssn" >
+                      <!-- <td>{{totalStaff.wkWorkID}}</td> -->
+                      <td>{{totalStaff.wkfName}} {{totalStaff.wklName}}</td>
+                      <td>{{totalStaff.wkDesgn}}</td>
+                      <td>{{totalStaff.wkidCrdNo}}</td>  
+                      <td>{{totalStaff.wkMobile}}</td> 
+                  </tr>
+              </tbody>
+       </table>
+  </div>
+</div>
+</div>
+<div  #visitor id="visitor">
+<div class="row" *ngIf="visitorDetails">
+  <div class="col-sm-12">
+      <br><br>
+      <h5 id="tablehead1">Visitor Details</h5>
+      <br>
+          <table class="table table-hover" style="margin-top: 10px;">
+              <thead>
+                  <tr>   
+                      <!-- <th>vlVisLgID</th> -->
+                      <th>Visitor Type</th>
+                      <th>Visitor Name</th>
+                      <th>Contact Number</th>
+                      <th>Purpose of Visit</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let allVisitorByAssn of allvisitorByAssn" >
+                      <!-- <td>{{allVisitorByAssn.vlVisLgID}}</td> -->
+                      <td>{{allVisitorByAssn.vlVisType}}</td>
+                      <td>{{allVisitorByAssn.vlfName}} {{allVisitorByAssn.vllName}}</td>
+                      <td>{{allVisitorByAssn.vlMobile}}</td> 
+                      <td>{{allVisitorByAssn.vlpOfVis}}</td> 
+                  </tr>
+              </tbody>
+       </table>
+  </div>
+</div>
 </div>

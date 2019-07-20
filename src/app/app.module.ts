@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {AlertsModule} from 'angular-alert-module';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
@@ -17,15 +16,9 @@ import { AddExpenseComponent } from './add-expense/add-expense.component';
 import { PathNotFoundComponent } from './path-not-found/path-not-found.component';
 import { ViewExpensesComponent } from './view-expenses/view-expenses.component';
 import { ViewInvoiceComponent } from './view-invoice/view-invoice.component';
-import {RouterModule} from '@angular/router';
 import {AppRouting} from './app-routing';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ToastrModule} from 'ngx-toastr';
-import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
-import {ModalModule} from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import {NgxPaginationModule} from 'ngx-pagination';
-import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { NewAmenityComponent } from './new-amenity/new-amenity.component';
 import { ViewreceiptComponent } from './viewreceipt/viewreceipt.component';
 import { GenerateReceiptComponent } from './generate-receipt/generate-receipt.component';
@@ -40,12 +33,25 @@ import { ReportComponent } from './report/report.component';
 import { ViewreportComponent } from './viewreport/viewreport.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { EditprofileComponent } from './editprofile/editprofile.component';
+import {ViewBlockComponent} from './view-block/view-block.component';
+import {DashBoardComponent} from './dash-board/dash-board.component';
+import {ViewAssociationComponent} from './view-association/view-association.component';
+import {ViewUnitComponent} from './view-unit/view-unit.component';
+
+import { HomeComponent } from './home/home.component';
+import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
+import { DefaultimagePipe } from './pipes/defaultimage.pipe';
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    routingComponents,
     WordsPipe,
     AddExpenseComponent,
     PathNotFoundComponent,
@@ -68,26 +74,31 @@ import { RegisterComponent } from './register/register.component';
     ReportComponent,
     ViewreportComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    EditprofileComponent,
+    ViewBlockComponent,
+    DashBoardComponent,
+    ViewAssociationComponent,
+    ViewUnitComponent,
+    HomeComponent,
+    DefaultimagePipe
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    AppRoutingModule,
     HttpClientModule,
     AlertsModule,
     AngularFontAwesomeModule,
     Ng2SearchPipeModule,
     AppRouting,
-    RouterModule,
+    BrowserAnimationsModule,
     BsDatepickerModule.forRoot(),
     ModalModule.forRoot(),
-    BrowserAnimationsModule,
-    ToastrModule.forRoot(), 
+    ProgressbarModule.forRoot(),
     PaginationModule.forRoot(),
     NgxPaginationModule,
-    ProgressbarModule.forRoot(),
-    Ng2TelInputModule
+    Ng2TelInputModule,
+    DatePickerModule
   ],
   providers: [ViewAssociationService, ViewBlockService, ViewUnitService, DashBoardService],
   bootstrap: [AppComponent]

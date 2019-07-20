@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { AddBlockService } from '../services/add-block.service';
 import { GlobalServiceService } from '../global-service.service';
 import swal from 'sweetalert2';
-import { ViewChild } from '@angular/core';
-import $ from 'jquery';
-
-//declare var jq:any;
+import { Router } from '@angular/router';
+import {ViewAssociationService} from '../view-association/view-association.service'
 
 @Component({
   selector: 'app-add-blocks',
@@ -53,16 +51,27 @@ export class AddBlocksComponent implements OnInit {
 
   currentAssociationID: string;
   currentAssociationName: string;
-
+  currentaccountID:number;
+  association: any;
+  country: any;
+ meter:string;
   @ViewChild('ctrateBlockform') ctrateBlockform: any;
+
+  todayDate:Date;
 
 
   constructor(private addblockservice: AddBlockService,
-    private globalservice: GlobalServiceService) {
+    private globalservice: GlobalServiceService,
+    private router:Router,
+    private viewassn: ViewAssociationService) {
     this.currentAssociationID = this.globalservice.getCurrentAssociationId();
     this.currentAssociationName = this.globalservice.getCurrentAssociationName();
+    this.currentaccountID=this.globalservice.acAccntID;
     this.assnName = this.currentAssociationName;
-    this.bsConfig = Object.assign({}, { containerClass: 'theme-orange', dateInputFormat: 'YYYY-MM-DD' });
+    this.bsConfig = Object.assign({}, { containerClass: 'theme-orange', 
+                                        dateInputFormat: 'DD-MM-YYYY' ,
+                                        showWeekNumbers:false,
+                                        isAnimated: true});
     this.frequency = '';
     this.latePymtChargeType = '';
     this.blocktype = '';
@@ -71,6 +80,7 @@ export class AddBlocksComponent implements OnInit {
     this.invoicedatechanged = false;
     this.enablestartfromdatevalidation = false;
     this.startsfromDateChanged = false;
+    this.todayDate=new Date();
 
     this.latePymtChrgTypes = [
       { "name": "Monthly", "displayName": "Monthly" },
@@ -98,16 +108,44 @@ export class AddBlocksComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.getMeasurement();
   }
-
+  getMeasurement(){
+    this.viewassn.getAssociationDetailsByAssociationid(this.currentAssociationID).subscribe((res)=>{
+      var data:any =res;
+      console.log(data);
+      this.association=data.data.association;
+      console.log(this.association);
+      this.country= this.association['asCountry'];
+      //this.viewassn.ascountry = this.country;
+      console.log('country',this.country);
+      // if(this.asCountry =='India'){
+      //   this.meter='sqft';
+      //   alert(this.meter);
+      // }
+      //   else if(this.asCountry !='India'){
+      //     this.meter='sqmt';
+      //     alert(this.meter);
+ 
+      // }
+      if (data['data']['association']['asCountry'] == "India") {
+        this.meter ='sqft';
+      }
+      else {
+        this.meter = 'sqmt';
+      }
+      if (data['data']['association']['asCountry'] != "India") {
+        this.meter = 'sqmt';
+      }
+      else {
+        this.meter = 'sqft';
+      }
+ 
+    })
+  }
   ngAfterViewInit() {
-    $(document).ready(function () {
-      $("#jquery-intl-phone").click(function () {
-        alert('hello');
-      })
-    });
   }
+
   telInputObject(telinputobj) {
     console.log(telinputobj);
   }
@@ -141,6 +179,16 @@ export class AddBlocksComponent implements OnInit {
 
     }
     //this.minDate.setDate(this.minDate.getDate() + 1);
+  }
+  gotoviewBlocks(){
+    this.router.navigate(['home/viewBlocks']);
+  }
+  _keyPress(event: any) {
+    const pattern = /[0-9]/;
+    let inputChar = String.fromCharCode(event.charCode);
+    if (!pattern.test(inputChar)) {
+        event.preventDefault();
+    }
   }
 
   onDueDateValueChange(value: Date) {
@@ -213,7 +261,7 @@ export class AddBlocksComponent implements OnInit {
     if (this.ctrateBlockform.valid) {
       let CreateBockData = {
         "ASAssnID": this.currentAssociationID,
-        "ACAccntID": 21,
+        "ACAccntID": this.currentaccountID,
         "blocks": [
           {
             "ASAssnID": this.currentAssociationID,
@@ -226,7 +274,7 @@ export class AddBlocksComponent implements OnInit {
             "ASMtType": '',
             "ASMtDimBs": this.maintenanceValue,
             "ASMtFRate": this.flatRatevalue,
-            "ASUniMsmt": this.measurements,
+            "ASUniMsmt": this.meter,
             "ASIcRFreq": this.frequency,
             "ASBGnDate": formatDate(this.billGenerationDate, 'yyyy/MM/dd', 'en'),
             "ASLPCType": this.latePymtChargeType,
@@ -242,12 +290,28 @@ export class AddBlocksComponent implements OnInit {
       this.addblockservice.createBlock(CreateBockData)
         .subscribe(data => {
           console.log(data);
-          swal.fire({
-            title: "Block Created Successfully",
-            text: "",
-            type: "success",
-            confirmButtonColor: "#f69321"
-          });
+          if(data['data'] == null){
+            swal.fire({
+              title: "Block Created Successfully",
+              text: "",
+              type: "success",
+              confirmButtonColor: "#f69321"
+            }).then(
+              (result) => {
+                if (result.value) {
+                  this.router.navigate(['home/viewBlocks']);
+                }
+              })
+          }
+          else if (data['data'] != null){
+            swal.fire({
+              title: "Error",
+              text: data['data']['errorResponse']['message'],
+              type: "error",
+              confirmButtonColor: "#f69321"
+            });
+          }
+       
         },
           () => {
             swal.fire({

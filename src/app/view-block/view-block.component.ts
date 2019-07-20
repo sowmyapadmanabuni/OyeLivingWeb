@@ -22,7 +22,7 @@ export class ViewBlockComponent implements OnInit {
   bank: any = {};
   createBlockData: any = {};
   associationID: string;
-  ACAccntID: string;
+  ACAccntID: number;
   ASAssnID: string;
   currentAssociationName: string;
   config: any;
@@ -75,7 +75,9 @@ export class ViewBlockComponent implements OnInit {
       currentPage: 1
     };
 
-    this.bsConfig = Object.assign({}, { containerClass: 'theme-orange', dateInputFormat: 'YYYY-MM-DD' });
+    this.bsConfig = Object.assign({}, { containerClass: 'theme-orange', dateInputFormat: 'DD-MM-YYYY' ,
+    showWeekNumbers:false,
+    isAnimated: true });
 
     this.allBlocksList = null;
 
@@ -88,6 +90,8 @@ export class ViewBlockComponent implements OnInit {
     {
       'name': 'Residential and Commercial', 'displayName': 'Residential and Commercial'
     }]
+
+    this.ACAccntID=this.globalService.getacAccntID();
   }
 
 
@@ -99,12 +103,15 @@ export class ViewBlockComponent implements OnInit {
   ngOnInit() {
     this.currentAssociationID = this.globalService.getCurrentAssociationId();
     this.currentAssociationName = this.globalService.getCurrentAssociationName();
+    console.log('this.currentAssociationName',this.currentAssociationName);
+    console.log('this.currentAssociationID',this.currentAssociationID);
     this.getBlockDetails();
     this.viewBlkService.getassociationlist(this.currentAssociationID)
       .subscribe(data => {
         this.assnName = data['data'].association.asAsnName;
         this.totalNoofblocks = data['data'].association.asNofBlks
       });
+      this.allBlocksLists='';
   }
 
 
@@ -130,25 +137,12 @@ export class ViewBlockComponent implements OnInit {
     if (totalNoofblocks <= availableNoOfBlocks) {
       Swal.fire({
         title: "Block limit Reached",
-        text: "Press Yes to Go Floors Details",
         type: "success",
-        showCancelButton: true,
         confirmButtonColor: "#f69321",
-        confirmButtonText: "Yes",
-        cancelButtonText: "No"
-      }).then(
-        (result) => {
-
-          if (result.value) {
-            this.router.navigate(['viewFloors']);
-          }
-          else if (result.dismiss === Swal.DismissReason.cancel) {
-            return false;
-          }
-        }
-      )
+        confirmButtonText: "Yes"
+      })
     } else {
-      this.router.navigate(['addBlocks']);
+      this.router.navigate(['home/addBlocks']);
     }
   }
 
@@ -225,7 +219,7 @@ export class ViewBlockComponent implements OnInit {
   createBlock() {
     this.createBlockData = {
       "ASAssnID": this.currentAssociationID,
-      "ACAccntID": "21",
+      "ACAccntID": this.ACAccntID,
       "blocks": [{
         "BLBlkName": this.block.blockname,
         "BLBlkType": this.block.blocktype,
@@ -254,6 +248,14 @@ export class ViewBlockComponent implements OnInit {
     };
   }
 
+  _keyPress(event: any) {
+    const pattern = /[0-9]/;
+    let inputChar = String.fromCharCode(event.charCode);
+    if (!pattern.test(inputChar)) {
+        event.preventDefault();
+    }
+  }
+
   OpenModal(editBlocktemplate: TemplateRef<any>, blBlkName: string, blBlkType: string, blNofUnit: number, blMgrName: string, blMgrMobile: number, blMgrEmail: string, asMtType: string, asMtFRate: number, asMtDimBs: string, asUniMsmt: string, asbGnDate: string, bldUpdated: Date, aslpcType: string, aslpChrg: number, aslpsDate: Date, blBlockID: string, asiCrFreq:string) {
 
     this.BLBlkName = blBlkName;
@@ -268,9 +270,9 @@ export class ViewBlockComponent implements OnInit {
     this.ASUniMsmt = asUniMsmt;
 
     this.ASLPCType = aslpcType;
-    this.ASBGnDate = formatDate(asbGnDate, 'yyyy/MM/dd', 'en');
-    this.ASDPyDate = formatDate(bldUpdated, 'yyyy/MM/dd', 'en')
-    this.ASLPSDate = formatDate(aslpsDate, 'yyyy/MM/dd', 'en');
+    this.ASBGnDate = formatDate(asbGnDate, 'dd/MM/yyyy', 'en');
+    this.ASDPyDate = formatDate(bldUpdated, 'dd/MM/yyyy', 'en')
+    this.ASLPSDate = formatDate(aslpsDate, 'dd/MM/yyyy', 'en');
     this.ASLPChrg = aslpChrg;
     this.BLBlockID = blBlockID;
     this.ASIcRFreq =asiCrFreq;
@@ -289,6 +291,8 @@ export class ViewBlockComponent implements OnInit {
       Object.assign({}, { class: 'gray modal-lg' }));
 
   }
+
+  
 
   UpdateBlock() {
     this.editblockdata = {
@@ -337,5 +341,6 @@ export class ViewBlockComponent implements OnInit {
     });
 
   }
+  
 }
 //export class ViewBlockComponent

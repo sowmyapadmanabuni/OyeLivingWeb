@@ -2,6 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import {GlobalServiceService} from '../global-service.service';
 import {ViewReceiptService} from '../services/view-receipt.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-viewreceipt',
@@ -15,7 +16,8 @@ export class ViewreceiptComponent implements OnInit {
 
   constructor( private modalService: BsModalService,
     private globalservice:GlobalServiceService,
-    private viewreceiptservice:ViewReceiptService) {
+    private viewreceiptservice:ViewReceiptService,
+    private router:Router) {
 
     this.currentAssociationID=this.globalservice.getCurrentAssociationId();
 
@@ -28,6 +30,10 @@ export class ViewreceiptComponent implements OnInit {
       console.log(data['data']['payments']);
       this.viewPayments=data['data']['payments']
     })
+  }
+
+  gotoGenerateReceipt(){
+    this.router.navigate(['home/generatereceipt']);
   }
 
   viewReceipt(viewreceiptmodal: TemplateRef<any>,unitIdentifier,invoiceNumber,pymtDate,amountPaid){

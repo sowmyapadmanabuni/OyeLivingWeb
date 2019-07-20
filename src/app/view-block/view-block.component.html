@@ -3,7 +3,7 @@
         <div class="pageTitle" style="padding: 10px;">
             <div class="row">
                 <div class="col-sm-5 col-xs-12">
-                    <h3 style="margin-top: 3px; margin-bottom: 0;">Blocks List For <strong>{{assnName}}</strong></h3>
+                    <h3 style="margin-top: 3px; margin-bottom: 0;">Blocks List For <strong>{{currentAssociationName}}</strong></h3>
                 </div>
                 <div class="col-sm-4 col-xs-12">
                     <div class="form-group">
@@ -17,7 +17,12 @@
                 </div>
             </div>
         </div>
-        <div class="card">
+        <div *ngIf="allBlocksLists == ''" class="card">
+                <h1 style="text-align :center">No Data Available</h1>
+              </div>
+            <!-- <div *ngIf='allBlocksLists' class="card"> -->
+    
+        <div class="card" *ngIf='allBlocksLists'>
             <div class="row">
                 <!---->
                 <div class="table-responsive hidden-xs" style="margin-top: 40px;">
@@ -57,7 +62,7 @@
             <!---->
             <div class="row">
                 <div class="col-xs-12">
-                    pagination...
+                    <!-- pagination... -->
                 </div>
             </div>
         </div>
@@ -129,7 +134,7 @@
                             </div>
 
                             <div class="col-sm-4" style="padding-right:15px;">
-                                <p>Date : <strong> {{myDate | date: 'yyyy/MM/dd'}}
+                                <p>Date : <strong> {{myDate | date: 'dd/MM/yyyy'}}
                                     </strong></p>
                             </div>
                         </div>
@@ -154,23 +159,24 @@
                                 </div>
                             </div>
                             <div class="col-sm-4 col-xs-12">
-                                <div class="form-group"
-                                    [ngClass]="{'was-validated' : blocktypeControl.invalid && blocktypeControl.touched}">
-                                    <label id=label2>Block Type<span class="red">*</span></label>
-
-                                        <select class="ui dropdown search methodDropdown" name="BLBlkType" [(ngModel)]="BLBlkType"
-                                        #blocktypeControl='ngModel' required>
-                                        <option value="">Select Frequency</option>
-                                        <option *ngFor="let blktype of blocktypes" [value]="blktype['name']">
-                                          {{blktype['displayName']}}
-                                        </option>
-                                      </select>
-
-                                    <p class="alerts" *ngIf="blocktypeControl.invalid && blocktypeControl.touched">Valid
-                                        block type is
-                                        required</p>
+                                    <div class="form-group"
+                                        [ngClass]="{'was-validated' : blocktypeControl.invalid && blocktypeControl.touched}">
+                                        <label id=label2>Block Type<span class="red">*</span></label>
+     
+                                            <input list="type" class="form-control" name="BLBlkType" [(ngModel)]="BLBlkType"
+                                            #blocktypeControl='ngModel' placeholder="Block Type" required>
+                                            <datalist id="type">
+                                            <option value="">Select Frequency</option>
+                                            <option *ngFor="let blktype of blocktypes" [value]="blktype['name']">
+                                              {{blktype['displayName']}}
+                                            </option>
+                                          </datalist>
+     
+                                        <p class="alerts" *ngIf="blocktypeControl.invalid && blocktypeControl.touched">Valid
+                                            block type is
+                                            required</p>
+                                    </div>
                                 </div>
-                            </div>
 
                             <div class="col-sm-4 col-xs-12">
                                 <div class="form-group"
@@ -214,7 +220,7 @@
                                     <input type="text" name="BLMgrMobile" id="input5" autocomplete='BLMgrMobile'
                                         [(ngModel)]="BLMgrMobile" #managernumberControl="ngModel" class="form-control"
                                         placeholder="Manager Mobile Number" minlength=10 maxlength=10 pattern="[0-9]*"
-                                        required />
+                                        required (keypress)=_keyPress($event) />
                                     <p class="alerts"
                                         *ngIf="managernumberControl.invalid && managernumberControl.touched">Manager
                                         mobile
@@ -311,13 +317,14 @@
                                     <div class="form-group">
                                         <label>Invoice Creation Frequency<span class="red">*</span> <span
                                                 class="red">*</span></label>
-                                        <select class="ui dropdown search methodDropdown" name="ASIcRFreq"
-                                            [(ngModel)]="ASIcRFreq" #frequencyControl='ngModel' required>
+                                        <input list="invoice" class="form-control" name="ASIcRFreq"
+                                            [(ngModel)]="ASIcRFreq" #frequencyControl='ngModel' placeholder="Invoice Creation Frequency" required>
+                                            <datalist id="invoice">
                                             <option disabled="true" value="">Select Frequency</option>
                                             <option *ngFor="let frequency of frequencys" [value]="frequency['name']">
                                                 {{frequency['displayName']}}
                                             </option>
-                                        </select>
+                                        </datalist>
                                         <p class="alerts" *ngIf="frequencyControl.invalid && frequencyControl.touched">
                                             Invalid Invoice Frequency
                                         </p>
@@ -328,9 +335,9 @@
                         <div class="row" style="padding-left:15px;padding-right:15px;">
                             <div class="col-sm-6 col-xs-12">
                                 <div class="form-group">
-                                    <label>Next Invoice Generation Date<span class="red">*</span></label>
+                                    <label>Invoice Generation Date<span class="red">*</span></label>
                                     <input type="text" class="form-control" name="ASBGnDate"
-                                        #NextInvoiceGenDateControl='ngModel' placeholder="Next Invoice Generation Date"
+                                        #NextInvoiceGenDateControl='ngModel' placeholder="Invoice Generation Date"
                                         [bsConfig]="bsConfig" [(ngModel)]="ASBGnDate" #nigDate='bsDatepicker'
                                         bsDatepicker />
 
@@ -349,35 +356,37 @@
 
                         <div class="row" style="padding-left:15px;padding-right:15px;">
 
-                            <div class="col-sm-4 col-xs-12">
+                                <div class="col-sm-4 col-xs-12">
 
-                                <div class="form-group">
-
-                                    <label>Late Payment Charge Type<span class="red">*</span></label>
-
-                                    <select class="ui dropdown search methodDropdown" name="ASLPCType"
-                                        #latePymtChargeTypeControl='ngModel' [(ngModel)]="ASLPCType" required>
-
-                                        <option disabled="true" value="">Select Charge Type</option>
-
-                                        <option *ngFor='let lpct of latePaymentChargeTypes' [value]="lpct['name']">
-
-                                            {{lpct['displayName']}}
-
-                                        </option>
-
-                                    </select>
-
-                                    <p class="alerts"
-                                        *ngIf="latePymtChargeTypeControl.invalid && latePymtChargeTypeControl.touched">
-                                        Select
-                                        Late Payment Charge Type
-
-                                    </p>
-
-                                </div>
-
-                            </div>
+                                        <div class="form-group">
+         
+                                            <label>Late Payment Charge Type<span class="red">*</span></label>
+         
+                                            <input list="payment" class="form-control" name="ASLPCType"
+                                                #latePymtChargeTypeControl='ngModel' [(ngModel)]="ASLPCType" placeholder="Late Payment Charge Type" required>
+         
+                                                <datalist id="payment">
+         
+                                                <option disabled="true" value="">Select Charge Type</option>
+         
+                                                <option *ngFor='let lpct of latePaymentChargeTypes' [value]="lpct['name']">
+         
+                                                    {{lpct['displayName']}}
+         
+                                                </option>
+         
+                                            </datalist>
+         
+                                            <p class="alerts"
+                                                *ngIf="latePymtChargeTypeControl.invalid && latePymtChargeTypeControl.touched">
+                                                Select
+                                                Late Payment Charge Type
+         
+                                            </p>
+         
+                                        </div>
+         
+                                    </div>
 
                             <div class="col-sm-4 col-xs-12">
 
@@ -388,7 +397,7 @@
 
                                     <input class="form-control" type="text" #latePymtChargeControl='ngModel'
                                         name="ASLPChrg" autocomplete="ASLPChrg" [(ngModel)]="ASLPChrg"
-                                        placeholder="Late Payment charge" required>
+                                        placeholder="Late Payment charge" pattern="[0-9]+(\.[0-9][0-9]?)?" required>
 
                                     <p class="alerts"
                                         *ngIf="latePymtChargeControl.invalid && latePymtChargeControl.touched">Select

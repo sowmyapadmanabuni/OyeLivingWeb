@@ -14,7 +14,8 @@ export class ReportComponent implements OnInit {
   }
 
   viewreport() {
-    this.router.navigate(['viewreport']);
+    //alert('viewreport');
+    this.router.navigate(['home/viewreport']);
   }
 
 }

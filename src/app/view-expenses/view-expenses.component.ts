@@ -72,6 +72,8 @@ export class ViewExpensesComponent implements OnInit {
   invoiceLists: any[];
 
   viewexpensesByBlockId: Object[];
+  currentassociationname:string;
+  bsConfig: { containerClass: string; dateInputFormat: string; showWeekNumbers: boolean; isAnimated: boolean; };
 
   constructor(private viewexpenseservice: ViewExpensesService,
     private modalService: BsModalService,
@@ -81,6 +83,7 @@ export class ViewExpensesComponent implements OnInit {
     private globalservice: GlobalServiceService,
     private viewinvoiceservice: ViewInvoiceService
   ) {
+    this.currentassociationname=this.globalservice.getCurrentAssociationName();
     this.blockID = '';
     this.todayDate = new Date();
     this.currentAssociationID = this.globalservice.getCurrentAssociationId();
@@ -123,8 +126,15 @@ export class ViewExpensesComponent implements OnInit {
       { 'name': '', 'displayName': 'Common Area Electric Bill', 'id': 3 },
       { 'name': '', 'displayName': 'Security Fees', 'id': 4 },
       { 'name': '', 'displayName': 'HouseKeeping', 'id': 5 },
-      { 'name': '', 'displayName': 'Fixed Maintenance', 'id': 6 }
+      { 'name': '', 'displayName': 'Fixed Maintenance', 'id': 6 },
+      { 'name': '', 'displayName': 'One Time Onboarding fee', 'id': 7 },
+      { 'name': '', 'displayName': 'One Time Membership fee', 'id': 8 },
+      { 'name': '', 'displayName': 'Water Meter', 'id': 9 },
+      { 'name': '', 'displayName': 'Renting Fees', 'id': 10 },
+      { 'name': '', 'displayName': 'Unsold Rental Fees', 'id': 11 },
+      { 'name': '', 'displayName': 'One Time Occupancy Fees', 'id': 12 }
     ]
+
 
     this.categories = [
       { "name": "Monthly", "displayName": "Monthly", "id": 1 },
@@ -136,15 +146,17 @@ export class ViewExpensesComponent implements OnInit {
     this.expensecategories = [{ "name": "Fixed", "displayName": "Fixed", "id": 10 }, { "name": "Variable", "displayName": "Variable", "id": 11 }]
 
     this.applicabltToUnits = [
-      { 'name': 'All', 'displayName': 'All Units' },
-      { 'name': 'Single', 'displayName': 'Single Unit' },
-      { 'name': 'SoldOwnerOccupied', 'displayName': 'Sold Owner-Occupied' },
-      { 'name': 'SoldTenantOccupied', 'displayName': 'Sold Tenant-Occupied' },
-      { 'name': 'SoldVacant', 'displayName': 'Sold Vacant' },
-      { 'name': 'UnsoldVacant', 'displayName': 'Unsold Vacant' },
-      { 'name': 'UnsoldTenant', 'displayName': 'Unsold Tenant-Occupied' },
-      { 'name': 'AllSold', 'displayName': 'All Sold' },
-      { 'name': 'AllUnSold', 'displayName': 'All UnSold' }
+      { 'name': 'All Units', 'displayName': 'All Units' },
+      { 'name': 'Single Unit', 'displayName': 'Single Unit' },
+      { 'name': 'All Sold Owner Occupied Units', 'displayName': 'All Sold Owner Occupied Units' },
+      { 'name': 'All Sold Tenant Occupied Units', 'displayName': 'All Sold Tenant Occupied Units' },
+      { 'name': 'All Sold Vacant Units', 'displayName': 'All Sold Vacant Units' },
+      { 'name': 'Unsold Vacant Units', 'displayName': 'Unsold Vacant Units' },
+      { 'name': 'Unsold Tenant Occupied Units', 'displayName': 'Unsold Tenant Occupied Units' },
+      { 'name': 'All Sold Units', 'displayName': 'All Sold Units' },
+      { 'name': 'All UnSold Units', 'displayName': 'All UnSold Units' },
+      { 'name': 'All Occupied Units', 'displayName': 'All Occupied Units' },
+      { 'name': 'All Vacant Unit', 'displayName': 'All Vacant Unit' }
     ]
 
     this.methodArray = [{ 'name': 'Cash', 'displayName': 'Cash', 'id': 1 },
@@ -152,6 +164,11 @@ export class ViewExpensesComponent implements OnInit {
     { 'name': 'DemandDraft', 'displayName': 'Demand Draft', 'id': 3 },
     { 'name': 'OnlinePay', 'displayName': 'OnlinePay', 'id': 4 }
     ]
+
+    this.bsConfig = Object.assign({}, { containerClass: 'theme-orange', 
+    dateInputFormat: 'DD-MM-YYYY' ,
+    showWeekNumbers:false,
+    isAnimated: true});
   }
 
   ngOnInit() {
@@ -174,7 +191,7 @@ export class ViewExpensesComponent implements OnInit {
 
     //this.viewexpenses = this.viewexpenseservice.GetExpenseListByAssocID(this.currentAssociationID);
     this.viewexpenses = this.viewexpenseservice.GetExpenseListByAssocID(this.currentAssociationID);
-    http://apidev.oyespace.com/oyeliving/api/v1/Expense/GetExpenseListByBlockID/{BlockID}
+    //http://apidev.oyespace.com/oyeliving/api/v1/Expense/GetExpenseListByBlockID/{BlockID}
 
 
     this.addexpenseservice.GetPurchaseOrderListByAssocID(this.currentAssociationID)
@@ -196,8 +213,9 @@ export class ViewExpensesComponent implements OnInit {
     this.viewexpenseservice.GetExpenseListByBlockID(blockID)
     .subscribe(
       data=>{
-        //console.log(data);
+        console.log('GetExpenseListByBlockID',data);
         this.viewexpensesByBlockId=data;
+        console.log('viewexpensesByBlockId',this.viewexpensesByBlockId);
       }
 
     )
@@ -246,10 +264,10 @@ export class ViewExpensesComponent implements OnInit {
     console.log('idx-', idx);
   }
   openModal(editexpensetemplate: TemplateRef<any>, exid: number, exDesc: any, expAmnt: string, exApplTO, exHead, exType, pmid, inNumber, poid, exPyCopy, exRecurr, exDate, blBlockID) {
-
-    this.POEAmnt = this.purchaseOrders[0]['poEstAmt'];
-    this.VNName = this.purchaseOrders[0]['poPrfVen'];
-    this.BPIden = this.purchaseOrders[0]['bpIden'];
+    console.log('purchaseOrders',this.purchaseOrders);
+    // this.POEAmnt = this.purchaseOrders[0]['poEstAmt'];
+    // this.VNName = this.purchaseOrders[0]['poPrfVen'];
+    // this.BPIden = this.purchaseOrders[0]['bpIden'];
     this.EXRABudg = 0;
 
     this.editexpensedata.EXID = exid;
@@ -263,7 +281,7 @@ export class ViewExpensesComponent implements OnInit {
     this.editexpensedata.POID = poid;
     this.editexpensedata.EXPyCopy = exPyCopy;
     this.editexpensedata.EXRecurr = exRecurr;
-    this.editexpensedata.EXDate = formatDate(exDate, 'MM/dd/yyyy', 'en');
+    this.editexpensedata.EXDate = formatDate(exDate, 'dd/MM/yyyy', 'en');
     this.editexpensedata.BLBlockID = blBlockID;
 
     this.modalRef = this.modalService.show(editexpensetemplate,
@@ -325,7 +343,7 @@ export class ViewExpensesComponent implements OnInit {
     this.checkField = paymentobj[0]['name'];
   }
   gotoAddexpense() {
-    this.router.navigate(['addexpense']);
+    this.router.navigate(['home/addexpense']);
   }
 
   updateExpense() {
@@ -339,7 +357,17 @@ export class ViewExpensesComponent implements OnInit {
           type: "success",
           confirmButtonColor: "#f69321",
           confirmButtonText: "OK"
-        })
+        }).then(
+          (result) => {
+        
+            if (result.value) {
+              //this.form.reset();
+              this.router.navigate(['home/viewexpense']);
+            
+            } else if (result.dismiss === swal.DismissReason.cancel) {
+              this.router.navigate(['home/viewexpense']);
+            }
+          })
       })
   }
 

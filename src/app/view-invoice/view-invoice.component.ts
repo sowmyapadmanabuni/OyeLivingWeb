@@ -82,6 +82,8 @@ export class ViewInvoiceComponent implements OnInit {
 
   invoiceDetails:object[];
 
+  currentassociationname:string;
+
 
   constructor(private viewinvoiceservice: ViewInvoiceService,
     private modalService: BsModalService,
@@ -94,6 +96,7 @@ export class ViewInvoiceComponent implements OnInit {
     this.hasnumber = false;
     this.showGateWay = false;
     this.currentAssociationID = this.globalservice.getCurrentAssociationId();
+    this.currentassociationname=this.globalservice.getCurrentAssociationName();
     this.blBlockID = '';
     this.validationResult = true;
     this.p = 1;
@@ -124,6 +127,7 @@ export class ViewInvoiceComponent implements OnInit {
   }
 
   viewInvoice1(template: TemplateRef<any>, inid, inGenDate, inNumber, inDsCVal, unUnitID) {
+    //alert('inside viewinvoice');
     console.log('inGenDate', inGenDate);
     console.log('inNumber', inNumber);
     console.log('inid', inid);
@@ -185,70 +189,69 @@ export class ViewInvoiceComponent implements OnInit {
           //previousDue=parseFloat(0.00);
         })
 
+        this.viewinvoiceservice.invoiceDetails(inid, unUnitID)
+        .subscribe(data => {
+          this.InvoiceValue=0;
+          console.log('invoiceDetails--', data['data']['invoiceDetails']);
+          this.invoiceDetails = data['data']['invoiceDetails'];
+          data['data']['invoiceDetails'].forEach(item => {
+  
+            if (item['idDesc'] == "common area electric bill") {
+              this.commonareafee = item['idValue'];
+              this.InvoiceValue += item['idValue'];
+            }
+            else if (item['idDesc'] == "Fixed Maintenance") {
+              this.fixedmaintenancefee = item['idValue'];
+              this.InvoiceValue += item['idValue'];
+            }
+            else if (item['idDesc'] == "generator bill") {
+              this.generatorfee = item['idValue'];
+              this.InvoiceValue += item['idValue'];
+            }
+            else if (item['idDesc'] == "security fees") {
+              this.securityfee = item['idValue'];
+              this.InvoiceValue += item['idValue'];
+            }
+            else if (item['idDesc'] == "unsold rental fees") {
+              this.unsoldrentalfees = item['idValue'];
+              this.InvoiceValue += item['idValue'];
+            }
+            else if (item['idDesc'] == "corpus") {
+              this.corpusfee = item['idValue'];
+              this.InvoiceValue += item['idValue'];
+            }
+            else if (item['idDesc'] == "housekeeping") {
+              this.housekeepingfee = item['idValue'];
+              this.InvoiceValue += item['idValue'];
+            }
+            else if (item['idDesc'] == "water meter") {
+              this.watermeterfee = item['idValue'];
+              this.InvoiceValue += item['idValue'];
+            }
+            else if (item['idDesc'] == "one time membership fee") {
+              this.onetimemembershipfee = item['idValue'];
+              this.InvoiceValue += item['idValue'];
+            }
+            else if (item['idDesc'] == "one time onboarding fee") {
+              this.OneTimeOnBoardingFees = item['idValue'];
+              this.InvoiceValue += item['idValue'];
+            }
+            else if (item['idDesc'] == "one time occupancy fee") {
+              this.onetimeoccupancyfees = item['idValue'];
+              this.InvoiceValue += item['idValue'];
+            }
+            else if (item['idDesc'] == "renting fees") {
+              this.rentingfees = item['idValue'];
+              this.InvoiceValue += item['idValue'];
+            }
+          })
+        })
+        
     this.viewinvoiceservice.getassociationlist(this.asdPyDate, this.blMgrMobile, this.currentAssociationID)
       .subscribe(data => {
         console.log('associationDetails', data);
         this.associationDetails = data
       })
-
-    this.viewinvoiceservice.invoiceDetails(inid, unUnitID)
-      .subscribe(data => {
-        this.InvoiceValue=0;
-        console.log('invoiceDetails--', data['data']['invoiceDetails']);
-        this.invoiceDetails = data['data']['invoiceDetails'];
-        data['data']['invoiceDetails'].forEach(item => {
-
-          if (item['idDesc'] == "common area electric bill") {
-            this.commonareafee = item['idValue'];
-            this.InvoiceValue += item['idValue'];
-          }
-          else if (item['idDesc'] == "Fixed Maintenance") {
-            this.fixedmaintenancefee = item['idValue'];
-            this.InvoiceValue += item['idValue'];
-          }
-          else if (item['idDesc'] == "generator bill") {
-            this.generatorfee = item['idValue'];
-            this.InvoiceValue += item['idValue'];
-          }
-          else if (item['idDesc'] == "security fees") {
-            this.securityfee = item['idValue'];
-            this.InvoiceValue += item['idValue'];
-          }
-          else if (item['idDesc'] == "unsold rental fees") {
-            this.unsoldrentalfees = item['idValue'];
-            this.InvoiceValue += item['idValue'];
-          }
-          else if (item['idDesc'] == "corpus") {
-            this.corpusfee = item['idValue'];
-            this.InvoiceValue += item['idValue'];
-          }
-          else if (item['idDesc'] == "housekeeping") {
-            this.housekeepingfee = item['idValue'];
-            this.InvoiceValue += item['idValue'];
-          }
-          else if (item['idDesc'] == "Water Meter") {
-            this.watermeterfee = item['idValue'];
-            this.InvoiceValue += item['idValue'];
-          }
-          else if (item['idDesc'] == "one time membership fee") {
-            this.onetimemembershipfee = item['idValue'];
-            this.InvoiceValue += item['idValue'];
-          }
-          else if (item['idDesc'] == "One Time OnBoarding Fees") {
-            this.OneTimeOnBoardingFees = item['idValue'];
-            this.InvoiceValue += item['idValue'];
-          }
-          else if (item['idDesc'] == "one time occupancy fees") {
-            this.onetimeoccupancyfees = item['idValue'];
-            this.InvoiceValue += item['idValue'];
-          }
-          else if (item['idDesc'] == "renting fees") {
-            this.rentingfees = item['idValue'];
-            this.InvoiceValue += item['idValue'];
-          }
-        })
-      })
-
 
   }
 
