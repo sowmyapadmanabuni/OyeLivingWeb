@@ -1,0 +1,57 @@
+/* ---------------------------------------------------
+SIDEBAR STYLE
+----------------------------------------------------- */
+
+.wrapper {
+    display: flex;
+    width: 100%;
+  }
+  
+  #sidebar {
+    width: 250px;
+    margin-left: -250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 999;
+    color: #fff;
+    transition: all 0.3s;
+  }
+  
+  #sidebar.active {
+  /* margin-left: -250px; */
+  margin-left: 0px;
+  }
+  
+  /* ---------------------------------------------------
+    CONTENT STYLE
+  ----------------------------------------------------- */
+  
+  #content {
+  /* width: calc(100% - 250px); */
+    width: 100%;
+    min-height: 100vh;
+    transition: all 0.3s;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  
+  #content.active {
+  /* width: 100%; */
+  width: calc(100% - 250px);
+  }
+
+  /*--bell icon--*/
+  .bell-nav { 
+   position: absolute; 
+   right: 0;
+   top: 0;
+   right: 132px;
+   top: 8px;
+   cursor: pointer;
+  }
+
+  .far { font-family: 'FontAwesome' !important; }
+  

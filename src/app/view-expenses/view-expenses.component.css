@@ -15,3 +15,15 @@ legend.scheduler-border {
     padding:0 10px;
     border-bottom:none;
 }
+#spanid {
+  visibility: hidden;
+}
+
+.activee #spanid {
+  color: #000;
+  visibility: visible;
+}
+
+table thead tr th{
+cursor: pointer;
+}

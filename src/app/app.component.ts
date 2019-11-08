@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {setTheme} from 'ngx-bootstrap/utils';
@@ -9,8 +10,9 @@ import {setTheme} from 'ngx-bootstrap/utils';
 })
 export class AppComponent {
   
-  constructor(private router: Router) {
+  constructor(private router: Router,private titleService: Title) {
     setTheme('bs4'); // or 'bs4'
+    this.titleService.setTitle( 'OyeSociety' );
     this.router.navigate(['home']);
   }
 

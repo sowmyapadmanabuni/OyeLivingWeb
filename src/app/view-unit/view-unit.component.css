@@ -1,7 +1,7 @@
 #row1, #row3 {
     color:#707070;
     padding:10px;
-    font-family: Poppins;
+    font-family: Quicksand;
     font-size: 18px;
     font-family: JOSEFINE SANS
 }
@@ -11,11 +11,11 @@
     background-color: #b33951;
     border-radius: 5px;
     border:1px solid #b33951;
-    font-family: Poppins;
+    font-family: Quicksand;
 }
 
 #search_unit{
-    font-family: Poppins;
+    font-family: Quicksand;
      border-radius: 3px; 
      border: 1px solid grey;
      color:#707070;
@@ -25,7 +25,7 @@
 }
 
 #selectBlock{
-    font-family: Poppins;
+    font-family: Quicksand;
      border-radius: 3px; 
      border: 1px solid grey;
      color:#707070;
@@ -35,12 +35,12 @@
 .alerts{
     color:red;
     font-size: 14px;
-    font-family: Poppins;
+    font-family: Quicksand;
 }   
 
 #unitData_table{
     color:#b33951;
-    font-family: Poppins; 
+    font-family: Quicksand; 
     font-size:18px; 
    
 }
@@ -53,7 +53,7 @@
 
 #select_above{
     font-weight:bold;
-    font-family: Poppins;
+    font-family: Quicksand;
     font-size: 25px;
     color: #707070;
 }
@@ -66,21 +66,21 @@
 #label9, #label10, #label11, #label12, #label13, #label14, #label15, 
 #label16, #label17, #label18, #label19, #label20, #label21, #label22,
 #label23, #label24, #label25, #label26 {
-          font-family: Poppins;
+          font-family: Quicksand;
           color:black;
         }
 
  #input1, #input2, #input3, #input4, #input5, #input6,#input7, #input8,
  #input9, #input10, #input11, #input12, #input13, #input14, #input15, 
  #input16, #input17, #input18, #input19{
-          font-family: Poppins;
+          font-family: Quicksand;
         }      
         
 #btn_createUnit{
         background-color: #b33951;
         border-radius: 3px;
         border:1px solid #b33951;
-        font-family: Poppins;
+        font-family: Quicksand;
         margin:10px;
        } 
         
@@ -89,7 +89,7 @@
         border-radius: 3px;
         border:1px solid #b33951;
         color: #b33951;
-        font-family: Poppins;
+        font-family: Quicksand;
         margin:10px;
        }
        
@@ -103,5 +103,18 @@
     background-color: grey;
     border:2px solid grey;
     border-radius: 4px;
-}           
+} 
+
+#spanid {
+    visibility: hidden;
+  }
+  
+  .activee #spanid {
+    color: #000;
+    visibility: visible;
+  }
+  
+  table thead tr td{
+  cursor: pointer;
+  }
         

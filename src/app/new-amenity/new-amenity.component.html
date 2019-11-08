@@ -9,7 +9,7 @@
     <tr *ngFor="let item of newamenities; let i = index">
             <td>
               <input type="text" required name="AMType" id="AMType" [(ngModel)]="item['AMType']"
-                #amenityTypecontrol="ngModel" class="form-control" placeholder="Amenity Type" style="font-family: Poppins"
+                #amenityTypecontrol="ngModel" class="form-control" placeholder="Amenity Type" style="font-family: Quicksand"
                 pattern="[a-zA-Z]*" />
               <p class="alerts" *ngIf="amenityTypecontrol.invalid && amenityTypecontrol.touched"> Valid Amenity type is required
               </p>
@@ -17,7 +17,7 @@
             &nbsp;
             <td>
               <input type="text" required name="NoofAmenities" id="NoofAmenities" [(ngModel)]="item['NoofAmenities']" #amenityNocontrol="ngModel"
-                class="form-control" placeholder="No of Amenities" style="font-family: Poppins" pattern="[0-9]*" />
+                class="form-control" placeholder="No of Amenities" style="font-family: Quicksand" pattern="[0-9]*" />
               <p class="alerts" *ngIf="amenityNocontrol.invalid && amenityNocontrol.touched"> Valid no of amenity is required</p>
             </td>
             &nbsp;
@@ -29,7 +29,7 @@
         <td>
             <input type="text" name="AMType" [(ngModel)]='newamenity.AMType' id="AMType"
                 #newamenityTypecontrol="ngModel" class="form-control" placeholder="Amenity Type"
-                style="font-family: Poppins" pattern="[a-zA-Z]*" />
+                style="font-family: Quicksand" pattern="[a-zA-Z]*" />
             <p class="alerts" *ngIf="newamenityTypecontrol.invalid && newamenityTypecontrol.touched">
                 Valid Amenity type is required</p>
         </td>
@@ -37,7 +37,7 @@
         <td>
             <input type="text" name="NoofAmenities" [(ngModel)]='newamenity.NoofAmenities' id="NoofAmenities"
                 #newamenityNocontrol="ngModel" class="form-control" placeholder="No of Amenities"
-                style="font-family: Poppins" pattern="[0-9]*" />
+                style="font-family: Quicksand" pattern="[0-9]*" />
             <p class="alerts" *ngIf="newamenityNocontrol.invalid && newamenityNocontrol.touched"> Valid no of amenity is required</p>
         </td>
         &nbsp;

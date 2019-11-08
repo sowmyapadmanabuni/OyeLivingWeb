@@ -15,8 +15,21 @@ legend.scheduler-border {
     border-bottom:none;
 }
 
-#viewassosnuploadFileinput{
+/* #viewassosnuploadFileinput{
     width: 91% !important;
     margin-left: 50px;
     margin-top: -3px;
-}
+} */
+
+#spanid {
+    visibility: hidden;
+  }
+  
+  .activee #spanid {
+    color: #000;
+    visibility: visible;
+  }
+  
+  table thead tr td{
+  cursor: pointer;
+  }

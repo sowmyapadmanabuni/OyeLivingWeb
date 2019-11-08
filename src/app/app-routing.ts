@@ -19,10 +19,15 @@ import { LoginComponent } from './login/login.component';
 import {HomeComponent} from './home/home.component';
 import {AuthGuard} from './guards/auth.guard';
 import {RegisterComponent} from './register/register.component';
+import {NewInvoiceComponent} from './new-invoice/new-invoice.component';
+import {AddexpensexlsxComponent} from './addexpensexlsx/addexpensexlsx.component';
+import {ExpensegridComponent} from './expensegrid/expensegrid.component';
+import {ReadBlockAndUnitxlsxComponent} from './read-block-and-unitxlsx/read-block-and-unitxlsx.component';
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
+    { path: 'association', component: ViewAssociationComponent },
     {
         path: 'home', component: HomeComponent,
         children: [
@@ -41,7 +46,12 @@ const routes: Routes = [
             { path: 'viewFloors', component: ViewFloorsComponent },
             { path: 'report', component: ReportComponent },
             { path: 'viewreport', component: ViewreportComponent },
-            { path: 'editprofile', component: EditprofileComponent }],
+            { path: 'editprofile', component: EditprofileComponent },
+            { path: 'newinvoice/:inid/:inGenDate/:inNumber/:inDsCVal/:unUnitID', component: NewInvoiceComponent },
+            { path: 'newinvoice', component: NewInvoiceComponent },
+            {path:'addexpensexlsx',component:AddexpensexlsxComponent},
+            {path:'expensegrid',component:ExpensegridComponent},
+            {path:'addblockunitxlsx',component:ReadBlockAndUnitxlsxComponent}],
             canActivate:[AuthGuard]
     }
 ]

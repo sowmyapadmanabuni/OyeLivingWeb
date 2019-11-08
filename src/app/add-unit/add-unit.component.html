@@ -34,7 +34,7 @@
     <div class="card col-xs-12" *ngIf='showCreateUnitemplate'>
       
         <!---->
-          <form name="addUnits" #createunitForm='ngForm' (ngSubmit)='createUnit()'>
+          <form name="addUnits" #createunitForm='ngForm'>
             <fieldset class="scheduler-border">
               <legend class="scheduler-border headingOrange">Unit Information</legend>
               <div class="row">
@@ -167,8 +167,8 @@
                     <label id=label11>Owner Altername Mobile Number</label>
                     <input type="text" name="ownerAltnumber" id="ownerAltnumber" [(ngModel)]="ownerAltnumber"
                       #ownerAltnumberontrol="ngModel" class="form-control" placeholder="Owner altername mobile no"
-                      minlength=10 maxlength=10 pattern="[0-9]*" required (keypress)=_keyPress($event)/>
-                      <p class="alerts" *ngIf="ownerAltnumberontrol.invalid && ownerAltnumberontrol.touched">Mobile number is invalid</p>
+                      minlength=10 maxlength=10 pattern="[0-9]*"  (keypress)=_keyPress($event)/>
+                      <!-- <p class="alerts" *ngIf="ownerAltnumberontrol.invalid && ownerAltnumberontrol.touched">Mobile number is invalid</p> -->
                   </div>
                 </div>
                 <div class="col-sm-6 col-xs-12">
@@ -176,8 +176,8 @@
                     <label id=label12>Owner Altername Email-Id</label>
                     <input type="text" name="ownerAltemail" id="ownerAltemail" [(ngModel)]="ownerAltemail"
                       class="form-control" #ownerAltemailControl="ngModel" placeholder="Owner alternate email-id"
-                      pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" required/>
-                      <p class="alerts" *ngIf="ownerAltemailControl.invalid && ownerAltemailControl.touched">Email-id is invalid</p>
+                      pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*" />
+                      <!-- <p class="alerts" *ngIf="ownerAltemailControl.invalid && ownerAltemailControl.touched">Email-id is invalid</p> -->
                   </div>
                 </div>
               </div>
@@ -229,22 +229,23 @@
             </fieldset>
             <fieldset class="scheduler-border" *ngIf='toggleunitvehicleinformation'>
               <legend class="scheduler-border headingOrange">Unit Vehicle Information</legend>
-              <table class="table">
+              <div class="col-sm-12">
+                <table class="table">
                 <tr id="label16">
-                  <td>Parking Lot Number</td>
-                  <td>Vehicle Number</td>
-                  <!-- <td>Action</td> -->
+                  <td>Parking Lot Number</td> &nbsp;
+                  <td>Vehicle Number</td> &nbsp;
+                  <td>Action</td>
                 </tr>
                 <!-- <tr *ngFor="let parking of parkings; let i = index">
                   <td>
                     <input type="text" name="parkingNo" id="parkingNo" [(ngModel)]="parkingNo"
                       #parkingNoControl="ngModel" class="form-control" placeholder="Parking Lot number"
-                      style="font-family: Poppins" pattern="[A-Za-z0-9]*" />
+                      style="font-family: Quicksand" pattern="[A-Za-z0-9]*" />
                   </td> &nbsp; &nbsp;
                   <td>
                     <input type="text" name="vehicleNo" id="vehicleNo" [(ngModel)]="vehicleNo"
                       #vehicleNoControl="ngModel" class="form-control" placeholder="Vehicle number"
-                      style="font-family: Poppins; text-transform: uppercase" pattern="[A-Z0-9]*" />
+                      style="font-family: Quicksand; text-transform: uppercase" pattern="[A-Z0-9]*" />
                   </td>
                   <td>
                   </td>
@@ -253,23 +254,27 @@
                   <td>
                     <input type="text" name="newParkingNo" id="newParkingNo" [(ngModel)]="newParkingNo"
                       #parkingNoControl="ngModel" class="form-control" placeholder="Parking Lot number"
-                      style="font-family: Poppins" pattern="A-Za-z0-9]*" />
+                      style="font-family: Quicksand" pattern="A-Za-z0-9]*" />
                   </td> &nbsp;
                   <td>
                     <input type="text" name="newVehicleNo" id="newVehicleNo" [(ngModel)]="newVehicleNo"
                       #vehicleNoControl="ngModel" class="form-control" placeholder="Vehicle number"
-                      style="font-family: Poppins; text-transform: uppercase" pattern="[A-Z0-9]*" />
-                  </td>
+                      style="font-family: Quicksand; text-transform: uppercase" pattern="[A-Z0-9]*" />
+                  </td> &nbsp;
                   <td>
-                    <!-- <p><span class="fa fa-plus-square fa-1x" (click)="addParking()"></span></p> -->
-                  </td>
+                    <p><span class="fa fa-plus-square fa-1x" (click)="addParking()"></span></p>
+                  </td> 
                 </tr>
               </table>
+              </div>
+              
             </fieldset>
             <div class="from-group">
               <div class="form-group pull-right">
-                <input type="submit" class="mdButton1" value="Add Unit"/> &nbsp;
                 <button type="reset" class="mdButton1">Reset</button>
+                &nbsp;
+                <input type="submit" [disabled]="createunitForm.invalid" (click)="createUnit()" class="mdButton1" value="Add Unit"/> 
+                <!-- <input type="submit" (click)="createUnit()" class="mdButton1" value="Add Unit"/>  -->
               </div>
             </div>
           </form>

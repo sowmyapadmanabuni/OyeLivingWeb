@@ -61,7 +61,7 @@ export class RegisterComponent implements OnInit {
   }
 
   getCountryData() {
-    alert('test')
+    //alert('test')
   }
 
 

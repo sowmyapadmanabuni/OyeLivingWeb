@@ -135,20 +135,34 @@ export class LoginComponent implements OnInit {
          //alert('inside verifyotp..data!= null');
         console.log('acAccntID',data['data']['account']['acAccntID']);
         this.globalserviceservice.acAccntID=data['data']['account']['acAccntID'];
+        console.log(this.globalserviceservice.acAccntID);
         //alert('assigned accountid to globalserviceservice.acAccntID');
         //alert('displaying globalserviceservice.acAccntID'+this.globalserviceservice.acAccntID);
-        //this.dashboardservice.getMembers(this.globalserviceservice.acAccntID).subscribe(res => {
+        this.dashboardservice.getMembers(this.globalserviceservice.acAccntID).subscribe(res => {
           //alert('assigning mrmRoleID...');
-          //this.dashboardservice.mrmRoleID = res['data'].memberListByAccount[0]['mrmRoleID'];
+          console.log('memberListByAccount',res['data'].memberListByAccount);
+          this.dashboardservice.mrmRoleID = res['data'].memberListByAccount[0]['mrmRoleID'];
+          console.log(this.dashboardservice.mrmRoleID);
           //alert('displaying dashboardservice.mrmRoleID..'+this.dashboardservice.mrmRoleID);
-          //this.router.navigate(['home']);
-        //},
-        //res=>{
+          this.router.navigate(['home']);
+        },
+        res=>{
           //alert('dashboardservice.mrmRoleID'+this.dashboardservice.mrmRoleID);
-        //});
-
+          console.log(res);
+          Swal.fire({
+            title: "Error",
+            text: res['error']['message'],
+            type: "error",
+            confirmButtonColor: "#f69321"
+          }).then(
+            (result) => {
+              if (result.value) {
+                this.router.navigate(['home']);
+              }});
+          
+        });
+        //this.router.navigate(['home']);
         //alert('navigate to home component...');
-        this.router.navigate(['home']);
         }
       })
      

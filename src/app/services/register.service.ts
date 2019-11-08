@@ -8,7 +8,9 @@ export class RegisterService {
 
   constructor(private http:HttpClient) { }
   
+  // ipAddress ='https://apidev.oyespace.com/';
   ipAddress ='https://apidev.oyespace.com/';
+
   url:string;
 
   register(requestData){

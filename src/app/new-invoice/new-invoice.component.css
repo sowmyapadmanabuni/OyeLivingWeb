@@ -1,0 +1,62 @@
+.classpangst{
+    display: block;
+}
+
+.classpangst li{
+    display: inline-block;
+    padding: 0 100px;
+}
+
+.ulclass{
+    margin-left: 10%;
+    width: 100%;
+    list-style-type: none;
+}
+
+div ul li > :first-child{
+    font-weight: bold;
+}
+
+div ul li{
+    margin-bottom: 5px;
+}
+
+hr{
+    height: 1px;
+    background-color: orange;
+}
+#tableone{
+    width: 95%;
+    position: absolute;
+    margin-top: 23%;
+    margin-left: 4%;
+}
+#tableone,#tabletwo,#tablethree tr,td,th {
+    border: 1px solid orange;
+    border-collapse: collapse;
+}
+.clsalign{
+    text-align: center
+}
+tbody tr td span{
+    margin-left: 5px;
+}
+
+#tabletwo{
+    margin-top: 51%;
+    position: absolute;
+    width: 95%;
+    margin-left: 4%;
+}
+
+#tablethree{
+    margin-top: 77%;
+    position: absolute;
+    width: 95%;
+    margin-left: 4%;
+}
+
+tbody div ul li{
+    list-style-type: none;
+    margin-left: -39px;
+}

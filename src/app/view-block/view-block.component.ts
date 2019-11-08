@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { formatDate } from '@angular/common';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-view-block',
@@ -48,7 +49,6 @@ export class ViewBlockComponent implements OnInit {
   ASLPCType: string;
   ASLPChrg: number;
   ASLPSDate: string;
-  editblockdata: object;
   BLBlockID: string;
   ASBGnDate: string;
   ASIcRFreq: string;
@@ -64,11 +64,27 @@ export class ViewBlockComponent implements OnInit {
   bsConfig: object;
 
   blocktypes: object[];
+  p: number;
+
+
+ invoicedatechanged: boolean;
+ minDate: Date;
+ minDateinNumber: number;
+ startsFromMaxDate: Date;
+ dueDateinNumber: number;
+ enableduedatevalidation: boolean;
+ duedatechanged: boolean;
+ startsFromMaxDateinNumber: number;
+ enablestartfromdatevalidation: boolean;
+ startsfromDateChanged: boolean;
+ todayDate: Date;
+  enablestartfromdatevalid: boolean;
+
 
   constructor(private viewBlkService: ViewBlockService,
     private globalService: GlobalServiceService,
     private router: Router,
-    private modalService: BsModalService, ) {
+    private modalService: BsModalService) {
     //pagination
     this.config = {
       itemsPerPage: 10,
@@ -92,6 +108,12 @@ export class ViewBlockComponent implements OnInit {
     }]
 
     this.ACAccntID=this.globalService.getacAccntID();
+    this.p = 1;
+    this.todayDate=new Date();
+    this.enableduedatevalidation = false;
+   this.duedatechanged = false;
+   this.invoicedatechanged = false;
+   this.enablestartfromdatevalidation=false;
   }
 
 
@@ -179,6 +201,71 @@ export class ViewBlockComponent implements OnInit {
   //   }
 
   // }
+  onValueChange(value: Date): void {
+    console.log(value);
+    if (value != null) {
+      this.invoicedatechanged = true;
+      this.minDate = new Date(value);
+      this.minDateinNumber = new Date(value).getTime();
+      console.log('minDateinNumber', this.minDateinNumber);
+      if (this.duedatechanged) {
+        if (this.dueDateinNumber < this.minDateinNumber) {
+          this.enableduedatevalidation = true;
+        }
+        else if (this.dueDateinNumber > this.minDateinNumber) {
+          this.enableduedatevalidation = false;
+        }
+        else if (this.dueDateinNumber == this.minDateinNumber) {
+          this.enableduedatevalidation = false;
+        }
+      }
+    }
+  }
+  onDueDateValueChange(value: Date) {
+    this.enableduedatevalidation = false;
+    if (value != null) {
+      this.duedatechanged = true;
+      this.startsFromMaxDate = new Date(value);
+      this.dueDateinNumber = new Date(value).getTime();
+      console.log('dueDateinNumber', this.dueDateinNumber);
+      if (this.invoicedatechanged) {
+        if (this.dueDateinNumber < this.minDateinNumber) {
+          this.enableduedatevalidation = true;
+        }
+        else if (this.dueDateinNumber > this.minDateinNumber) {
+          this.enableduedatevalidation = false;
+        }
+        else if (this.dueDateinNumber == this.minDateinNumber) {
+          this.enableduedatevalidation = false;
+        }
+      }
+      if (this.startsfromDateChanged) {
+        if (this.startsFromMaxDateinNumber < this.dueDateinNumber) {
+          this.enablestartfromdatevalidation = true;
+        }
+        else if (this.startsFromMaxDateinNumber == this.dueDateinNumber) {
+          this.enablestartfromdatevalidation = false;
+        }
+      }
+    }
+    //this.startsFromMaxDate.setDate(this.startsFromMaxDate.getDate() + 1);
+  }
+  onStartsFromDateValueChange(value: Date) {
+    if (value != null) {
+      this.startsfromDateChanged = true;
+      this.startsFromMaxDateinNumber = new Date(value).getTime();
+      if (this.duedatechanged) {
+        if (this.startsFromMaxDateinNumber < this.dueDateinNumber) {
+          this.enablestartfromdatevalidation = true;
+        }else if (this.startsFromMaxDateinNumber > this.dueDateinNumber) {
+          this.enablestartfromdatevalidation = false;
+        }
+        else if (this.startsFromMaxDateinNumber == this.dueDateinNumber) {
+          this.enablestartfromdatevalidation = false;
+        }
+      }
+    }
+  }
 
   checkRate1(rate1) {
     if (rate1 == true) {
@@ -256,7 +343,7 @@ export class ViewBlockComponent implements OnInit {
     }
   }
 
-  OpenModal(editBlocktemplate: TemplateRef<any>, blBlkName: string, blBlkType: string, blNofUnit: number, blMgrName: string, blMgrMobile: number, blMgrEmail: string, asMtType: string, asMtFRate: number, asMtDimBs: string, asUniMsmt: string, asbGnDate: string, bldUpdated: Date, aslpcType: string, aslpChrg: number, aslpsDate: Date, blBlockID: string, asiCrFreq:string) {
+  OpenModal(editBlocktemplate: TemplateRef<any>,blBlkName,blBlkType,blNofUnit,blMgrName,blMgrMobile,blMgrEmail,asMtType,asMtFRate,asMtDimBs,asUniMsmt,asbGnDate,asdPyDate,bldUpdated,aslpcType,aslpChrg,blBlockID,asiCrFreq,aslpsDate) {
 
     this.BLBlkName = blBlkName;
     this.BLBlkType = blBlkType;
@@ -271,7 +358,7 @@ export class ViewBlockComponent implements OnInit {
 
     this.ASLPCType = aslpcType;
     this.ASBGnDate = formatDate(asbGnDate, 'dd/MM/yyyy', 'en');
-    this.ASDPyDate = formatDate(bldUpdated, 'dd/MM/yyyy', 'en')
+    this.ASDPyDate = formatDate(asdPyDate, 'dd/MM/yyyy', 'en');
     this.ASLPSDate = formatDate(aslpsDate, 'dd/MM/yyyy', 'en');
     this.ASLPChrg = aslpChrg;
     this.BLBlockID = blBlockID;
@@ -282,7 +369,7 @@ export class ViewBlockComponent implements OnInit {
     console.log(this.BLNofUnit);
     console.log(this.BLMgrEmail);
     console.log(this.ASUniMsmt);
-    console.log(this.ASDPyDate);
+    console.log('ASDPyDate',this.ASDPyDate);
     console.log(this.ASLPChrg);
     console.log(this.ASLPSDate);
     console.log(this.BLBlockID);
@@ -295,7 +382,47 @@ export class ViewBlockComponent implements OnInit {
   
 
   UpdateBlock() {
-    this.editblockdata = {
+    let asbgndate;
+    let asdpydate;
+    let aslpsdate;
+    let asbgndateobj
+    let asdpydateobj;
+    let aslpsdateobj;
+
+    if(typeof this.ASBGnDate == 'string'){
+      //alert('ASBGnDate is string');
+      asbgndateobj=this.ASBGnDate.split('/');
+      asbgndate = new Date(asbgndateobj[2]+'-'+asbgndateobj[1]+'-'+asbgndateobj[0]+'T00:00:00Z');
+      //alert(asbgndate);
+    }
+    else if(typeof this.ASBGnDate == 'object'){
+      //alert('ASBGnDate is object');
+      asbgndate = this.ASBGnDate;
+      //alert(asbgndate);
+    }
+    if(typeof this.ASDPyDate == 'string'){
+      //alert('ASDPyDate is string');
+      asdpydateobj= this.ASDPyDate.split('/');
+      asdpydate = new Date(asdpydateobj[2]+'-'+asdpydateobj[1]+'-'+asdpydateobj[0]+'T00:00:00Z');
+      //alert(asdpydate);
+    }
+    else if(typeof this.ASDPyDate == 'object'){
+      //alert('ASDPyDate is object');
+      asdpydate = this.ASDPyDate;
+      //alert(asdpydate);
+    }
+    if(typeof this.ASLPSDate == 'string'){
+      //alert('ASLPSDate is string');
+      aslpsdateobj= this.ASLPSDate.split('/');
+      aslpsdate = new Date(aslpsdateobj[2]+'-'+aslpsdateobj[1]+'-'+aslpsdateobj[0]+'T00:00:00Z');
+      //alert(aslpsdate);
+    }
+    else if(typeof this.ASLPSDate == 'object'){
+      //alert('ASLPSDate is object');
+      aslpsdate = this.ASLPSDate;
+      //alert(aslpsdate);
+    }
+     let editblockdata = {
       BLBlkName: this.BLBlkName,
       BLBlkType: this.BLBlkType,
       BLNofUnit: this.BLNofUnit,
@@ -306,9 +433,9 @@ export class ViewBlockComponent implements OnInit {
       ASMtFRate: this.ASMtFRate,
       ASMtDimBs: this.ASMtDimBs,
       ASUniMsmt: this.ASUniMsmt,
-      ASBGnDate: formatDate(this.ASBGnDate, 'yyyy/MM/dd', 'en'),
-      ASDPyDate: formatDate(this.ASDPyDate, 'yyyy/MM/dd', 'en'),
-      ASLPSDate: formatDate(this.ASLPSDate, 'yyyy/MM/dd', 'en'),
+      ASBGnDate: formatDate(asbgndate, 'yyyy/MM/dd', 'en'),
+      ASDPyDate: formatDate(asdpydate, 'yyyy/MM/dd', 'en'),
+      ASLPSDate: formatDate(aslpsdate, 'yyyy/MM/dd', 'en'),
       ASLPCType: this.ASLPCType,
       ASLPChrg: this.ASLPChrg,
       BLBlockID: this.BLBlockID,
@@ -316,11 +443,11 @@ export class ViewBlockComponent implements OnInit {
       ASIcRFreq:this.ASIcRFreq
     };
 
-    console.log('editblockdata', this.editblockdata);
-    this.viewBlkService.UpdateBlock(this.editblockdata).subscribe(res => {
+    console.log('editblockdata', editblockdata);
+    this.viewBlkService.UpdateBlock(editblockdata).subscribe(res => {
       console.log("Done");
       console.log(JSON.stringify(res));
-      console.log('editblockdata', this.editblockdata);
+      console.log('editblockdata', editblockdata);
       Swal.fire({
         title: 'Block Updated Successfuly',
       }).then(
@@ -329,16 +456,14 @@ export class ViewBlockComponent implements OnInit {
           if (result.value) {
             //this.form.reset();
             this.modalRef.hide();
-            this.router.navigate(['viewBlocks']);
-
-
+            this.getBlockDetails();
           } else if (result.dismiss === Swal.DismissReason.cancel) {
             this.router.navigate(['']);
           }
         }
       )
 
-    });
+    }); 
 
   }
   

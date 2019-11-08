@@ -1,6 +1,6 @@
 <div class="pageTitle">
   <div class="row">
-    <div class="col-sm-4 col-xs-12">
+    <div class="col-sm-3 col-xs-12">
       <h3>View Expenses for {{currentassociationname}}</h3>
     </div>
     <div class="col-sm-3 col-xs-12 pull-left">
@@ -14,9 +14,21 @@
         </select>
       </div>
     </div>
-    <div class="col-sm-3 col-xs-12">
-
-    </div>
+    <div class="col-sm-2 col-xs-12">
+      <div [hidden]="blockID == ''" class="form-group">
+        <select required class="ui dropdown search methodDropdown" name="blockID" [(ngModel)]="expid"
+        (change)='GetexpenseListByInvoiceID(expid)' #invoicedNameControl='ngModel'>
+          <option disabled="true" selected="true" value="">Invoiced</option>
+          <option *ngFor='let item of invoiced' [value]="item['name']">
+            {{item['displayName']}}
+          </option>
+        </select>
+      </div>
+    </div>    
+      <div class="col-sm-2 col-xs-12">
+        <button [hidden]='toggleGenerateInvButton' class="btn btn-primary pull-right" type="button" (click)="generateInvoice()"> Generate Invoice</button>
+      </div>
+    
     <div class="col-sm-2 col-xs-12">
       <button (click)='gotoAddexpense()' type="button" class="btn btn-primary pull-right"><i class="fa fa-plus"></i>Add
         Expenses</button>
@@ -30,23 +42,34 @@
     <thead>
       <tr>
         <th>Sl No</th>
-        <th>Expense Head</th>
-        <th>Applicability</th>
-        <th>Unit Identifier</th>
-        <th>Date Added</th>
-        <th>Amount</th>
+        <th [class.activee]="order === 'exHead'"
+        (click)="setOrder('exHead')">Expense Head<span id="spanid" [hidden]="reverse">▼</span><span id="spanid" [hidden]="!reverse">▲</span></th>
+        <th [class.activee]="order === 'exApplTO'"
+        (click)="setOrder('exApplTO')">Applicability<span id="spanid" [hidden]="reverse">▼</span><span id="spanid" [hidden]="!reverse">▲</span></th>
+        <th [class.activee]="order === 'unUniIden'"
+        (click)="setOrder('unUniIden')">Unit Name<span id="spanid" [hidden]="reverse">▼</span><span id="spanid" [hidden]="!reverse">▲</span></th>
+        <th [class.activee]="order === 'exIsInvD'"
+        (click)="setOrder('exIsInvD')">Invoiced<span id="spanid" [hidden]="reverse">▼</span><span id="spanid" [hidden]="!reverse">▲</span></th>
+        <th [class.activee]="order === 'exDate'"
+        (click)="setOrder('exDate')">Date Added<span id="spanid" [hidden]="reverse">▼</span><span id="spanid" [hidden]="!reverse">▲</span></th>
+        <th [class.activee]="order === 'expAmnt'"
+        (click)="setOrder('expAmnt')">Amount<span id="spanid" [hidden]="reverse">▼</span><span id="spanid" [hidden]="!reverse">▲</span></th>
         <th>Added By</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor='let view of viewexpensesByBlockId | paginate: { itemsPerPage: 10, currentPage: p };let i=index'>
-        <td>{{i+1}}</td>
+      <tr *ngFor="let view of _viewexpensesByBlockId | orderBy: order:reverse:'case-insensitive' | paginate: { itemsPerPage: 10, currentPage: p };let i = index">
+        <td>{{ (10 * (p - 1) + i)+1 }}</td>
         <td>{{view.exHead}}</td>
         <td>{{view.exApplTO}}</td>
         <td>{{view.unUniIden}}</td>
-        <td>{{view.exDate | date:"M/d/y"}}</td>
+        <td>
+          <span style="margin-left: 13px;" *ngIf="view.exIsInvD == true"> YES</span>
+          <span style="margin-left: 13px;" *ngIf="view.exIsInvD == false"> NO</span>
+        </td>
+        <td>{{view.exDate | date:"d/M/y"}}</td>
         <td>{{'₹ '+view.expAmnt}}</td>
-        <td>{{view.mgrName}}</td>
+        <td>{{dashboardservice.acfName | titlecase}}</td>
         <td>
           <button type="button" class="smallBtn"
             (click)="openModal(editexpensetemplate,view.exid,view.exDesc,view.expAmnt,view.exApplTO,view.exHead,view.exType,view.pmid,view.inNumber,view.poid,view.exPyCopy,view.exRecurr,view.exDate,view.blBlockID)">
@@ -59,12 +82,15 @@
       </tr>
     </tbody>
   </table>
+  <p class="text-center float-right" style="margin-top:53px;"><pagination-controls (pageChange)="p = $event"></pagination-controls></p>
 </div>
 
-<div class="col-sm-2 col-sm-12 col-xs-12">
+<!-- <div class="col-sm-12 col-xs-12" style="margin-top:-8px;position:absolute;margin-right:-7px;">
   <button class="btn btn-primary pull-right" type="button" (click)="generateInvoice()"> Preview Invoice</button>
-  <pagination-controls (pageChange)='p=$event'></pagination-controls>
-</div>
+</div> -->
+<!-- <div class="col-sm-12 col-xs-12">
+  <p class="text-center float-right"><pagination-controls (pageChange)="p = $event"></pagination-controls></p>
+</div> -->
 
 <ng-template #editexpensetemplate>
   <div class="modal-content">
@@ -353,7 +379,7 @@
                     <label>Demand Draft Date <span class="red">*</span></label>
                     <input type="text" class="form-control" name="DemandDraftDate" #demandDraftDateControl='ngModel'
                       placeholder="Demand Draft Date" required [bsConfig]="bsConfig" [(ngModel)]="DemandDraftDate"
-                      #dp="bsDatepicker" [bsConfig]='bsConfig' bsDatepicker [(bsValue)]="DemandDraftDate" [minDate]="minDemandDraftDate" />
+                      #dp="bsDatepicker" [bsConfig]='bsConfig' bsDatepicker [(bsValue)]="DemandDraftDate" [minDate]="minDemandDraftDate" placement="top"/>
                     <p class="alerts" *ngIf="demandDraftDateControl.invalid && demandDraftDateControl.touched"> Please
                       Select
                       DemandDraft Date</p>
@@ -363,7 +389,7 @@
               </div>
 
               <div class="row" style="padding-left:15px;padding-right:15px;">
-                <div class="col-sm-6 col-xs-12">
+                <div class="col-sm-4 col-xs-12">
                   <div class="form-group"
                     [ngClass]="{'has-error' : expendituredateControl.invalid && expendituredateControl.touched}">
                     <label>Expenditure Date <span class="red">*</span></label>
@@ -378,16 +404,18 @@
               
 
               
-                <div class="col-sm-6 col-xs-12">
+                <div class="col-sm-8 col-xs-12">
                   <div class="row">
                     <label>Invoice / Payment Copy<span class="red"></span></label>
                   </div>
                   <div class="row">
+                      <img id="imgthumbnail" src="../../assets/images/default_thumbnail.png" style="position: absolute;left: 77%;" width="44px" height="32px" alt="">
                     <input type="file" id="uploadFileinput" class="form-control" (change)='onFileSelected($event)' />
                     <button class="btn btn-primary" (click)='onUpLoad()'
-                      style="position:absolute;margin-left:90%;top:45%">
+                      style="position:absolute;margin-left:93%;top:34%">
                       <i class="fa fa-cloud-upload"></i>
                     </button>
+                    <button style="position: absolute;top:35%;left:86%" class="btn btn-danger" (click)='removeSelectedfile()'><i class="fa fa-trash"></i> </button>
                   </div>
                   <div *ngIf='dynamic > 0' class="row mb-2">
                     <progressbar [animate]="false" [value]="dynamic" type="success"><b>{{dynamic}}%</b></progressbar>
