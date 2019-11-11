@@ -6,10 +6,7 @@ import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { formatDate } from '@angular/common';
 import * as moment from 'moment';
-<<<<<<< HEAD
-=======
 declare var $: any;
->>>>>>> 915141cb818db85056b13f41a6309813be43ce47
 
 @Component({
   selector: 'app-view-block',

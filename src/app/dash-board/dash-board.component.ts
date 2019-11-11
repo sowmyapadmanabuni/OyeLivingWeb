@@ -213,6 +213,7 @@ export class DashBoardComponent implements OnInit {
     })
   }
   loadAssociation(associationName: string) {
+    this.unitlistForAssociation=[];
     //this.appComponent.myMenus=true;
     console.log("AssociationName: ", associationName);
     this.currentAssociationName = associationName;

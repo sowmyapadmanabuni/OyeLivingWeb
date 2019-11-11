@@ -65,12 +65,8 @@ export class ViewExpensesService {
   GetExpenseListByAssocID(currentAssociationID): Observable<Viewexpense[]>{
     console.log('GetExpenseListByAssocID')
     let headers = this.getHttpheaders();
-<<<<<<< HEAD
-    this.url = `${this.ipAddress}oyeliving/api/v1/Expense/GetExpenseListByAssocID/${currentAssociationID}`;
-=======
     let ipAddress=this.utilsService.GetExpenseListByAssocID();
     this.url = `${ipAddress}oyeliving/api/v1/Expense/GetExpenseListByAssocID/${currentAssociationID}`;
->>>>>>> 915141cb818db85056b13f41a6309813be43ce47
     // this.http.get(this.url, { headers: headers })
     // .subscribe(data=>{
     //   console.log(data);

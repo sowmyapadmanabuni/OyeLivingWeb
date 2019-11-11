@@ -58,13 +58,10 @@ import { ReadBlockAndUnitxlsxComponent } from './read-block-and-unitxlsx/read-bl
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { environment } from '../environments/environment';
-<<<<<<< HEAD
 import { GuestComponent } from './guest/guest.component';
 import { DeliveriesComponent } from './deliveries/deliveries.component';
 import { StaffComponent } from './staff/staff.component';
-=======
 import { AddFamilyMemberComponent } from './add-family-member/add-family-member.component';
->>>>>>> 915141cb818db85056b13f41a6309813be43ce47
 
 
 @NgModule({
@@ -105,13 +102,10 @@ import { AddFamilyMemberComponent } from './add-family-member/add-family-member.
     AddexpensexlsxComponent,
     ExpensegridComponent,
     ReadBlockAndUnitxlsxComponent,
-<<<<<<< HEAD
     GuestComponent,
     DeliveriesComponent,
-    StaffComponent
-=======
+    StaffComponent,
     AddFamilyMemberComponent
->>>>>>> 915141cb818db85056b13f41a6309813be43ce47
   ],
   imports: [
     BrowserModule,
