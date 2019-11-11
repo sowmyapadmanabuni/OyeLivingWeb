@@ -77,6 +77,11 @@ export class ViewInvoiceService {
 
 //http://apidev.oyespace.com/oyeliving/api/v1/invoice/details/{InvoiceId}/{UnitID}
   }
+  InvoiceListByInvoiceID(inid){
+    let headers = this.getHttpheaders();
+    this.url = `${this.ipAddress}/oyeliving/api/v1/Invoice/InvoiceListByInvoiceID/${inid}`;
+    return this.http.get(this.url, { headers: headers });
+  }
 
   GetUnitListByUnitID(unitID) {
     let headers = this.getHttpheaders();

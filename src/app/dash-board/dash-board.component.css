@@ -1,7 +1,7 @@
 #row1 {
     color:#707070;
     padding:10px;
-    font-family: JOSEFINE SANS;
+    font-family: Quicksand;
     font-size: 18px;
 }
 
@@ -34,7 +34,7 @@
     color: #58666e;
     text-transform: uppercase;
     font-size: 14px;
-    font-family: JOSEFINE SANS;
+    font-family: Quicksand;
     font-size:12px;
     margin:20px;
     height:100px;
@@ -43,7 +43,7 @@
 
 #tablehead1{
     color:#b33951;
-    font-family: Poppins;
+    font-family: Quicksand;
 }
 
 #mydiv1{
@@ -62,7 +62,7 @@
     width: 97.2%;
     padding: 20px;
     height:100%;
-    font-family: Poppins;
+    font-family: Quicksand;
 }
 
 .bh2{margin-top:0; margin-bottom:5px;}

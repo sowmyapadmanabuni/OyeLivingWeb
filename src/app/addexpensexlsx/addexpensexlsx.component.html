@@ -1,0 +1,43 @@
+<div class="container">
+  <form>
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6" style="display:flex;margin-top:82px;">
+        <span style="margin-left: -14px;">
+          <ul>
+            <li style="display: block"> <img (click)="Upload()" src="../../assets/images/upload_excel.jpeg" width="45px"
+                height="45px" style="cursor: pointer;" /></li>
+            <li style="display: block"><span style="font-size: 11px;">Upload Expense</span></li>
+          </ul>
+        </span>
+        <input type="file" id="file_upload_id" class="form-control" style="display:none;font-family:Quicksand;margin-top:30px;"
+        (change)="onFileChange($event)" multiple="false"
+        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" #file>
+        <span style="margin-left: 158px;">
+          <ul>
+            <!-- <li style="display: block"><a style="padding-left: 21px;" href="../../assets/file/Expense.xlsx"
+                            download><img src="../../assets/images/download_excel.jpeg" width="45px" height="45px"
+                              style="cursor: pointer;" /></a></li> -->
+            <li style="display: block"><a (click)='generateExcel()' style="padding-left: 21px;"><img src="../../assets/images/download_excel.jpeg" width="45px" height="45px" style="cursor: pointer;" /></a></li>
+            <li style="display: block"><span style="font-size: 11px;">Download Excel Format</span></li>
+          </ul>
+        </span>
+      </div>
+      <div class="col-sm-3">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-8" style="border: 1px solid #F08E33;border-radius: 18px;">
+        <h1>Note:- Upload your expense file in <i class="fa fa-file-excel-o" aria-hidden="true"></i> excel format, the
+          demo excel format can be downloaded from above
+        </h1>
+
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+
+  </form>
+
+</div>

@@ -64,6 +64,10 @@ export class ViewExpensesService {
     console.log('GetExpenseListByAssocID')
     let headers = this.getHttpheaders();
     this.url = `${this.ipAddress}oyeliving/api/v1/Expense/GetExpenseListByAssocID/${currentAssociationID}`;
+    // this.http.get(this.url, { headers: headers })
+    // .subscribe(data=>{
+    //   console.log(data);
+    // })
     return this.http.get(this.url, { headers: headers })
       .pipe(
         map(data => {
@@ -90,7 +94,7 @@ export class ViewExpensesService {
               )
           })
         })
-      )
+      ) 
   }
 
   GetExpenseListByBlockID(BlockID){
@@ -100,6 +104,13 @@ export class ViewExpensesService {
     return this.http.get(this.url, { headers: headers })
     .pipe(map(data => {return data['data']['expenseByBlock']})
     )
+   /* this.http.get(this.url, { headers: headers })
+    .subscribe(data=>{
+      console.log(data);
+    },
+    err=>{
+      console.log(err);
+    })*/
   }
 
   GetBlockListByBlockID(data: object): Observable<Viewexpense[]> {

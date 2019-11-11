@@ -5,6 +5,7 @@ import { GlobalServiceService } from '../global-service.service';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import {ViewAssociationService} from '../view-association/view-association.service'
+import { ViewUnitService } from '../view-unit/view-unit.service';
 
 @Component({
   selector: 'app-add-blocks',
@@ -58,12 +59,15 @@ export class AddBlocksComponent implements OnInit {
   @ViewChild('ctrateBlockform') ctrateBlockform: any;
 
   todayDate:Date;
+  check:any;
+check1:any;
 
 
   constructor(private addblockservice: AddBlockService,
     private globalservice: GlobalServiceService,
     private router:Router,
-    private viewassn: ViewAssociationService) {
+    private viewassn: ViewAssociationService,
+    private viewUniService: ViewUnitService) {
     this.currentAssociationID = this.globalservice.getCurrentAssociationId();
     this.currentAssociationName = this.globalservice.getCurrentAssociationName();
     this.currentaccountID=this.globalservice.acAccntID;
@@ -105,10 +109,13 @@ export class AddBlocksComponent implements OnInit {
       'name': 'Residential and Commercial', 'displayName': 'Residential and Commercial'
     }]
 
+    this.maintenanceValue=0;
   }
 
   ngOnInit() {
     this.getMeasurement();
+    this.check="true";
+   this.check1="true";
   }
   getMeasurement(){
     this.viewassn.getAssociationDetailsByAssociationid(this.currentAssociationID).subscribe((res)=>{
@@ -145,7 +152,21 @@ export class AddBlocksComponent implements OnInit {
   }
   ngAfterViewInit() {
   }
-
+  checking(rate){
+    if(rate==true){
+      this.check="true";
+    }
+    else{
+      this.check="false";
+    }
+  }
+    checking1(rate1){
+     if(rate1==true){
+      this.check1="true";
+    }else{
+      this.check1="false";
+    }
+  }
   telInputObject(telinputobj) {
     console.log(telinputobj);
   }
@@ -229,6 +250,9 @@ export class AddBlocksComponent implements OnInit {
         if (this.startsFromMaxDateinNumber < this.dueDateinNumber) {
           this.enablestartfromdatevalidation = true;
         }
+        else if (this.startsFromMaxDateinNumber > this.dueDateinNumber) {
+          this.enablestartfromdatevalidation = false;
+        }
         else if (this.startsFromMaxDateinNumber == this.dueDateinNumber) {
           this.enablestartfromdatevalidation = false;
         }
@@ -290,7 +314,7 @@ export class AddBlocksComponent implements OnInit {
       this.addblockservice.createBlock(CreateBockData)
         .subscribe(data => {
           console.log(data);
-          if(data['data'] == null){
+          if(data['data'].blockID){
             swal.fire({
               title: "Block Created Successfully",
               text: "",
@@ -299,11 +323,86 @@ export class AddBlocksComponent implements OnInit {
             }).then(
               (result) => {
                 if (result.value) {
+
+                  let createUnitData =
+                  {
+                    "ASAssnID": this.currentAssociationID,
+                    "ACAccntID": this.currentaccountID,
+                    "units": [
+                      {
+                        "UNUniName": this.blockname + "-" + "Common",
+                        "UNUniType": '',
+                        "UNRate": '',
+                        "UNOcStat": '',
+                        "UNOcSDate": '',
+                        "UNOwnStat": '',
+                        "UNSldDate": '',
+                        "UNDimens": '',
+                        "UNCalType": '',
+                        "BLBlockID": data['data'].blockID,
+                        "Owner":
+                        [{
+              
+                          "UOFName": '',
+                          "UOLName": '',
+                          "UOMobile": '',
+                          "UOISDCode": '',
+                          "UOMobile1": '',
+                          "UOMobile2": '',
+                          "UOMobile3": '',
+                          "UOMobile4": '',
+                          "UOEmail": '',
+                          "UOEmail1": '',
+                          "UOEmail2": '',
+                          "UOEmail3": '',
+                          "UOEmail4": '',
+                          "UOCDAmnt": ''
+                        }],
+                        "unitbankaccount":
+                        {
+                          "UBName": '',
+                          "UBIFSC": '',
+                          "UBActNo": '',
+                          "UBActType": '',
+                          "UBActBal": '',
+                          "BLBlockID": data['data'].blockID
+                        },
+                      "Tenant":
+                        [{
+              
+                          "UTFName":'',
+                          "UTLName": '',
+                          "UTMobile": '',
+                          "UTISDCode": '',
+                          "UTMobile1": '',
+                          "UTEmail": '',
+                          "UTEmail1": ''
+                        }],
+                        "UnitParkingLot":
+                          [
+                            {
+                              "UPLNum": '',
+                              "MEMemID": '',
+                              "UPGPSPnt": ''
+              
+                            }
+                          ]
+                      }
+                    ]
+                  }
+
+                  this.viewUniService.createUnit(createUnitData).subscribe(data => {
+                    console.log(data);
+                  },
+                    err => {
+                      console.log(err);
+                    })
+
                   this.router.navigate(['home/viewBlocks']);
                 }
               })
           }
-          else if (data['data'] != null){
+          else if (data['data']['errorResponse']['message']){
             swal.fire({
               title: "Error",
               text: data['data']['errorResponse']['message'],

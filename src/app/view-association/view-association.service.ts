@@ -21,6 +21,9 @@ export class ViewAssociationService {
       'Access-Control-Allow-Origin': "*"
     })
   };
+  associationId:any;
+  asNofBlks:any;
+  asNofUnit:any;
 
   onUpLoad(fd: FormData) {
     //let headers = this.getHttpheaders();

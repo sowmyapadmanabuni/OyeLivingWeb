@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ViewInvoiceService } from '../services/view-invoice.service';
 import { BlocksByAssoc } from '../models/blocks-by-assoc';
 import { AssociationDetails } from '../models/association-details';
@@ -6,6 +6,11 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import swal from 'sweetalert2';
 import { GlobalServiceService } from '../global-service.service';
+import {Router} from '@angular/router';
+import { NgxPrinterService } from 'ngx-printer';
+import { OrderPipe } from 'ngx-order-pipe';
+import {GenerateReceiptService} from '../services/generate-receipt.service';
+
 
 @Component({
   selector: 'app-view-invoice',
@@ -14,6 +19,7 @@ import { GlobalServiceService } from '../global-service.service';
 })
 export class ViewInvoiceComponent implements OnInit {
   allBlocksByAssnID: BlocksByAssoc[];
+  allblocksbyassnid:BlocksByAssoc[];
   currentPage: number;
   pageSize: number;
   invoiceLists: any[];
@@ -49,6 +55,7 @@ export class ViewInvoiceComponent implements OnInit {
   calculatedIPGUtilHash: string;
   blBlockID: string;
   modalRef: BsModalRef;
+  modalRefForGenerateRecipt: BsModalRef;
   asdPyDate: string;
   blMgrMobile: string;
   allLineItem: any[];
@@ -83,12 +90,26 @@ export class ViewInvoiceComponent implements OnInit {
   invoiceDetails:object[];
 
   currentassociationname:string;
+  @ViewChild('template') private template: TemplateRef<any>;
+  @ViewChild('generateinvoicemodal') private generateinvoicemodal: TemplateRef<any>;
+
+  _unOcStat:string;
+  _ineSent:boolean;
+
+  order: string = 'unUnitID';
+  reverse: boolean = false;
+  sortedCollection: any[];
+  unpaidUnits: any[];
 
 
   constructor(private viewinvoiceservice: ViewInvoiceService,
     private modalService: BsModalService,
     private toastr: ToastrService,
-    private globalservice: GlobalServiceService) {
+    private globalservice: GlobalServiceService,
+    private router:Router,
+    private printerService: NgxPrinterService,
+    private orderpipe: OrderPipe,
+    private generatereceiptservice:GenerateReceiptService) {
     this.currentPage = 1;
     this.pageSize = 10;
     this.previousDue = 0.00;
@@ -101,6 +122,8 @@ export class ViewInvoiceComponent implements OnInit {
     this.validationResult = true;
     this.p = 1;
     this.isChecked = false;
+    this._unOcStat='';
+    this._ineSent=false;
   }
 
   ngOnInit() {
@@ -121,12 +144,28 @@ export class ViewInvoiceComponent implements OnInit {
       .subscribe(data => {
         this.invoiceLists = data['data'].invoices;
         console.log('invoiceLists?', this.invoiceLists);
+          //
+          this.sortedCollection = this.orderpipe.transform(this.invoiceLists, 'unUnitID');
+          console.log(this.sortedCollection);
       })
     this.isChecked = false;
     this.checkAll = false;
   }
 
-  viewInvoice1(template: TemplateRef<any>, inid, inGenDate, inNumber, inDsCVal, unUnitID) {
+  setOrder(value: string) {
+    if (this.order === value) {
+      this.reverse = !this.reverse;
+    }
+    this.order = value;
+  }
+
+ /* viewInvoice1(inid, inGenDate, inNumber, inDsCVal, unUnitID) {
+    console.log(inid, inGenDate, inNumber, inDsCVal, unUnitID);
+    this.router.navigate(['home/newinvoice',inid, inGenDate, inNumber, inDsCVal, unUnitID]);
+  } */
+
+ viewInvoice1(event,template: TemplateRef<any>, inid, inGenDate, inNumber, inDsCVal, unUnitID) {
+  event.preventDefault();
     //alert('inside viewinvoice');
     console.log('inGenDate', inGenDate);
     console.log('inNumber', inNumber);
@@ -253,8 +292,24 @@ export class ViewInvoiceComponent implements OnInit {
         this.associationDetails = data
       })
 
+  } 
+  raiseAlert(){
+    //alert('test');
   }
+  printTemplate() {
+    //this.printerService.printAngular(this.template);
+    window.print();
+  }
+  printDiv(){
+    var printContents = document.getElementById("printableArea").innerHTML;
+     var originalContents = document.body.innerHTML;
 
+     document.body.innerHTML = printContents;
+
+     window.print();
+
+     document.body.innerHTML = originalContents;
+  }
   totalAmountPaid(e?) {
 
     if (e != undefined) {
@@ -378,21 +433,62 @@ export class ViewInvoiceComponent implements OnInit {
       })
   }
 
-  sendInvoiceInMail(inid) {
+  sendInvoiceInMail(inid,unUnitID,ineSent,blBlockID) {
     console.log('inid', inid);
-    this.viewinvoiceservice.GetInvoiceOwnerListByInvoiceId(inid)
-      .subscribe(() => {
-        swal.fire({
-          title: "Mail Sent Successful",
-          text: "",
-          type: "success",
-          confirmButtonColor: "#f69321",
-          confirmButtonText: "OK"
-        })
-      },
-        () => {
-          swal.fire('Error', 'No Email Address to Send!', 'error')
-        })
+    console.log('unUnitID', unUnitID);
+    console.log('ineSent', ineSent);
+    console.log('blBlockID', blBlockID);
+    //
+    this.viewinvoiceservice.GetUnitListByUnitID(unUnitID)
+      .subscribe(data => {
+        console.log(data);
+        this._unOcStat = data['data']['unit']['unOcStat'];
+        console.log(this._unOcStat);
+        if (data['data']['unit']['unOcStat'] == "UnSold Vacant Unit") {
+          swal.fire({
+            title: "No Email Address to Send!",
+            text: "UnSold Vacant Unit",
+            type: "success",
+            confirmButtonColor: "#f69321",
+            confirmButtonText: "OK"
+          })
+        }    
+        else {
+           this.viewinvoiceservice.GetInvoiceOwnerListByInvoiceId(inid)
+             .subscribe((res) => {
+               console.log(res);
+               swal.fire({
+                 title: "Mail Sent Successful",
+                 text: "",
+                 type: "success",
+                 confirmButtonColor: "#f69321",
+                 confirmButtonText: "OK"
+               }).then(
+                 (result) => {
+                   if (result.value) {
+                     this.getCurrentBlockDetails(blBlockID);
+                   }
+                 })
+               console.log(res);
+             },
+               (res) => {
+                 console.log(res);
+                 swal.fire('Error', 'No Email Address to Send!', 'error')
+               }) 
+         }
+         //
+         //http://localhost:54400/oyeliving/api/v1/Invoice/InvoiceListByInvoiceID/%7BInvoiceID%7D
+         /*this.viewinvoiceservice.InvoiceListByInvoiceID(inid)
+         .subscribe(data=>{
+           console.log(data);
+          this._ineSent= data['data']['invoices']['ineSent'];
+          console.log(this._ineSent);
+         })*/
+         //
+
+      })
+    //
+
   }
 
   toggleIsChecked(event) {
@@ -412,10 +508,14 @@ export class ViewInvoiceComponent implements OnInit {
   }
 
   toggleAllCheck(event) {
-    alert('toggleAllCheck');
+    //alert('toggleAllCheck');
     if (event.target.checked) {
       this.isChecked = true;
       this.checkAll = true;
+    }else{
+      //alert('toggleunAllCheck')
+      this.isChecked = false;
+      this.checkAll = false;
     }
   }
 
@@ -442,6 +542,26 @@ export class ViewInvoiceComponent implements OnInit {
         () => {
           swal.fire('Error', 'No Email Address to Send!', 'error')
         })
+  }
+
+  generateReceipt(generatereceiptmodal: TemplateRef<any>){
+
+    this.generatereceiptservice.GetBlockListByAssocID(this.currentAssociationID)
+      .subscribe(data => {
+        this.allblocksbyassnid = data['data'].blocksByAssoc;
+        console.log('allBlocksByAssnID', this.allblocksbyassnid);
+      });
+    //
+    this.modalRefForGenerateRecipt = this.modalService.show(generatereceiptmodal,
+      Object.assign({}, { class: 'gray modal-xl' }));
+  }
+
+  getcurrentblockdetails(blkBlockID){
+    this.generatereceiptservice.getCurrentBlockDetails(blkBlockID,this.currentAssociationID)
+    .subscribe(data => {
+      console.log('unpaidUnits', data['data']['paymentsUnpaid']);
+      this.unpaidUnits = data['data']['paymentsUnpaid'];
+    })
   }
 
 }

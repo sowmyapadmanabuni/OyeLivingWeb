@@ -31,9 +31,30 @@
     <legend class="scheduler-border headingOrange">Expenses Details</legend>
     <form #addExpense="ngForm" (ngSubmit)="addExp()">
       <div class="row">
-        <div class="col-xs-12">
-          <label style="float: right; margin: 15px 0px;"><strong>Current Date :
-            </strong>{{dateandTime | date:"d-M-y"}}</label>
+        <div class="col-sm-3" style="float: left">
+          <label style="margin: 15px 0px;"><strong>Current Date :
+            </strong>{{dateandTime | date:"dd-MM-yyyy"}}</label>
+        </div>
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-2">
+        </div>
+        <div class="col-sm-2">
+        </div>
+        <div class="col-sm-2" style="display:flex">
+            <!-- <span>
+              <ul>
+                <li style="display: block"> <img (click)="Upload()" src="../../assets/images/upload_excel.jpeg" width="45px" height="45px" style="cursor: pointer;"/></li>
+                <li style="display: block"><span style="font-size: 11px;">UploadExpense</span></li>
+              </ul>
+            </span>
+            <input type="file" id="file_upload_id" (change)="onFileChange($event)" multiple="false" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none" #file>
+            <span>
+              <ul>
+                <li style="display: block"><a href="../../assets/file/Expense.xlsx" download><img src="../../assets/images/download_excel.jpeg" width="45px" height="45px" style="cursor: pointer;"/></a></li>
+                <li style="display: block"><span style="font-size: 11px;">DownloadExpenseFormat</span></li>
+              </ul>
+            </span> -->
         </div>
       </div>
 
@@ -214,7 +235,7 @@
           <div class="form-group" [ngClass]="{'has-error' : unitControl.invalid && unitControl.touched}">
             <label>Select Unit <span class="red">*</span></label>
             <select class="ui dropdown search methodDropdown" name="UnUniIden" [(ngModel)]="expensedata.UnUniIden"
-              #unitControl='ngModel' [required]="applicabletoControl.value == 'Single'">
+              #unitControl='ngModel'>
               <option disabled="true" selected="true" value="">Select Unit </option>
               <option *ngFor='let item of ascUnit' [value]="item['unUniName']">
                 {{item['unUniName']}}
@@ -249,7 +270,7 @@
             <label>Select Payment Method <span class="red">*</span></label>
             <select class="ui dropdown search methodDropdown" name="PMID" [(ngModel)]="expensedata.PMID"
               #paybymethodControl='ngModel' (change)="showMethod(expensedata.PMID)" required>
-              <option disabled="true" selected="true" value="">Select Method *</option>
+              <option disabled="true" selected="true" value="">Select Payment Method</option>
               <option *ngFor='let item of methodArray' [value]="item['id']">
                 {{item['displayName']}}
               </option>
@@ -328,7 +349,7 @@
             <label>Cheque Date <span class="red">*</span></label>
             <input type="text" class="form-control" name="EXChqDate" #chequedateControl='ngModel'
               placeholder="Cheque Date" required [(ngModel)]="EXChqDate" [bsConfig]="bsConfig"
-              #expchkdate="bsDatepicker" bsDatepicker [minDate]="minDate" />
+              #expchkdate="bsDatepicker" bsDatepicker [minDate]="minDate" placement="top"/>
 
             <p class="alerts" *ngIf="chequedateControl.invalid && chequedateControl.touched"> Please Select Cheque Date
             </p>
@@ -342,7 +363,7 @@
           <div class="form-group" [ngClass]="{'has-error' : payeenameControl.invalid && payeenameControl.touched}">
             <label>Payee Name </label>
             <input type="text" class="form-control" name="EXPName" [(ngModel)]="expensedata.EXPName"
-              #payeenameControl='ngModel' pattern="^[a-zA-Z _]*$" required placeholder="Payee Name " />
+              #payeenameControl='ngModel' pattern="^[a-zA-Z _]*$" placeholder="Payee Name " />
 
             <div *ngIf="payeenameControl.invalid && payeenameControl.touched">
               <p class="alerts" *ngIf="payeenameControl.errors.required">Enter Payee Name</p>
@@ -377,7 +398,7 @@
             <label>Expenditure Date <span class="red">*</span></label>
             <input type="text" class="form-control" name="EXDate" #expendituredateControl='ngModel'
               placeholder="Expenditure Date " required [(ngModel)]="EXDate" [bsConfig]="bsConfig" #expdp='bsDatepicker'
-              bsDatepicker />
+              bsDatepicker placement="top"/>
 
             <p class="alerts" *ngIf="expendituredateControl.invalid && expendituredateControl.touched"> Please Select
               Expenditure Date</p>
@@ -400,22 +421,22 @@
 
       </div>
       <div class="form-group pull-right">
-        <input type="submit" class="btn btn-primary btn-lg" [disabled]='addExpense.invalid' value="Add Expense"/>
         <button (click)="resetForm($event)" type="button" class="btn btn-primary btn-lg">Reset </button>
+        <input type="submit" class="btn btn-primary btn-lg" [disabled]='addExpense.invalid' value="Add Expense"/>
       </div>
     </form>
 
     <div class="col-sm-6 col-xs-12">
-        <button style="position: absolute;top:46%;left:84%" class="btn btn-danger" (click)='removeSelectedfile()'><i class="fa fa-trash"></i> </button>
       <div class="row">
           <label>Invoice / Payment Copy<span class="red"></span></label>
       </div>
       <div class="row" style="display: flex">
-          <img id="imgthumbnail" src="../../assets/images/default_thumbnail.png" width="50px" height="50px" alt="">
-        <input type="file" id="uploadFileinput" class="form-control" (change)='onFileSelected($event)' />
-        <button class="btn btn-primary" (click)='onUpLoad()' style="position:absolute;margin-left:92%;top:45%" [disabled]='disableButton'>
+        <input type="file" id="uploadFileinput" class="form-control" (change)='onFileSelected($event)' style="top:42px;left:-50px;position:relative;"/>
+        <button class="btn btn-primary" (click)='onUpLoad()' style="position:absolute;margin-left:91%;top:88%;" [disabled]='disableButton'>
           <i class="fa fa-cloud-upload"></i>
         </button>
+        <img id="imgthumbnail" src="../../assets/images/default_thumbnail.png" style="position:absolute;top:94%;left:73%;" width="44px" height="32px" alt="">
+        <button style="position: absolute;top:88%;left:83%" class="btn btn-danger" (click)='removeSelectedfile()'><i class="fa fa-trash"></i> </button>
       </div>
           <div *ngIf='dynamic > 0' class="row mb-2">
               <progressbar [animate]="false" [value]="dynamic" type="success"><b>{{dynamic}}%</b></progressbar>

@@ -20,7 +20,8 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/assets/js/firebase-messaging-sw.js"
             ],
             "styles": [
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -29,19 +30,18 @@
               "./node_modules/intl-tel-input/build/css/intlTelInput.css",
               "src/assets/css/style.css",
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
-              "./node_modules/@syncfusion/ej2-base/styles/material.css",
-              "./node_modules/@syncfusion/ej2-buttons/styles/material.css",
-              "./node_modules/@syncfusion/ej2-inputs/styles/material.css",
-              "./node_modules/@syncfusion/ej2-popups/styles/material.css",
-              "./node_modules/@syncfusion/ej2-lists/styles/material.css",
-              "./node_modules/@syncfusion/ej2-splitbuttons/styles/material.css",
-              "./node_modules/@syncfusion/ej2-calendars/styles/material.css",
-              "./node_modules/@syncfusion/ej2-angular-calendars/styles/material.css"
+              "./node_modules/handsontable/dist/handsontable.full.css",
+              "./node_modules/pikaday/css/pikaday.css"
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",
+              "./node_modules/bootstrap/dist/js/bootstrap.js",
               "./node_modules/intl-tel-input/build/js/intlTelInput.min.js",
-              "./node_modules/intl-tel-input/build/js/utils.js"
+              "./node_modules/intl-tel-input/build/js/utils.js",
+              "./node_modules/jszip/lib/readable-stream-browser.js",
+              "./node_modules/exceljs/dist/exceljs.min.js",
+              "./node_modules/moment/moment.js",
+              "./node_modules/pikaday/pikaday.js"
             ],
             "es5BrowserSupport": true
           },

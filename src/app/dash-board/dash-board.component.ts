@@ -4,6 +4,8 @@ import {GlobalServiceService} from '../global-service.service';
 import { AppComponent } from '../app.component';
 import {LoginAndregisterService} from '../services/login-andregister.service';
 import {Router, NavigationEnd} from '@angular/router';
+import { ViewAssociationService } from '../view-association/view-association.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-dash-board',
@@ -46,16 +48,18 @@ export class DashBoardComponent implements OnInit {
 @ViewChild('visitor') public visitor:ElementRef;
   acfName: any;
   aclName: any;
+  enrollAssociation: boolean;
+  joinAssociation: boolean;
+  viewAssociation_Table: boolean;
  
-
   constructor(private dashBrdService: DashBoardService, private appComponent:AppComponent,
      private globalService:GlobalServiceService,
      private loginandregisterservice:LoginAndregisterService,
-     private router: Router) { 
+     private router: Router,
+     private viewassosiationservice:ViewAssociationService) { 
       this.accountID=this.globalService.acAccntID;
        this.association='';
      }
-
   ngOnInit() {
     this.getAssociation();
     this.getAmount();
@@ -65,6 +69,7 @@ export class DashBoardComponent implements OnInit {
     this.getStaff();
     this.getVistors();
     this.getAccountFirstName();
+    //this.globalService.currentAssociationName='';
   }
 
   getAssociation(){
@@ -72,7 +77,9 @@ export class DashBoardComponent implements OnInit {
     this.dashBrdService.getAssociation(this.accountID).subscribe(res => {
       //console.log(JSON.stringify(res));
       var data:any = res;
-      this.associations = data.data.associationByAccount;
+      console.log(data);
+      this.associations = data.data.memberListByAccount;
+      this.associations = _.sortBy(this.associations, e => e.asAsnName);
       console.log('associations',this.associations);
       },
       res=>{
@@ -100,7 +107,6 @@ export class DashBoardComponent implements OnInit {
        this.amount = this.amt[0]['pyAmtDue'];
     })
   }
-
   // getMembers(){
   //     this.dashBrdService.getMembers(this.accountID).subscribe(res => {
   //       //console.log(JSON.stringify(res));
@@ -112,7 +118,6 @@ export class DashBoardComponent implements OnInit {
   //       this.totalMember= data.data.memberListByAccount.length;
   //       });
   // }
-
   getMembers() {
     this.dashBrdService.getMembers(this.accountID).subscribe(res => {
       //console.log(JSON.stringify(res));
@@ -126,10 +131,8 @@ export class DashBoardComponent implements OnInit {
       (res) => {
         console.log(res);
         this.dashBrdService.memberdoesnotexist = true;
-
       });
   }
-
   getTickets() {
     this.dashBrdService.getTickets(this.associationID).subscribe(res => {
       console.log('ticketresult-', res);
@@ -142,10 +145,20 @@ export class DashBoardComponent implements OnInit {
         console.log('totalTickets', this.totalTickets);
       }
       // var data:any = res;
-
     });
   }
-
+  enroll() {
+    this.dashBrdService.toggleViewAssociationTable=true;
+    this.dashBrdService.enrollassociationforresident=true;
+    this.router.navigate(['home/association']);
+  }
+  join() {
+    // this.enrollAssociation = false;
+    // this.joinAssociation = true;
+    // this.viewAssociation_Table = false;
+    this.dashBrdService.toggleViewAssociationTable=false;
+    this.router.navigate(['home/association']);
+  }
   getAccountFirstName(){
     this.dashBrdService.getAccountFirstName(this.accountID).subscribe(res => {
       //console.log(JSON.stringify(res));
@@ -158,7 +171,6 @@ export class DashBoardComponent implements OnInit {
      this.dashBrdService.aclName=this.aclName;
       });
 }
-
   getVehicle(){
       this.dashBrdService.getVehicle(this.associationID).subscribe(res => {
         console.log('vehicle',res);
@@ -193,7 +205,6 @@ export class DashBoardComponent implements OnInit {
      }
     })
   }
-
   loadAssociation(associationName:string){
     //this.appComponent.myMenus=true;
     console.log("AssociationName: ",associationName);
@@ -208,6 +219,7 @@ export class DashBoardComponent implements OnInit {
       }
       
     });
+    console.log('globalService.currentAssociationName',this.globalService.currentAssociationName);
     this.getAmount();
     this.getMembers();
     this.getTickets();
@@ -216,7 +228,6 @@ export class DashBoardComponent implements OnInit {
     this.getVistors();
     
   }
-
   assnAmountDue(){
     this.AssociationAmountDue=true;
     this.memberDeatils=false;
@@ -257,7 +268,6 @@ export class DashBoardComponent implements OnInit {
        this.visitorDetails=false;
        this.vehicle.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
    }
-
  staffs(){
   this.staffDetails=true;
   this.vehicleDetails=false;
@@ -276,5 +286,4 @@ export class DashBoardComponent implements OnInit {
   this.ticketDetails=false;
   this.visitor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
  }
-
 }

@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ViewUnitService } from '../view-unit/view-unit.service';
 import Swal from 'sweetalert2';
 import {GlobalServiceService} from '../global-service.service';
+import {Router} from '@angular/router'
+import { NgForm } from '@angular/forms';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-add-unit',
@@ -41,9 +44,14 @@ export class AddUnitComponent implements OnInit {
 
   accountID:number;
   toggleunitvehicleinformation:boolean;
+  @ViewChild('createunitForm') createunitForm: NgForm;
+  scopeIP: string;
 
   constructor(private viewUniService: ViewUnitService,
-    private globalservice:GlobalServiceService) {
+    private globalservice:GlobalServiceService,
+    private router:Router,
+    private http:HttpClient) {
+      this.scopeIP="https://apidev.oyespace.com/";
       this.currentAssociationName=this.globalservice.getCurrentAssociationName();
       this.accountID=this.globalservice.acAccntID;
       this.toggleunitvehicleinformation=true;
@@ -148,7 +156,12 @@ export class AddUnitComponent implements OnInit {
     }
   }
 
+  addParking(){
+
+  }
+
   createUnit() {
+
     let createUnitData =
     {
       "ASAssnID": this.currentAssociationID,
@@ -221,13 +234,43 @@ export class AddUnitComponent implements OnInit {
       Swal.fire({
         title: 'Unit Created Successfuly',
         type: 'success',
-        confirmButtonText: 'OK'
-      })
+        showCancelButton: true,
+        confirmButtonText: 'OK',
+        cancelButtonText: "View Unit"
+      }).then(
+       (result) => {
+
+         if (result.value) {
+           this.createunitForm.reset();
+           this.unitno='';
+           this.unitType='';
+           this.calculationtype='';
+           this.unitrate='';
+           this.unitdimension='';
+           this.occupency='';
+       
+           this.ownerFirtname='';
+           this.ownerLastname='';
+           this.ownerMobnumber='';
+           this.ownerAltnumber='';
+           this.ownerEmail='';
+           this.ownerAltemail='';
+           this.tenantFirtname='';
+           this.tenantLastname='';
+           this.tenantMobnumber='';
+           this.tenantEmail='';
+
+
+         } else if (result.dismiss === Swal.DismissReason.cancel) {
+           this.router.navigate(['home/viewunit']);
+         }
+       }
+     )
 
     },
       (response) => {
         console.log(response);
-      });
+      }); 
 
       // this.unitno='';
       // this.unitrate='';
@@ -248,5 +291,13 @@ export class AddUnitComponent implements OnInit {
       // this.calculationtype='';
 
   }
+
+  getHttpheaders(): HttpHeaders {
+    const headers = new HttpHeaders()
+    .set('Authorization', 'my-auth-token')
+    .set('X-Champ-APIKey', '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1')
+    .set('Content-Type', 'application/json');
+    return headers;
+    }
 
 }

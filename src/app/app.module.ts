@@ -46,7 +46,21 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
 import { DefaultimagePipe } from './pipes/defaultimage.pipe';
-
+import { ToastrModule } from 'ngx-toastr';
+import { NewInvoiceComponent } from './new-invoice/new-invoice.component';
+import { CustomdatePipe } from './pipes/customdate.pipe';
+import {NgxPrinterModule} from 'ngx-printer';
+import { AddexpensexlsxComponent } from './addexpensexlsx/addexpensexlsx.component';
+import { OrderModule } from 'ngx-order-pipe';
+import { HotTableModule } from '@handsontable/angular';
+import {ExpensegridComponent} from './expensegrid/expensegrid.component';
+import { ReadBlockAndUnitxlsxComponent } from './read-block-and-unitxlsx/read-block-and-unitxlsx.component';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { environment } from '../environments/environment';
+import { GuestComponent } from './guest/guest.component';
+import { DeliveriesComponent } from './deliveries/deliveries.component';
+import { StaffComponent } from './staff/staff.component';
 
 
 @NgModule({
@@ -81,7 +95,15 @@ import { DefaultimagePipe } from './pipes/defaultimage.pipe';
     ViewAssociationComponent,
     ViewUnitComponent,
     HomeComponent,
-    DefaultimagePipe
+    DefaultimagePipe,
+    NewInvoiceComponent,
+    CustomdatePipe,
+    AddexpensexlsxComponent,
+    ExpensegridComponent,
+    ReadBlockAndUnitxlsxComponent,
+    GuestComponent,
+    DeliveriesComponent,
+    StaffComponent
   ],
   imports: [
     BrowserModule,
@@ -92,13 +114,19 @@ import { DefaultimagePipe } from './pipes/defaultimage.pipe';
     Ng2SearchPipeModule,
     AppRouting,
     BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     BsDatepickerModule.forRoot(),
     ModalModule.forRoot(),
     ProgressbarModule.forRoot(),
     PaginationModule.forRoot(),
     NgxPaginationModule,
     Ng2TelInputModule,
-    DatePickerModule
+    DatePickerModule,
+    NgxPrinterModule.forRoot({printOpenWindow: false}),
+    OrderModule,
+    HotTableModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireMessagingModule
   ],
   providers: [ViewAssociationService, ViewBlockService, ViewUnitService, DashBoardService],
   bootstrap: [AppComponent]

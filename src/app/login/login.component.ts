@@ -105,11 +105,9 @@ export class LoginComponent implements OnInit {
   }
 
   verifyOtp() {
-    //alert('inside verifyOtp...');
     let headers = this.getHttpheaders();
     let url = `${this.ipAddress}/oyeliving/api/v1/account/verifyotp`
     var otpdata = {
-      // CountryCode : this.code,
       CountryCode: this.code,
       MobileNumber: this.mobilenumber,
       OTPnumber: this.otp
@@ -124,7 +122,6 @@ export class LoginComponent implements OnInit {
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
             text: 'Please register your Number!',
-            // footer: '<a href>Why do I have this issue?</a>'
           }).then((result) => {
             if (result.value) {
              this.router.navigate(['register']);
@@ -132,29 +129,60 @@ export class LoginComponent implements OnInit {
           })
         }
        else if (data['data'] != null){
-         //alert('inside verifyotp..data!= null');
         console.log('acAccntID',data['data']['account']['acAccntID']);
         this.globalserviceservice.acAccntID=data['data']['account']['acAccntID'];
-        //alert('assigned accountid to globalserviceservice.acAccntID');
-        //alert('displaying globalserviceservice.acAccntID'+this.globalserviceservice.acAccntID);
-        //this.dashboardservice.getMembers(this.globalserviceservice.acAccntID).subscribe(res => {
-          //alert('assigning mrmRoleID...');
-          //this.dashboardservice.mrmRoleID = res['data'].memberListByAccount[0]['mrmRoleID'];
-          //alert('displaying dashboardservice.mrmRoleID..'+this.dashboardservice.mrmRoleID);
-          //this.router.navigate(['home']);
-        //},
-        //res=>{
-          //alert('dashboardservice.mrmRoleID'+this.dashboardservice.mrmRoleID);
-        //});
-
-        //alert('navigate to home component...');
-        this.router.navigate(['home']);
+        console.log(this.globalserviceservice.acAccntID);
+        this.dashboardservice.getMembers(this.globalserviceservice.acAccntID).subscribe(res => {
+          console.log('memberListByAccount',res['data'].memberListByAccount);
+          this.dashboardservice.mrmRoleID = res['data'].memberListByAccount[0]['mrmRoleID'];
+          console.log(this.dashboardservice.mrmRoleID);
+          this.router.navigate(['home']);
+        },
+        res=>{
+          console.log(res);
+          Swal.fire({
+            title: "Error",
+            text: res['error']['message'],
+            type: "error",
+            confirmButtonColor: "#f69321"
+          }).then(
+            (result) => {
+              if (result.value) {
+                this.router.navigate(['home']);
+              }});
+          
+        });
         }
       })
      
   }
 
+  verifyOtp1(){
+    this.globalserviceservice.acAccntID=11511;
+    console.log(this.globalserviceservice.acAccntID);
+    this.dashboardservice.getMembers(this.globalserviceservice.acAccntID).subscribe(res => {
+      console.log('memberListByAccount',res['data'].memberListByAccount);
+      this.dashboardservice.mrmRoleID = res['data'].memberListByAccount[0]['mrmRoleID'];
+      console.log(this.dashboardservice.mrmRoleID);
+      this.router.navigate(['home']);
+    },
+    res=>{
+      console.log(res);
+      Swal.fire({
+        title: "Error",
+        text: res['error']['message'],
+        type: "error",
+        confirmButtonColor: "#f69321"
+      }).then(
+        (result) => {
+          if (result.value) {
+            this.router.navigate(['home']);
+          }});
+      
+    });
+  }
 
+  
   otpCall(e) {
     e.preventDefault();
     let headers = this.getHttpheaders();

@@ -9,7 +9,9 @@ export class GlobalServiceService {
    currentAssociationName:string;
    acAccntID:number;
    
-  constructor() { }
+  constructor() { 
+    this.currentAssociationName='';
+  }
 
 
 public getCurrentAssociationId(){

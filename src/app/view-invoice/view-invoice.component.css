@@ -21,7 +21,8 @@
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
-/**/
+
+/*
 @media print {
 body.modalprinter * {
     visibility: hidden;
@@ -56,5 +57,63 @@ body.modalprinter .modal-dialog.focused .modal-content .modal-body {
 body.modalprinter .modal-dialog.focused .modal-content .modal-header .modal-title {
     margin-bottom: 20px;
 }
+}*/
+#spanid {
+    visibility: hidden;
+  }
+  
+  .activee #spanid {
+    color: #000;
+    visibility: visible;
+  }
+  
+  table thead tr th{
+  cursor: pointer;
+  }
+
+  /**/
+  .ulclass
+{ 
+overflow-x:hidden;
+white-space:nowrap; 
+height: 1em;
+width: 100%;
+} 
+
+li
+{ 
+display:inline; 
+} 
+  /**/
+.clsspacelft{
+    margin-left: 8px;
 }
+.clsspaceright{
+    margin-right: 9px;
+}
+#makePaymentButton{
+    position: absolute;
+    left: 66%; 
+    bottom: 10px;
+    margin-bottom: 6px;
+    }
+#generateReceiptButton{
+    position: absolute;
+    left:78%;
+    bottom: 10px;
+    }
+    .modal-content1 {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        pointer-events: auto;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid rgba(0,0,0,.2);
+        border-radius: .3rem;
+        outline: 0;
+    }
+
+    
 

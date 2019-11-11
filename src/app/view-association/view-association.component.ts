@@ -11,6 +11,11 @@ import { Bank } from '../models/bank';
 import { BlocksByAssoc } from '../models/blocks-by-assoc';
 import{Sendrequest} from '../models/sendrequest';
 import Swal from 'sweetalert2';
+import { OrderPipe } from 'ngx-order-pipe';
+import {DashBoardService} from '../dash-board/dash-board.service';
+import {HomeService} from '../home/home.service';
+import { AngularFireMessaging } from '@angular/fire/messaging';
+import { mergeMapTo } from 'rxjs/operators';
 
 
 
@@ -168,13 +173,23 @@ export class ViewAssociationComponent implements OnInit {
 
   togglevalidateGST:boolean;
   defaultThumbnail: string;
+  defaultPanThumbnail: string;
+
+  order: string = 'asAsnName';
+  reverse: boolean = false;
+  sortedCollection: any[];
+  _associations: any;
 
   constructor(
     private viewAssnService: ViewAssociationService,
     private globalService: GlobalServiceService,
     private router: Router,
     private modalService: BsModalService,
-    private route:ActivatedRoute){
+    private route:ActivatedRoute,
+    private orderpipe: OrderPipe,
+    private dashboardservice:DashBoardService,
+    private homeservice:HomeService,
+    private afMessaging: AngularFireMessaging){
     //pagination
     this.isLargefile = false;
     this.isnotValidformat = false;
@@ -182,14 +197,31 @@ export class ViewAssociationComponent implements OnInit {
     this.config = {
       itemsPerPage: 10,
       currentPage: 1
-      
-
     };
   
-
+    //alert('test');
     this.enrollAssociation = false;
     this.joinAssociation = false;
-    this.viewAssociation_Table = true;
+    if (this.dashboardservice.toggleViewAssociationTable) {
+      this.enrollAssociation = true;
+      this.viewAssociation_Table = true;
+      if(this.dashboardservice.enrollassociationforresident){
+        this.viewAssociation_Table = false;
+      }
+      this.joinAssociation = false;
+      this.homeservice.toggleviewassociationtable=false;
+    }
+    if (!this.dashboardservice.toggleViewAssociationTable) {
+      this.enrollAssociation = false;
+      this.viewAssociation_Table = false;
+      this.joinAssociation = true;
+    }
+    if (this.homeservice.toggleviewassociationtable) {
+      this.viewAssociation_Table = true;
+      this.joinAssociation = false;
+      this.enrollAssociation = false;
+      //alert('joinAssociation');
+    }
 
   //   this.route.params.subscribe(data=>{
   //     console.log(data['asAssnID']);
@@ -201,7 +233,14 @@ export class ViewAssociationComponent implements OnInit {
   //     this.allBlocksLists= res['data']['blocksByAssoc'];
   //     console.log(this.allBlocksLists);
   // });
+  this.crtAssn.newBABName='';
+  this.crtAssn.newBAIFSC='';
+  this.crtAssn.newBAActNo='';
+  this.crtAssn.newBAActType='';
 
+  this.crtAssn.GSTNumber='';
+  this.crtAssn.email='';
+  this.crtAssn.url='';
     
   this.association='';
 
@@ -235,7 +274,8 @@ export class ViewAssociationComponent implements OnInit {
     this.accountID = this.globalService.acAccntID;
     this.newamenities=[];
     this.defaultThumbnail='../../assets/images/default_thumbnail.png';
-  
+    this.defaultPanThumbnail='../../assets/images/default_panthumbnail copy.png';
+    this.ASAsnName='';
 }
 
 
@@ -416,25 +456,29 @@ export class ViewAssociationComponent implements OnInit {
         BAActID:this.BAActID
       }]
   };
-  console.log(this.editassndata);
-  this.viewAssnService.UpdateAssociation(this.editassndata).subscribe(res => {console.log("Done");
-  console.log(JSON.stringify(res));
-//alert("Association Created Successfully")
-Swal.fire({
-  title: 'Association Updated Successfuly',
-}).then(
-  (result) => {
+    console.log(this.editassndata);
+    this.viewAssnService.UpdateAssociation(this.editassndata).subscribe(res => {
+      console.log("Done");
+      console.log(JSON.stringify(res));
+      //alert("Association Created Successfully")
+      Swal.fire({
+        title: 'Association Updated Successfuly',
+      }).then(
+        (result) => {
 
-    if (result.value) {
-      //this.form.reset();
-      this.router.navigate(['home/association']);
-    
-    } else if (result.dismiss === swal.DismissReason.cancel) {
-      this.router.navigate(['']);
-    }
-  })
-});
-  
+          if (result.value) {
+            //this.form.reset();
+            this.router.navigate(['home/association']);
+
+          } else if (result.dismiss === swal.DismissReason.cancel) {
+            this.router.navigate(['']);
+          }
+        })
+    },
+      err => {
+        console.log(err);
+      });
+
 
   }
 
@@ -461,7 +505,7 @@ this.crtAssn.newBAActType='';
     this.viewAssnService.getAssociationAllDetails()
     .subscribe(item => {
       console.log('getAssociationAllDetails',item);
-      //this.associations = item;
+      this._associations= item['data']['associations'];
      //this.availableNoOfBlocks = item.length;
       console.log('associations', this.associations);  
 
@@ -494,7 +538,17 @@ this.crtAssn.newBAActType='';
       console.log(data.data.associationByAccount);
       this.associations = data.data.associationByAccount;
       console.log(this.associations);
+      //
+      this.sortedCollection = this.orderpipe.transform(this.associations, 'asAsnName');
+      console.log(this.sortedCollection);
     });
+  }
+
+  setOrder(value: string) {
+    if (this.order === value) {
+      this.reverse = !this.reverse;
+    }
+    this.order = value;
   }
   // getAssociationDetail(){
   //   this.viewAssnService.getAssociationDetail()
@@ -649,7 +703,42 @@ this.crtAssn.newBAActType='';
   }
 
   //dropdownassociationlist. associations
-  
+  onFilSelected(event) {
+    this.isLargefile = false;
+    this.isnotValidformat = false;
+    this.disableButton = false;
+    this.selectedFile = <File>event.target.files[0];
+    console.log('file type', this.selectedFile['type']);
+    if (this.selectedFile['type'] == "application/zip") {
+      console.log('inside file type');
+      this.isnotValidformat = true;
+      this.disableButton = true;
+    }
+    if (this.selectedFile['size'] > 2000000) {
+      console.log('inside file size');
+      this.isLargefile = true;
+      this.disableButton = true;
+    }
+    
+    let imgpanthumbnailelement = <HTMLInputElement>document.getElementById("assosnpanimgthumbnail");
+    let splitarr = this.selectedFile['name'].split('.')
+    let currentdate = new Date();
+    let expycopy = splitarr[0] + '_' + currentdate.getTime().toString() + '.' + splitarr[1];
+    let reader  = new FileReader();
+   
+    
+    reader.onloadend = function () {
+      // imgthumbnailelement.src  = reader.result as string;
+      imgpanthumbnailelement.src  = reader.result as string;
+    }
+    if (this.selectedFile) {
+      reader.readAsDataURL(this.selectedFile);
+    } else {
+      // imgthumbnailelement.src = "";
+      imgpanthumbnailelement.src = "";
+    }
+  }
+
 
   removeSelectedfile() {
     let imgthumbnailelement = <HTMLInputElement>document.getElementById("assosnlogoimgthumbnail");
@@ -666,6 +755,9 @@ this.crtAssn.newBAActType='';
     this.isLargefile = false;
   }
   removePanfile() {
+    let imgpanthumbnailelement = <HTMLInputElement>document.getElementById("assosnpanimgthumbnail");
+   imgpanthumbnailelement.src = this.defaultPanThumbnail;
+
     const dataTransfer = new ClipboardEvent('').clipboardData || new DataTransfer();
     dataTransfer.items.add('', '');
     console.log('dataTransfer', dataTransfer);
@@ -729,8 +821,8 @@ this.crtAssn.newBAActType='';
         "ASPANStat": "True",
         //"ASPANNum":"AAAAm1234A",
         //"ASPANNum": this.crtAssn.assnPANNo,
-        "ASNofBlks": this.crtAssn.totalNoBlocks,
-        "ASNofUnit": this.crtAssn.totalNoUnits,
+        "ASNofBlks": 1000000,//this.crtAssn.totalNoBlocks,
+        "ASNofUnit": 10000000,//this.crtAssn.totalNoUnits,
         "ASONStat": "False",
         "ASOMStat": "False",
         "ASOLOStat": "False",
@@ -780,7 +872,11 @@ this.crtAssn.newBAActType='';
   };
 
     this.viewAssnService.createAssn(this.createAsssociationData).subscribe(res => {
-      console.log(JSON.stringify(res));
+      console.log(res['data']['association']['asAssnID']);
+      //console.log(res['association']['asAssnID']);
+      this.viewAssnService.associationId=res['data']['association']['asAssnID'];
+      this.viewAssnService.asNofBlks=res['data']['association']['asNofBlks'];
+      this.viewAssnService.asNofUnit=res['data']['association']['asNofUnit'];
       Swal.fire({
         title: 'Association Created Successfuly',
       }).then(
@@ -799,6 +895,9 @@ this.crtAssn.newBAActType='';
               this.associations = data.data.associationByAccount;
               console.log(this.associations);
             });
+
+            //
+            //this.router.navigate(['home/addblockunitxlsx']);
 
           } else if (result.dismiss === swal.DismissReason.cancel) {
             //this.router.navigate(['']);
@@ -822,10 +921,29 @@ this.crtAssn.newBAActType='';
 
 
   OnSendButton(){
-    this.senddata={
+    // this.afMessaging.requestPermission
+    // .subscribe(
+    //   () => { console.log('Permission granted!'); },
+    //   (error) => { console.error(error); },  
+    // );
+
+    // this.afMessaging.requestPermission
+    //   .pipe(mergeMapTo(this.afMessaging.tokenChanges))
+    //   .subscribe(
+    //     (token) => { console.log('Permission granted! Save to the server!', token); },
+    //     (error) => { console.error(error); },
+    //   );
+
+    this.afMessaging.tokenChanges
+      .subscribe(
+        (token) => { console.log('Permission granted! Save to the server!', token); },
+        (error) => { console.error(error); },
+      );
+
+   /* this.senddata={
       "ISDCode":"+91",
-      "MobileNumber":"9490791523",
-      "text":"Hallo Fraaandss"
+      "MobileNumber":"7353204696",
+      "text":"ABC... want to join your Association"
     }
     this.viewAssnService.sendRequestmethod(this.senddata)
       .subscribe(
@@ -839,7 +957,7 @@ this.crtAssn.newBAActType='';
     
           })
           console.log(data);
-        })
+        }) */
         
   }
 
@@ -858,7 +976,7 @@ this.crtAssn.newBAActType='';
       }
     }
 
-  }
+  } 
 
 
 

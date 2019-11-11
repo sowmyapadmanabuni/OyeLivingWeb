@@ -1,0 +1,71 @@
+<div class="main-wrapper animateIt">
+  <div class="container-fluid">
+      <div class="pageTitle" style="padding: 10px;">
+          <div class="row">
+              <div class="col-sm-5 col-xs-12">
+                  <h3 style="margin-top: 3px; margin-bottom: 0;">Visitor List</h3>
+              </div>
+              <div class="col-sm-4 col-xs-12">
+                  <div class="form-group">
+                      <input type="text" name="searchBoxData" [(ngModel)]="searchBoxData" class="form-control"
+                          placeholder="Search" />
+                  </div>
+              </div>
+              <div class="col-sm-3 col-xs-12">
+                  <button type="button" class="btn btn-primary pull-right" (click)="addBlocksValidation()"><i
+                          class="fa fa-plus"></i> Add Visitor</button>
+              </div>
+          </div>
+      </div>
+      <div *ngIf="allBlocksLists == ''" class="card">
+              <h1 style="text-align :center">No Data Available</h1>
+            </div>
+          <!-- <div *ngIf='allBlocksLists' class="card"> -->
+  
+      <div class="card" *ngIf='allBlocksLists'>
+          <div class="row">
+              <!---->
+              <div class="table-responsive hidden-xs" style="margin-top: 40px;">
+                  <table class="table">
+                      <thead>
+                          <tr style="color:#e59400;">
+                              <th>Block Name</th>
+                              <th>Block Type</th>
+                              <th>No Of Units</th>
+                              <th>Action</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let item of allBlocksLists | filter: searchBoxData | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                              <td data-toggle="modal" data-target="#viewBlockDetailsTemplate"
+                                  (click)="viewBlockDetails(item.blBlkName,item.blBlkType,item.blNofUnit)">{{item['blBlkName']}}
+                              </td>
+                              <td data-toggle="modal" data-target="#viewBlockDetailsTemplate"
+                                  (click)="viewBlockDetails(item['blBlkName'],item['blBlkType'],item['blNofUnit'])">{{item['blBlkType']}}
+                              </td>
+                              <td data-toggle="modal" data-target="#viewBlockDetailsTemplate"
+                                  (click)="viewBlockDetails(item['blBlkName'],item['blBlkType'],item['blNofUnit'])">{{item['blNofUnit']}}
+                              </td>
+                              <td>
+                                  <i data-toggle="modal" data-target="#viewBlockDetailsTemplate"
+                                      (click)="viewBlockDetails(item['blBlkName'],item['blBlkType'],item['blNofUnit'])" class="fa fa-eye"></i>&nbsp;|&nbsp;<i
+                                      data-toggle="modal" data-target="#editBlockDetails"
+                                      (click)="OpenModal(editBlocktemplate,item.blBlkName,item.blBlkType,item.blNofUnit,item.blMgrName,item.blMgrMobile,item.blMgrEmail,item.asMtType,item.asMtFRate,item.asMtDimBs,item.asUniMsmt,item.asbGnDate,item.asdPyDate,item.bldUpdated,item.aslpcType,item.aslpChrg,item.blBlockID,item.asiCrFreq,item.aslpsDate)"
+                                      class="fa fa-pencil"></i>
+
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  <p class="text-center float-right"><pagination-controls (pageChange)="p = $event"></pagination-controls></p>
+              </div>
+          </div>
+          <!---->
+      </div>
+  </div>
+</div>
+
+<!------------------>
+
+
+

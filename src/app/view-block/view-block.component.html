@@ -36,7 +36,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of allBlocksLists | filter: searchBoxData">
+                            <tr *ngFor="let item of allBlocksLists | filter: searchBoxData | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
                                 <td data-toggle="modal" data-target="#viewBlockDetailsTemplate"
                                     (click)="viewBlockDetails(item.blBlkName,item.blBlkType,item.blNofUnit)">{{item['blBlkName']}}
                                 </td>
@@ -50,21 +50,21 @@
                                     <i data-toggle="modal" data-target="#viewBlockDetailsTemplate"
                                         (click)="viewBlockDetails(item['blBlkName'],item['blBlkType'],item['blNofUnit'])" class="fa fa-eye"></i>&nbsp;|&nbsp;<i
                                         data-toggle="modal" data-target="#editBlockDetails"
-                                        (click)="OpenModal(editBlocktemplate,item.blBlkName,item.blBlkType,item.blNofUnit,item.blMgrName,item.blMgrMobile,item.blMgrEmail,item.asMtType,item.asMtFRate,item.asMtDimBs,item.asUniMsmt,item.asbGnDate,item.bldUpdated,item.aslpcType,item.aslpChrg,item.aslpsDate,item.blBlockID,item.asiCrFreq)"
+                                        (click)="OpenModal(editBlocktemplate,item.blBlkName,item.blBlkType,item.blNofUnit,item.blMgrName,item.blMgrMobile,item.blMgrEmail,item.asMtType,item.asMtFRate,item.asMtDimBs,item.asUniMsmt,item.asbGnDate,item.asdPyDate,item.bldUpdated,item.aslpcType,item.aslpChrg,item.blBlockID,item.asiCrFreq,item.aslpsDate)"
                                         class="fa fa-pencil"></i>
 
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <p class="text-center float-right"><pagination-controls (pageChange)="p = $event"></pagination-controls></p>
                 </div>
             </div>
             <!---->
-            <div class="row">
-                <div class="col-xs-12">
-                    <!-- pagination... -->
-                </div>
-            </div>
+            <!-- <div class="row">
+                     pagination... 
+                    <p class="text-center float-right"><pagination-controls (pageChange)="p = $event"></pagination-controls></p>
+            </div> -->
         </div>
     </div>
 </div>
@@ -152,7 +152,7 @@
                                     <label id=label1>Block Name<span class="red">*</span> </label>
                                     <input type="text" name="BLBlkName" id="input1" autocomplete='BLBlkName'
                                         [(ngModel)]="BLBlkName" #blocknameControl="ngModel" class="form-control"
-                                        placeholder="Block Name" pattern="[a-zA-Z0-9-]*" required />
+                                        placeholder="Block Name" pattern="[a-zA-Z0-9]*" required />
                                     <p class="alerts" *ngIf="blocknameControl.invalid && blocknameControl.touched">Valid
                                         name is required
                                     </p>
@@ -338,18 +338,26 @@
                                     <label>Invoice Generation Date<span class="red">*</span></label>
                                     <input type="text" class="form-control" name="ASBGnDate"
                                         #NextInvoiceGenDateControl='ngModel' placeholder="Invoice Generation Date"
-                                        [bsConfig]="bsConfig" [(ngModel)]="ASBGnDate" #nigDate='bsDatepicker'
-                                        bsDatepicker />
-
+                                        [bsConfig]="bsConfig" [(ngModel)]="ASBGnDate" (bsValueChange)="onValueChange($event)"  [minDate]="todayDate"
+                                        bsDatepicker placement="top"/>
+                                        <p class="invalid-feedback">Invoice Generation Date required
+                                        </p>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-xs-12">
                                 <div class="form-group">
                                     <label>Due Date<span class="red">*</span></label>
-                                    <input type="text" class="form-control" name="ASDPyDate" #DueDateControl='ngModel'
-                                        placeholder="Due Date" [bsConfig]="bsConfig" [(ngModel)]="ASDPyDate"
-                                        #DueDateCtrl='bsDatepicker' bsDatepicker />
-
+                                    <input type="text" class="form-control" name="ASDPyDate" #DueDateControl='ngModel' [class.classForInvalid]="enableduedatevalidation"
+                                        placeholder="Due Date" [bsConfig]="bsConfig" [(ngModel)]="ASDPyDate" [minDate]="minDate"
+                                        (bsValueChange)="onDueDateValueChange($event)"
+                                         bsDatepicker placement="top"/>
+                                         <p class="invalid-feedback">Due date required
+                                        </p>
+                                         <ng-container *ngIf='enableduedatevalidation'>
+                                            <p class="invalidFeedback">Due date should be greater than or equal to
+                                                invoice date
+                                            </p>
+                                          </ng-container>
                                 </div>
                             </div>
                         </div>
@@ -418,9 +426,13 @@
 
                                     <input class="form-control" type="text" class="form-control" name="ASLPSDate"
                                         #StartsFromDateControl='ngModel' placeholder="Starts From Date"
-                                        [bsConfig]="bsConfig" [(ngModel)]="ASLPSDate" #startsFromDateCtrl='bsDatepicker'
-                                        bsDatepicker />
-
+                                        [bsConfig]="bsConfig" [(ngModel)]="ASLPSDate" #startsFromDateCtrl='bsDatepicker' [minDate]='startsFromMaxDate' [class.classForInvalid]="enablestartfromdatevalidation"
+                                         (bsValueChange)="onStartsFromDateValueChange($event)" [(ngModel)]="ASLPSDate" #startsFromDateCtrl='bsDatepicker'
+                                        bsDatepicker placement="top"/>
+                                        <p class="invalid-feedback">Select Date</p>
+                                        <ng-container *ngIf='enablestartfromdatevalidation'>
+                                            <p class="invalidFeedback">Starts from date should be greater than or equal to due date</p>
+                                        </ng-container>
                                 </div>
 
                             </div>

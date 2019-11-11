@@ -1,0 +1,32 @@
+<div style="text-align:center">
+  <h1>
+    Expense Spreadsheet
+  </h1>
+</div>
+<div>
+
+  <hot-table
+      class="hot" [hotId]="id" [data]="testdatanew" [colHeaders]="true" [rowHeaders]="true" [height]="400" [width]="1100"
+      [contextMenu]="true" [settings]="hotSettings">
+        <hot-column data="ExpenseHead" title="ExpenseHead"></hot-column>
+        <hot-column data="ExpenseDescription" title="ExpenseDescription"></hot-column>
+        <hot-column data="ExpenseRecurrenceType" title="ExpenseRecurrenceType"></hot-column>
+        <hot-column data="ApplicableToUnit" title="ApplicableToUnit"></hot-column>
+        <hot-column data="ExpenseType" title="ExpenseType"></hot-column>
+        <hot-column data="DistributionType" title="DistributionType"></hot-column>
+        <hot-column data="PaymentMethod" title="PaymentMethod"></hot-column>
+        <hot-column data="SelectBank" title="SelectBank"></hot-column>
+        <hot-column data="VoucherNo" title="VoucherNo"></hot-column>
+        <hot-column data="ChequeNo" title="ChequeNo"></hot-column>
+        <hot-column data="ChequeDate" title="ChequeDate" type="date"></hot-column>
+        <hot-column data="DemandDraftNo" title="DemandDraftNo"></hot-column>
+        <hot-column data="Amount" title="Amount" type="numeric"></hot-column>
+        <hot-column data="DemandDraftDate" title="DemandDraftDate" type="date"></hot-column>
+        <hot-column data="PayeeName" title="PayeeName"></hot-column>
+        <hot-column data="PayeeBankName" title="PayeeBankName"></hot-column>
+        <hot-column data="ExpenditureDate" title="ExpenditureDate" type="date"></hot-column>
+        <hot-column data="InvoiceNoReceiptNo" title="InvoiceNoReceiptNo"></hot-column>
+        <hot-column data="SelectUnit" title="SelectUnit"></hot-column>
+    </hot-table>
+  <input type="button" style="float:right;margin-right:60px;" (click)="commitAllExpense()" class="mdButton1" value="Commit All"/> 
+</div>

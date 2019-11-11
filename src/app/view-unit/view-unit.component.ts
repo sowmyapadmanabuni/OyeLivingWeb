@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 //import * as swal from 'sweetalert2';
 import { GlobalServiceService } from '../global-service.service';
 import {Router} from '@angular/router';
+import { OrderPipe } from 'ngx-order-pipe';
 
 
 @Component({
@@ -64,10 +65,16 @@ export class ViewUnitComponent implements OnInit {
   tenantLastname:string;
   tenantMobnumber:string;
   tenantEmail:string;
+  p:number;
+
+  order: string = 'unUniName';
+  reverse: boolean = false;
+  sortedCollection: any[];
 
   constructor(private viewUniService: ViewUnitService,
      private globalService: GlobalServiceService,
-     private router:Router) {
+     private router:Router,
+     private orderpipe: OrderPipe) {
     this.ACAccntID=this.globalService.acAccntID;
     this.currentAssociationID=this.globalService.getCurrentAssociationId();
     //pagination
@@ -76,6 +83,7 @@ export class ViewUnitComponent implements OnInit {
       currentPage: 1
     };
 
+    this.p=1;
     this.blBlockID = '';
     this.unitType='';
     this.calculationtype='';
@@ -245,12 +253,12 @@ export class ViewUnitComponent implements OnInit {
           "Tenant":
           {
 
-            "UTFName":""/*this.tenantFirtname,*/,
-            "UTLName": ""/*this.tenantLastname,*/,
-            "UTMobile": ""/*this.tenantMobnumber,*/,
+            "UTFName":this.tenantFirtname,
+            "UTLName": this.tenantLastname,
+            "UTMobile": this.tenantMobnumber,
             "UTISDCode": "",
             "UTMobile1": "",
-            "UTEmail": ""/*this.tenantEmail,*/,
+            "UTEmail": this.tenantEmail,
             "UTEmail1": ""
           },
           "UnitParkingLot":
@@ -291,7 +299,7 @@ export class ViewUnitComponent implements OnInit {
         unitDimen: repUnit.unDimens,
         rate: repUnit.unRate,
         calculationType: repUnit.unCalType,
-        ownershipStatus: repUnit.unOwnStat
+        occupencyStatus: repUnit.unOcStat
       };
      
   }
@@ -303,7 +311,17 @@ export class ViewUnitComponent implements OnInit {
       .subscribe(data => {
         console.log('allUnitBYBlockID',data);
         this.allUnitBYBlockID = data['data'].unitsByBlockID;
+            //
+            this.sortedCollection = this.orderpipe.transform(this.allUnitBYBlockID, 'unUniName');
+            console.log(this.sortedCollection);
       });
+  }
+
+  setOrder(value: string) {
+    if (this.order === value) {
+      this.reverse = !this.reverse;
+    }
+    this.order = value;
   }
 
 }//class ends

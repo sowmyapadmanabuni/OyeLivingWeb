@@ -21,6 +21,9 @@ export class DashBoardService {
   aclName: any;
 
   memberdoesnotexist:boolean;
+  toggleViewAssociationTable:boolean;
+  enrollassociationforresident:boolean;
+  joinassociationforresident:boolean;
   
   constructor(private http:HttpClient) {
     
@@ -30,11 +33,14 @@ export class DashBoardService {
                                    .append('X-Champ-APIKey', this.scriptIP)
                                    .append('Access-Control-Allow-Origin', "*");
 
-                                  
+                  this.memberdoesnotexist=false; 
+    this.toggleViewAssociationTable=false; 
+    this.enrollassociationforresident=false;              
    }//Constructor Ends
 
    getAssociation(accountID){
-    return this.http.get(this.scopeIP + 'oyeliving/api/v1/GetAssociationListByAccountID/' +accountID ,  {headers:this.headers});
+    // return this.http.get(this.scopeIP + 'oyeliving/api/v1/GetAssociationListByAccountID/' +accountID ,  {headers:this.headers});
+    return this.http.get(this.scopeIP + 'oyeliving/api/v1/Member/GetMemberListByAccountID/' +accountID ,  {headers:this.headers});
   }
   getAmount(associationID:string){
     let headers= new HttpHeaders().append('Content-Type',  'application/json')

@@ -1,0 +1,21 @@
+export class ReadExpenseFromExcel {
+    constructor(private ExpenseHead,
+        private ExpenseDescription,
+        private ExpenseRecurrenceType,
+        private ApplicableToUnit,
+        private ExpenseType,
+        private DistributionType,
+        private PaymentMethod,
+        private SelectBank,
+        private VoucherNo,
+        private ChequeNo,
+        private ChequeDate,
+        private DemandDraftNo,
+        private Amount,
+        private DemandDraftDate,
+        private PayeeName,
+        private PayeeBankName,
+        private ExpenditureDate,
+        private InvoiceNoReceiptNo,
+        private SelectUnit){}
+}
