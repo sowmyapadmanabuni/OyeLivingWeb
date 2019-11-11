@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpEventType } from '@angular/common/http';
+import {UtilsService} from '../utils/utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,13 +9,14 @@ export class ViewreportService {
   ipaddress:string;
   url:string;
 
-  constructor(private http:HttpClient) { 
+  constructor(private http:HttpClient,private utilsService:UtilsService) { 
     this.ipaddress="https://apidev.oyespace.com/";
   }
 
   getpaymentdetails(currentAssociationID){
     let headers = this.getHttpheaders();
-    this.url=`${this.ipaddress}oyeliving/api/v1/GetPaymentsListByAssocID/${currentAssociationID}`
+    let ipaddress=this.utilsService.getpaymentdetails();
+    this.url=`${ipaddress}oyeliving/api/v1/GetPaymentsListByAssocID/${currentAssociationID}`
     return this.http.get(this.url,{headers:headers});
   }
   getHttpheaders(): HttpHeaders {

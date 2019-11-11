@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {UtilsService} from '../utils/utils.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegisterService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient,private utilsService:UtilsService) { }
   
   // ipAddress ='https://apidev.oyespace.com/';
   ipAddress ='https://apidev.oyespace.com/';
@@ -16,7 +17,8 @@ export class RegisterService {
   register(requestData){
     console.log('requestData',requestData);
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/account/signup`
+    let ipAddress=this.utilsService.register();
+    this.url = `${ipAddress}oyeliving/api/v1/account/signup`
    return this.http.post(this.url, JSON.stringify(requestData), { headers: headers });
   }
 

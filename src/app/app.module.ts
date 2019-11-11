@@ -58,6 +58,7 @@ import { ReadBlockAndUnitxlsxComponent } from './read-block-and-unitxlsx/read-bl
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { environment } from '../environments/environment';
+import { AddFamilyMemberComponent } from './add-family-member/add-family-member.component';
 
 
 @NgModule({
@@ -97,7 +98,8 @@ import { environment } from '../environments/environment';
     CustomdatePipe,
     AddexpensexlsxComponent,
     ExpensegridComponent,
-    ReadBlockAndUnitxlsxComponent
+    ReadBlockAndUnitxlsxComponent,
+    AddFamilyMemberComponent
   ],
   imports: [
     BrowserModule,

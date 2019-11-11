@@ -5,6 +5,7 @@ import { AppComponent } from '../app.component';
 import {LoginAndregisterService} from '../services/login-andregister.service';
 import {Router, NavigationEnd} from '@angular/router';
 import { ViewAssociationService } from '../view-association/view-association.service';
+import {UnitlistForAssociation} from '../models/unitlist-for-association';
 import * as _ from 'lodash';
 
 @Component({
@@ -51,6 +52,9 @@ export class DashBoardComponent implements OnInit {
   enrollAssociation: boolean;
   joinAssociation: boolean;
   viewAssociation_Table: boolean;
+  unit:any;
+  unitForAssociation:any[];
+  unitlistForAssociation:UnitlistForAssociation[];
  
   constructor(private dashBrdService: DashBoardService, private appComponent:AppComponent,
      private globalService:GlobalServiceService,
@@ -59,6 +63,9 @@ export class DashBoardComponent implements OnInit {
      private viewassosiationservice:ViewAssociationService) { 
       this.accountID=this.globalService.acAccntID;
        this.association='';
+       this.unit='';
+       this.unitForAssociation=[];
+       this.unitlistForAssociation=[];
      }
   ngOnInit() {
     this.getAssociation();
@@ -205,28 +212,37 @@ export class DashBoardComponent implements OnInit {
      }
     })
   }
-  loadAssociation(associationName:string){
+  loadAssociation(associationName: string) {
     //this.appComponent.myMenus=true;
-    console.log("AssociationName: ",associationName);
+    console.log("AssociationName: ", associationName);
     this.currentAssociationName = associationName;
     this.associations.forEach(association => {
-      if(association.asAsnName == associationName)
-      {
-        this.globalService.setCurrentAssociationId(association.asAssnID);
-        this.globalService.setCurrentAssociationName(associationName);
-        this.associationID=this.globalService.getCurrentAssociationId();
-        console.log("Selected AssociationId: " + this.globalService.getCurrentAssociationId());
+      if (association.asAsnName == associationName) {
+        console.log(association);
+        this.unitForAssociation.push(association);
+        console.log(this.unitForAssociation);
+        if (association['unUnitID'] != 0) {
+          const found = this.unitlistForAssociation.some(el => el['unUnitID'] === association['unUnitID'] && el['unUniName'] === association['unUniName']);
+          if (!found) {
+            this.unitlistForAssociation.push(new UnitlistForAssociation(association['unUniName'], association['unUnitID']));
+          }
+          console.log(this.unitlistForAssociation);
+          this.globalService.setCurrentAssociationId(association.asAssnID);
+          this.globalService.setCurrentAssociationName(associationName);
+          this.associationID = this.globalService.getCurrentAssociationId();
+          console.log("Selected AssociationId: " + this.globalService.getCurrentAssociationId());
+        }
       }
-      
+
     });
-    console.log('globalService.currentAssociationName',this.globalService.currentAssociationName);
+    console.log('globalService.currentAssociationName', this.globalService.currentAssociationName);
     this.getAmount();
     this.getMembers();
     this.getTickets();
     this.getVehicle();
     this.getStaff();
     this.getVistors();
-    
+
   }
   assnAmountDue(){
     this.AssociationAmountDue=true;
@@ -286,4 +302,9 @@ export class DashBoardComponent implements OnInit {
   this.ticketDetails=false;
   this.visitor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
  }
+  loadUnit(unit) {
+    console.log(unit);
+    this.globalService.setCurrentUnitId(unit);
+    console.log(this.globalService.currentUnitId);
+  }
 }

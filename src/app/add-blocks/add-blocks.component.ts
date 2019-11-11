@@ -110,6 +110,7 @@ check1:any;
     }]
 
     this.maintenanceValue=0;
+    this.flatRatevalue=0;
   }
 
   ngOnInit() {

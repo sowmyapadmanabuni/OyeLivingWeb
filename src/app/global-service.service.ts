@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class GlobalServiceService {
 
    currentAssociationId:string;
+   currentUnitId:string;
    currentAssociationName:string;
    acAccntID:number;
    
@@ -19,10 +20,19 @@ public getCurrentAssociationId(){
   return this.currentAssociationId;
 
 }
+public getCurrentUnitId(){
+
+  return this.currentUnitId;
+
+}
 
 public setCurrentAssociationId(associationId:string)
 {
   this.currentAssociationId = associationId;
+}
+public setCurrentUnitId(unitId)
+{
+  this.currentUnitId = unitId;
 }
 
 public setAccountID(acAccntID){

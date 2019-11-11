@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {CreateBlock} from './../create-block';
+import {UtilsService} from '../utils/utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class ViewBlockService {
     })
   };
 
-  constructor(private http:HttpClient) { 
+  constructor(private http:HttpClient,private utilsService:UtilsService) { 
       this.scopeIP="https://apidev.oyespace.com/";
       this.scriptIP="1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1";
       this.headers= new HttpHeaders().append('Content-Type',  'application/json')
@@ -29,22 +30,26 @@ export class ViewBlockService {
   }//constructor ends
 
   getBlockDetails(currentAssociationID){
-    return this.http.get(this.scopeIP + 'oyeliving/api/v1/Block/GetBlockListByAssocID/' +currentAssociationID ,  {headers:this.headers});
+    let scopeIP=this.utilsService.getBlockDetails();
+    return this.http.get(scopeIP + 'oyeliving/api/v1/Block/GetBlockListByAssocID/' +currentAssociationID ,  {headers:this.headers});
   }
 
   getassociationlist(currentAssociationID){
-    return this.http.get(this.scopeIP + '/oyeliving/api/v1/association/getassociationlist/' +currentAssociationID ,  {headers:this.headers});
+    let scopeIP=this.utilsService.getassociationlist();
+    return this.http.get(scopeIP + '/oyeliving/api/v1/association/getassociationlist/' +currentAssociationID ,  {headers:this.headers});
   }
 
   createBlock(createBlockData:any)
   {
-    return this.http.post(this.scopeIP + 'oyeliving/api/v1/Block/create', createBlockData,  {headers:this.headers});
+    let scopeIP=this.utilsService.createBlock();
+    return this.http.post(scopeIP + 'oyeliving/api/v1/Block/create', createBlockData,  {headers:this.headers});
   }
 
   UpdateBlock(editblockdata:any)
  {
    let headers = this.getHttpheaders();
-   this.url = `http://apidev.oyespace.com/oyeliving/api/v1/Block/BlockDetailsUpdate`;
+   let scopeIP=this.utilsService.UpdateBlock();
+   this.url = scopeIP + 'oyeliving/api/v1/Block/BlockDetailsUpdate';
    return this.http.post(this.url, JSON.stringify(editblockdata), { headers: headers });
  }
  getHttpheaders(): HttpHeaders {

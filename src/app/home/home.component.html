@@ -4,7 +4,7 @@
 
         <nav id="sidebar">
             <div>
-                <img src="../assets/images/newLogo.png" style="margin-top: 20px;margin-left:50px" height="60px"
+                <img src="../../assets/images/OyeSociety.png" style="margin-top: 20px;margin-left:50px" height="60px"
                     width="120px">
             </div>
         <br>
@@ -77,19 +77,26 @@
                         class="fa fa-bars"></i></span>
                 <div
                     style="text-align:center;font-family: Quicksand;background-color: black; color: white;padding:1px; font-size:15px;">
-                    <p>
-                        OYE<span style="color:orange;">SOCIETY</span>. You Live It. We Manage It!
+                    <p style="height: 29px;">
+                        <span> OYE<span style="color:orange;">SOCIETY</span>. You Live It. We Manage It!</span>
+                        <span style="float: right;">
+                            <div style="display:flex;">
+                                <i style="right: 119px;position: absolute;top: 9px;" class="fa fa-bell-o" aria-hidden="true"></i>
+                                <ul class="top-nav-details" style="top: -4px;">
+                                    <li><a><span class="logout-nav"><i class="fa fa-user" aria-hidden="true"></i> {{acfName|titlecase}} <b
+                                                    class="fa fa-caret-down" aria-hidden="true"></b></span></a>
+                                        <ul class="sub-menu animateIt pull-right" style="top: 31px;">
+                                            <li><a routerLink="editprofile"><i class="fa fa-user-plus" aria-hidden="true"></i> Family</a>
+                                            </li>
+                                            <li (click)='gotoLoginPage()'><a><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                    
+                        </span>
                     </p>
-                    <!-- <span class="bell-nav"><i class="bell-nav far fa-bell"></i></span> -->
-                    <i class="bell-nav far fa-bell"></i>
-                    <ul class="top-nav-details">
-                        <li><a><span class="logout-nav"><i class="fa fa-user" aria-hidden="true"></i> {{acfName|titlecase}} <b class="fa fa-caret-down" aria-hidden="true"></b></span></a>
-                            <ul class="sub-menu animateIt pull-right">
-                                <li><a routerLink="editprofile"><i class="fal fa-user" aria-hidden="true"></i>  Profile</a></li>
-                                <li (click)='gotoLoginPage()'><a><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a></li>
-                            </ul>
-                        </li>
-                    </ul>
                 </div>
             </div>
             <router-outlet></router-outlet>

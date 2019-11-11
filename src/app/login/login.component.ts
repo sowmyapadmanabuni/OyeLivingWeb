@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { Router, ActivatedRoute } from '@angular/router';
 import {GlobalServiceService} from '../global-service.service';
 import {DashBoardService} from '../dash-board/dash-board.service';
+import {UtilsService} from '../utils/utils.service';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private http: HttpClient, public router: Router,
     private globalserviceservice: GlobalServiceService, private route: ActivatedRoute,
-    private dashboardservice:DashBoardService) {
+    private dashboardservice:DashBoardService,private utilsService:UtilsService) {
       //alert('inside login component');
     // redirect to home if already logged in
     if (this.globalserviceservice.acAccntID) {
@@ -50,7 +51,8 @@ export class LoginComponent implements OnInit {
   sendOTP() {
     //alert('inside sendOTP');
     let headers = this.getHttpheaders();
-    let url = `${this.ipAddress}/oyeliving/api/v1/account/sendotp`
+    let ipAddress=this.utilsService.sendOTP();
+    let url = `${ipAddress}/oyeliving/api/v1/account/sendotp`
     // document.getElementById("myButton1").value="Resend";
     var mobileNoData = {
       // CountryCode: this.code,
@@ -107,7 +109,8 @@ export class LoginComponent implements OnInit {
   verifyOtp() {
     //alert('inside verifyOtp...');
     let headers = this.getHttpheaders();
-    let url = `${this.ipAddress}/oyeliving/api/v1/account/verifyotp`
+    let ipAddress=this.utilsService.verifyOtp();
+    let url = `${ipAddress}/oyeliving/api/v1/account/verifyotp`
     var otpdata = {
       // CountryCode : this.code,
       CountryCode: this.code,
@@ -168,6 +171,31 @@ export class LoginComponent implements OnInit {
      
   }
 
+  verifyOtp1() {
+    this.globalserviceservice.acAccntID = 9539;
+    console.log(this.globalserviceservice.acAccntID);
+    this.dashboardservice.getMembers(this.globalserviceservice.acAccntID).subscribe(res => {
+      console.log('memberListByAccount', res['data'].memberListByAccount);
+      this.dashboardservice.mrmRoleID = res['data'].memberListByAccount[0]['mrmRoleID'];
+      console.log(this.dashboardservice.mrmRoleID);
+      this.router.navigate(['home']);
+    },
+      res => {
+        console.log(res);
+        Swal.fire({
+          title: "Error",
+          text: res['error']['message'],
+          type: "error",
+          confirmButtonColor: "#f69321"
+        }).then(
+          (result) => {
+            if (result.value) {
+              this.router.navigate(['home']);
+            }
+          });
+
+      });
+  }
 
   otpCall(e) {
     e.preventDefault();
@@ -194,7 +222,8 @@ export class LoginComponent implements OnInit {
   resendOtp(e) {
     e.preventDefault();
     let headers = this.getHttpheaders();
-    let url = `${this.ipAddress}oyeliving/api/v1/account/resendotp`
+    let ipAddress=this.utilsService.resendOtp();
+    let url = `${ipAddress}oyeliving/api/v1/account/resendotp`
     var reSendOtpData = {
       CountryCode: this.code,
       MobileNumber: this.mobilenumber,

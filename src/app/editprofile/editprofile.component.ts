@@ -109,12 +109,16 @@ console.log(this.currentaccountid);
        
            if (result.value) {
              //this.form.reset();
+             this.modalRef.hide();
              this.router.navigate(['home/dashboard']);
            
            } else if (result.dismiss === Swal.DismissReason.cancel) {
              this.router.navigate(['home/dashboard']);
            }
          })
+       },
+       err=>{
+         console.log(err);
        });
 
     }
@@ -157,6 +161,14 @@ console.log(this.currentaccountid);
   
       this.modalRef = this.modalService.show(edittemplate,
         Object.assign({}, { class: 'gray modal-lg' }));
+    }
+    resetProfile(){
+      this.ACFName = '';
+      this.ACLName = '';
+      this.ACMobile='';
+      this.ACMobile1='';
+      this.ACEmail='';
+      this.ACEmail1='';
     }
 
 
