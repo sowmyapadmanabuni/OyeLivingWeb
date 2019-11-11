@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule ,Title} from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -58,9 +58,13 @@ import { ReadBlockAndUnitxlsxComponent } from './read-block-and-unitxlsx/read-bl
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { environment } from '../environments/environment';
+<<<<<<< HEAD
 import { GuestComponent } from './guest/guest.component';
 import { DeliveriesComponent } from './deliveries/deliveries.component';
 import { StaffComponent } from './staff/staff.component';
+=======
+import { AddFamilyMemberComponent } from './add-family-member/add-family-member.component';
+>>>>>>> 915141cb818db85056b13f41a6309813be43ce47
 
 
 @NgModule({
@@ -101,9 +105,13 @@ import { StaffComponent } from './staff/staff.component';
     AddexpensexlsxComponent,
     ExpensegridComponent,
     ReadBlockAndUnitxlsxComponent,
+<<<<<<< HEAD
     GuestComponent,
     DeliveriesComponent,
     StaffComponent
+=======
+    AddFamilyMemberComponent
+>>>>>>> 915141cb818db85056b13f41a6309813be43ce47
   ],
   imports: [
     BrowserModule,
@@ -128,7 +136,7 @@ import { StaffComponent } from './staff/staff.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireMessagingModule
   ],
-  providers: [ViewAssociationService, ViewBlockService, ViewUnitService, DashBoardService],
+  providers: [ViewAssociationService, ViewBlockService, ViewUnitService, DashBoardService,Title],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

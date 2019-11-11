@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {UtilsService} from '../utils/utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,14 +10,15 @@ export class AddBlockService {
   currentAssociationID: number;
   url: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private utilsService:UtilsService) {
     this.ipAddress = 'http://apidev.oyespace.com/';
     this.currentAssociationID = 4217;
    }
 
   createBlock(CreateBockData){
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/Block/create`
+    let ipAddress = this.utilsService.createBlock();
+    this.url = `${ipAddress}oyeliving/api/v1/Block/create`
    return this.http.post(this.url, JSON.stringify(CreateBockData), { headers: headers });
   }
 

@@ -6,6 +6,7 @@ import { UnitsByBlockID } from '../models/units-by-block-id';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import {ExpenseData} from '../models/expense-data';
+import {UtilsService} from '../utils/utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,14 +17,15 @@ export class AddExpenseService {
   url: string;
   availableNoOfBlocks: number;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private utilsService:UtilsService) {
     this.ipAddress = 'http://apidev.oyespace.com/';
   }
 
   /*----------------------Block List By association ID -----------------*/
   GetBlockListByAssocID(currentAssociationID) {
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/Block/GetBlockListByAssocID/${currentAssociationID}`
+    let ipAddress = this.utilsService.GetBlockListByAssocID();
+    this.url = `${ipAddress}oyeliving/api/v1/Block/GetBlockListByAssocID/${currentAssociationID}`
    return this.http.get(this.url, { headers: headers })
       .pipe(map(data => {
         return data['data'].blocksByAssoc.map(item => {
@@ -61,14 +63,16 @@ export class AddExpenseService {
     //$scope.blockID = $scope.allBlocksLists.blBlockID;
     console.log('prerequisitesAddUnit',blockID);
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/Unit/GetUnitListByBlockID/${blockID}`;
+    let ipAddress = this.utilsService.prerequisitesAddUnit();
+    this.url = `${ipAddress}oyeliving/api/v1/Unit/GetUnitListByBlockID/${blockID}`;
     return this.http.get(this.url, { headers: headers });
   }
 
   /* Get All PurchaseOrder details For purchase Order UI lists */
   GetPurchaseOrderListByAssocID(currentAssociationID): Observable<PurchaseOrdersByAssoc[]> {
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/PurchaseOrder/GetPurchaseOrderListByAssocID/${currentAssociationID}`
+    let ipAddress = this.utilsService.GetPurchaseOrderListByAssocID();
+    this.url = `${ipAddress}oyeliving/api/v1/PurchaseOrder/GetPurchaseOrderListByAssocID/${currentAssociationID}`
     return this.http.get(this.url, { headers: headers })
       .pipe(map(data => {
         return data['data'].purchaseOrdersByAssoc.map(item => {
@@ -111,7 +115,8 @@ export class AddExpenseService {
   /* getAssociationList */
   getAssociationList(currentAssociationID) {
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/association/getAssociationList/${currentAssociationID}`
+    let ipAddress=this.utilsService.getAssociationList();
+    this.url = `${ipAddress}oyeliving/api/v1/association/getAssociationList/${currentAssociationID}`
     this.http.get(this.url, { headers: headers })
       .subscribe(data => {
         console.log(data);
@@ -123,7 +128,8 @@ export class AddExpenseService {
   GetUnitListByBlockID(blockID): Observable<UnitsByBlockID[]> {
 
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/Unit/GetUnitListByBlockID/${blockID}`
+    let ipAddress = this.utilsService.GetUnitListByBlockID();
+    this.url = `${ipAddress}oyeliving/api/v1/Unit/GetUnitListByBlockID/${blockID}`
     return this.http.get(this.url, { headers: headers })
       .pipe(map(data => {
         console.log(data['data'].unitsByBlockID);
@@ -170,7 +176,8 @@ export class AddExpenseService {
   createExpense(expensedata:ExpenseData){
     console.log('expensedata',expensedata);
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/Expense/Create`
+    let ipAddress = this.utilsService.createExpense();
+    this.url = `${ipAddress}oyeliving/api/v1/Expense/Create`
    return this.http.post(this.url, JSON.stringify(expensedata), { headers: headers });
   }
 

@@ -7,6 +7,10 @@ import Swal from 'sweetalert2';
 import * as _ from 'underscore';
 //import {BlockDetail} from '../block-detail';
 import {ViewAssociationService} from '../view-association/view-association.service';
+<<<<<<< HEAD
+=======
+import {UtilsService} from '../utils/utils.service';
+>>>>>>> 915141cb818db85056b13f41a6309813be43ce47
 
 @Component({
   selector: 'app-read-block-and-unitxlsx',
@@ -41,7 +45,12 @@ export class ReadBlockAndUnitxlsxComponent implements OnInit {
 
   constructor(private http: HttpClient,
     private globalserviceservice: GlobalServiceService,
+<<<<<<< HEAD
     private viewassociationservice:ViewAssociationService) {
+=======
+    private viewassociationservice:ViewAssociationService,
+    private utilsService:UtilsService) {
+>>>>>>> 915141cb818db85056b13f41a6309813be43ce47
       this.scopeIP = "https://apidev.oyespace.com/";
       this.ipAddress = 'http://apidev.oyespace.com/';
       this.scriptIP = "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1";
@@ -137,7 +146,12 @@ export class ReadBlockAndUnitxlsxComponent implements OnInit {
           }
     
           let headers = this.getHttpheaders();
+<<<<<<< HEAD
           let url = `${this.ipAddress}oyeliving/api/v1/Block/create`
+=======
+          let ipAddress=this.utilsService.createBlock();
+          let url = `${ipAddress}oyeliving/api/v1/Block/create`
+>>>>>>> 915141cb818db85056b13f41a6309813be43ce47
           this.http.post(url, JSON.stringify(CreateBockData), { headers: headers })
             .subscribe(data => {
               console.log('_blockid', data['data'].blockID);
@@ -212,8 +226,13 @@ export class ReadBlockAndUnitxlsxComponent implements OnInit {
                   }
                 ]
               }
+<<<<<<< HEAD
     
               this.http.post(this.scopeIP + 'oyeliving/api/v1/unit/create', createUnitData, { headers: this.headers })
+=======
+              let ipAddress = this.utilsService.createUnit();
+              this.http.post(ipAddress + 'oyeliving/api/v1/unit/create', createUnitData, { headers: this.headers })
+>>>>>>> 915141cb818db85056b13f41a6309813be43ce47
                 .subscribe(data => {
                   console.log(data);
                  /* Swal.fire({
@@ -328,7 +347,12 @@ export class ReadBlockAndUnitxlsxComponent implements OnInit {
     
     //let headers = this.getHttpheaders();
     console.log('_createUnitData',JSON.stringify(_createUnitData));
+<<<<<<< HEAD
     this.http.post(this.scopeIP + 'oyeliving/api/v1/unit/create', _createUnitData, { headers: this.headers })
+=======
+    let scopeIP=this.utilsService.createUnit();
+    this.http.post(scopeIP + 'oyeliving/api/v1/unit/create', _createUnitData, { headers: this.headers })
+>>>>>>> 915141cb818db85056b13f41a6309813be43ce47
       .subscribe(data => {
         console.log(data);
       },

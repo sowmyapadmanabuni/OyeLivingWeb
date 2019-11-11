@@ -2,6 +2,7 @@ import {DashBoardService} from '../dash-board/dash-board.service'
 import { Injectable,Component, TemplateRef, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpEventType } from '@angular/common/http';
 import {BsModalService,BsModalRef} from 'ngx-bootstrap/modal';
+import {UtilsService} from '../utils/utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class EditprofileService {
       'Access-Control-Allow-Origin': "*"
     })
   };
-  constructor(private http:HttpClient, private modalService: BsModalService) {
+  constructor(private http:HttpClient, private modalService: BsModalService,
+    private utilsService:UtilsService) {
     this.scopeIP="http://apidev.oyespace.com/";
     //this.scopeIP = "https://apidemo.oyespace.com/";
     this.scriptIP="1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1";
@@ -31,12 +33,14 @@ export class EditprofileService {
   getProfileDetails(accountID)
   {
     console.log(accountID);
-    return this.http.get(this.scopeIP + 'oyeliving/api/v1/GetAccountListByAccountID/' + accountID,  {headers:this.headers});
+    let scopeIP=this.utilsService.getProfileDetails();
+    return this.http.get(scopeIP + 'oyeliving/api/v1/GetAccountListByAccountID/' + accountID,  {headers:this.headers});
   }
 
   updateEditProfile(updateProfileData) {
     //http://apidev.oyespace.com/oyeliving/api/v1/association/Update
-    return this.http.post(this.scopeIP + 'oyeliving/api/v1/AccountDetails/Update', JSON.stringify(updateProfileData), { headers: this.headers });
+    let scopeIP=this.utilsService.updateEditProfile();
+    return this.http.post(scopeIP + 'oyeliving/api/v1/AccountDetails/Update', JSON.stringify(updateProfileData), { headers: this.headers });
   }
 
 }

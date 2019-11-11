@@ -32,7 +32,7 @@
                 <!-- <p><strong>Profile Picture </strong></p> -->
               </div>
               <div class="col-sm-5 col-xs-12" style="padding-top: 10px;">
-                <p>Mobile Number : <strong>{{this.acMobile}}
+                <p>Mobile Number : <strong>{{acMobile}}
                     <i
                       ng-class="{true: 'ion ion-checkmark-round green', false: 'ion ion-close-round red'}[profile.mobileVerified == true]"></i>
                   </strong></p>
@@ -40,7 +40,7 @@
                                 <p>Mobile Number 3 : <strong>{{profile.mobileNumber3}}</strong></p> -->
               </div>
               <div class="col-sm-5 col-xs-12" style="padding-top: 10px;">
-                <p>Email ID : <strong>{{this.acEmail}} <i
+                <p>Email ID : <strong>{{acEmail}} <i
                       ng-class="{true: 'ion ion-checkmark-round green', false: 'ion ion-close-round red'}[profile.emailVerified == true]"></i></strong>
                 </p>
                 <!-- <p>Email ID 2 : <strong>{{profile.email2}}</strong></p>
@@ -56,7 +56,7 @@
                 <!-- <button type="button" class="smallBtn" (click)="OpenModal(template,association.asAsnName,association.asCountry,association.asAddress,association.asCity,association.asState,association.asPinCode,association.asPrpType,association.asPrpName,association.asNofBlks,association.asNofUnit,association.amType,association.noofAmenities,association.baBName,association.baIFSC,association.baActNo,association.baActType,association.asAssnID)">
                                     <i class="fa fa-pencil" title="editassociation"></i>
                                   </button>    -->
-                <button type="button" class="btn btn-primary pull-right"
+                <button type="button" class="btn btn-primary pull-right" style="background-color: orange;"
                   (click)="OpenModal(edittemplate,acfName,aclName,acMobile,acEmail,acMobile1,acEmail1,acAccntID)">Edit
                   Profile</button>
               </div>
@@ -65,6 +65,29 @@
         </div>
       </div>
     </div>
+    <div class="container-fluid">
+      <div class="pageTitle" style="padding: 10px;">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <input type="text" name="searchBoxData" [(ngModel)]="searchBoxData" class="form-control"
+                        placeholder="Search" />
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <input type="text" name="searchBoxData" [(ngModel)]="searchBoxData" class="form-control"
+                        placeholder="Search" />
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <button class="mdButton1" (click)="openModal(template)" style="margin-top:27px;font-size:18px;float: right;"
+                  type="button">Add Family Member</button>
+              </div>
+        </div>
+      </div>
+    </div>
+    <app-add-family-member></app-add-family-member>
   </div>
 </div>
 
@@ -75,10 +98,8 @@
   <div class="modal-content">
     <div class="modal-header">
       <div class="modal-body">
-        <!-- <button type="button" class="close" aria-label="Close" (click)="modalRef.hide()">
-                                    <span aria-hidden="true">&times;</span>
-                                  </button> -->
-        <div class="row">
+        <form>
+           <div class="row">
           <div class="col-sm-6 col-xs-12">
             <div class="form-group" [ngClass]="{'has-error' : firstnameControl.invalid && firstnameControl.touched}">
               <label>First Name <span class="red">*</span></label>
@@ -138,9 +159,15 @@
         </div>
         <div class="row">
           <div class="col-sm-12 col-xs-12">
-            <button type="button" class="btn btn-warning" (click)="updateEditProfile()">Update Profile</button>
+            <button type="button" style="float: left;" class="btn btn-warning" (click)="updateEditProfile()">Update Profile</button>
+            <button type="reset" style="float: left;margin-left: 14px;" class="btn btn-warning" (click)="resetProfile()">Reset</button>
           </div>
         </div>
+        </form>
+        <!-- <button type="button" class="close" aria-label="Close" (click)="modalRef.hide()">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button> -->
+       
       </div>
     </div>
   </div>

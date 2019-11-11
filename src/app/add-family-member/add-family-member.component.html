@@ -1,0 +1,137 @@
+<!-- <div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-8" style="margin-left: 0px;">
+        <div class="form-group" style="display:flex;margin-left: 300px;">
+          <label style="margin-top: 12px;font-size: 20px;">Association</label>
+          <select class="ui dropdown search methodDropdown" name="asAssnID" class="form-control"
+            style="width: 100%;margin-top: 11px;margin-left: 12px;" (change)='loadAssociationforchangerole(asAssnID)'
+            [(ngModel)]='asAssnID' autocomplete="off" placeholder="Search Association">
+            <option disabled='true' value="">Select Association</option>
+            <option *ngFor="let asn of associationsforchangerole" [value]="asn['asAssnID']">
+              {{asn['asAsnName']}}
+            </option>
+          </select>
+           <p class="invalid-feedback">Select Association</p> 
+        </div>
+      </div>
+      <div class="col-sm-2"></div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-8" style="margin-left: 0px;">
+            <div class="form-group" style="display:flex;margin-left: 297px;">
+              <label style="margin-top: 12px;font-size: 20px;">Units</label>
+              <select class="ui dropdown search methodDropdown" name="UnitlidtForAssnID" class="form-control"
+                style="width: 100%;margin-top: 11px;margin-left: 73px;"
+                (change)='loadUnitForAssociation(UnitlidtForAssnID)' [(ngModel)]='UnitlidtForAssnID' autocomplete="off"
+                placeholder="Search Association">
+                <option disabled='true' value="">Select Unit</option>
+                <option *ngFor="let asn of unitlistbyassociationid" [value]="asn['unUnitID']">
+                  {{asn['unUniName']}}
+                </option>
+              </select>
+               <p class="invalid-feedback">Select Association</p> 
+            </div>
+          </div>
+          <div class="col-sm-2"></div>
+
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="row">
+    <div class="col-sm-12">
+          <div class="card" style="padding-left: 68px;">
+            <div *ngIf='loadchangedforassociation'>
+              <table class="table table-striped">
+                <thead>
+                  <tr style="color:#e59400;">
+                    <td style="font-size: 20px;">S.No.</td>
+                    <td style="font-size: 20px;"><span>Family Member Name</span></td>
+                    <td style="font-size: 20px;"><span>Relation</span></td>
+                    <td style="font-size: 20px;"><span>MobileNumber</span></td>
+                    <td></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let unit of familymemberarray;let i=index">
+                    <td>{{ i+1 }}</td>
+                    <td>{{unit['fmName']}}</td>
+                    <td>{{unit['fmRltn']}}</td>
+                    <td>{{unit['fmMobile']}}</td>
+                    <!-- <td><span *ngIf="unit['uoRoleID'] == ''"><button type="button" class="smallBtn" data-toggle="modal" (click)="openModal(template,unit['asAssnID'],unit['unUnitID'],unit['blBlockID'])"><i style="cursor: pointer" class="fas fa-edit"></i></button></span></td> -->
+                  </tr>
+                </tbody>
+              </table>
+              <!-- <p class="text-center float-right" style="margin-top:10px;"><pagination-controls (pageChange)="p = $event"></pagination-controls></p> -->
+            </div>
+          </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="row">
+  <div *ngIf='!loadchangedforassociation'
+    style="height: 100px;text-align: center;color: orangered;background-color: whitesmoke;box-sizing: border-box;position: relative;">
+    <span style="position: absolute;margin-top: 38px;">No Records Found!</span>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <button class="mdButton1" (click)="openModal(template)" style="margin-top:27px;font-size:18px;float: right;"
+      type="button">Add Family Member</button>
+  </div>
+</div>
+
+<!-- <div class="row">
+  <div class="col-sm-6"></div>
+  <div class="col-sm-6">
+    <button class="mdButton1" (click)='backtocreateorexistingasn()' style="margin-top:27px;font-size:18px;float: left;"
+      type="button"><i class="fas fa-arrow-left"></i> Back to
+      Create/Existing Association</button>
+  </div>
+</div> -->
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" style="color: #e59400;font-size: 20px;position: absolute;left: 350px;">Add Family
+      Member</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div>
+        <label><b>Family Member Name</b></label>
+        <input type="text" placeholder="First Name" [(ngModel)]='FirstName' maxlength="30" name="FirstName"
+          class="form-control" #FirstNameControl="ngModel">
+
+        <label><b>Mobile Number</b></label>
+        <input type="text" placeholder="MobileNumber" [(ngModel)]='MobileNumber' maxlength="20" name="MobileNumber"
+          class="form-control" #MobileNumberControl="ngModel">
+
+        <label><b>Relation</b></label>
+        <input type="text" placeholder="Relation" [(ngModel)]='Relation' maxlength="20" name="Relation"
+          class="form-control" #RelationControl="ngModel">
+
+        <div>
+          <button type="submit" class="button mdButton1" style="display: inline-block;margin: 0% 0% 0% 36%;"
+            (click)='addfamilymember()'>Submit</button>
+          <button type="reset" (click)="resetFamilyMemberModal()" class="cancelbtn mdButton1"
+            style="display: inline-block;margin: 1.5% 0% 0% 5%;">Reset</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

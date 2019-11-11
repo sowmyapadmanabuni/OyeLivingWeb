@@ -5,6 +5,7 @@ import { Viewexpense } from '../models/viewexpense';
 import { Observable } from 'rxjs';
 import { PurchaseOrdersByAssoc } from '../models/purchase-orders-by-assoc';
 import { EditExpenseData } from '../models/edit-expense-data';
+import {UtilsService} from '../utils/utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class ViewExpensesService {
 
   currentBlockId: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private utilsService:UtilsService) {
     this.ipAddress = 'http://apidev.oyespace.com/';
     this.todayDate = new Date();
   }
@@ -33,7 +34,8 @@ export class ViewExpensesService {
   getAssociationList(currentAssociationID) {
     console.log('getAssociationList', currentAssociationID);
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/association/getAssociationList/${currentAssociationID}`;
+    let ipAddress=this.utilsService.getassociationlist();
+    this.url = `${ipAddress}oyeliving/api/v1/association/getAssociationList/${currentAssociationID}`;
     return this.http.get(this.url, { headers: headers })
   }
 
@@ -63,7 +65,12 @@ export class ViewExpensesService {
   GetExpenseListByAssocID(currentAssociationID): Observable<Viewexpense[]>{
     console.log('GetExpenseListByAssocID')
     let headers = this.getHttpheaders();
+<<<<<<< HEAD
     this.url = `${this.ipAddress}oyeliving/api/v1/Expense/GetExpenseListByAssocID/${currentAssociationID}`;
+=======
+    let ipAddress=this.utilsService.GetExpenseListByAssocID();
+    this.url = `${ipAddress}oyeliving/api/v1/Expense/GetExpenseListByAssocID/${currentAssociationID}`;
+>>>>>>> 915141cb818db85056b13f41a6309813be43ce47
     // this.http.get(this.url, { headers: headers })
     // .subscribe(data=>{
     //   console.log(data);
@@ -100,7 +107,8 @@ export class ViewExpensesService {
   GetExpenseListByBlockID(BlockID){
    //http://apidev.oyespace.com/oyeliving/api/v1/Expense/GetExpenseListByBlockID/{BlockID}
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/Expense/GetExpenseListByBlockID/${BlockID}`;
+    let ipAddress=this.utilsService.GetExpenseListByBlockID();
+    this.url = `${ipAddress}oyeliving/api/v1/Expense/GetExpenseListByBlockID/${BlockID}`;
     return this.http.get(this.url, { headers: headers })
     .pipe(map(data => {return data['data']['expenseByBlock']})
     )
@@ -153,7 +161,8 @@ export class ViewExpensesService {
     console.log('currentBlockId', this.currentBlockId);
     console.log('currentAssociationID', currentAssociationID);
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/invoice/list/${currentAssociationID}/${this.currentBlockId}`;
+    let ipAddress=this.utilsService.generateInvoice();
+    this.url = `${ipAddress}oyeliving/api/v1/invoice/list/${currentAssociationID}/${this.currentBlockId}`;
     return this.http.get(this.url, { headers: headers })
       .pipe(switchMap(data => this.generateInvoice_post(data)))
   }
@@ -170,7 +179,8 @@ export class ViewExpensesService {
       else
         test += "'" + this.invoiceLists[i].inid + "',";
     }
-    let url = `${this.ipAddress}oyeliving/api/v1/invoice/generate`
+    let ipAddress=this.utilsService.generateInvoice();
+    let url = `${ipAddress}oyeliving/api/v1/invoice/generate`
     console.log('generateinvoice', test);
     return this.http.post(url, JSON.stringify(test), { headers: headers });
   }
@@ -187,7 +197,8 @@ export class ViewExpensesService {
   deleteExpense(viewexpense) {
     console.log('viewexpense', viewexpense);
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/Expense/ExpenseUpdate`;
+    let ipAddress=this.utilsService.deleteExpense();
+    this.url = `${ipAddress}oyeliving/api/v1/Expense/ExpenseUpdate`;
     return this.http.post(this.url, JSON.stringify(viewexpense), { headers: headers });
   }
   editExpense(repexpense1, idx) {
@@ -234,7 +245,8 @@ export class ViewExpensesService {
   updateExpense(editexpensedata: EditExpenseData) {
     console.log(JSON.stringify(editexpensedata));
     let headers = this.getHttpheaders();
-    this.url = `${this.ipAddress}oyeliving/api/v1/Expense/ExpenseUpdate`;
+    let ipAddress=this.utilsService.updateExpense();
+    this.url = `${ipAddress}oyeliving/api/v1/Expense/ExpenseUpdate`;
     return this.http.post(this.url, JSON.stringify(editexpensedata), { headers: headers });
   }
   getHttpheaders(): HttpHeaders {

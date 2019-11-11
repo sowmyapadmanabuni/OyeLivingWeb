@@ -110,6 +110,10 @@ check1:any;
     }]
 
     this.maintenanceValue=0;
+<<<<<<< HEAD
+=======
+    this.flatRatevalue=0;
+>>>>>>> 915141cb818db85056b13f41a6309813be43ce47
   }
 
   ngOnInit() {
