@@ -85,6 +85,14 @@ export class AddExpenseComponent implements OnInit {
     this.currentAssociationName=this.globalservice.getCurrentAssociationName();
     this.expensedata = new ExpenseData();
     this.expensedataXlsx=new ExpenseData();
+    this.expensedata.POID=1;
+    this.expensedata.EXRABudg=12.32;
+    this.expensedata.POEAmnt=23.65;
+    this.expensedata.EXChqNo='';
+    this.expensedata.BPID=1;
+    this.expensedata.EXPName='';
+    this.expensedata.INNumber="";
+    this.expensedata.EXPyCopy='';
     this.selectedFile = null;
     this.blockName = '';
     this.purchaseorderid = '';
@@ -100,6 +108,9 @@ export class AddExpenseComponent implements OnInit {
     this.expensedata.BLBlockID = '';
     //this.expensedata.POID = '';
     this.expensedata.EXHead = '';
+    this.expensedata.EXDesc =  "";
+    this.expensedata.EXDate = "2018-02-02";
+    this.expensedata.EXPAmnt = '';
     this.expensedata.EXRecurr = '';
     this.expensedata.EXApplTO = '';
     this.expensedata.EXType = '';
@@ -108,6 +119,12 @@ export class AddExpenseComponent implements OnInit {
     this.expensedata.PMID = '';
     this.expensedata.BABName = '';
     this.expensedata.EXPBName = '';
+    this.expensedata.EXChqDate="2018-02-02";
+    this.expensedata.VNName='Bills';
+    this.expensedata.EXDDNo='';
+    this.expensedata.EXDDDate='';
+    this.expensedata.EXVoucherNo='';
+    this.expensedata.EXAddedBy='';
     this.avialableUnitSpace = 0;
     this.EXDate = null;
     this.EXChqDate = null;
@@ -445,19 +462,20 @@ export class AddExpenseComponent implements OnInit {
     this.expensedata.BLBlockID=this.viewexpensesservice.currentBlockId;
     this.expensedata.EXDate = formatDate(this.EXDate, 'yyyy/MM/dd', 'en');
     if (this.checkField == 'Cash') {
-      this.expensedata.EXChqDate = null;
+      this.expensedata.EXChqDate = '';
     }
     if (this.checkField == 'Cheque') {
       this.expensedata.EXChqDate = formatDate(this.EXChqDate, 'yyyy/MM/dd', 'en');
     }
     if (this.checkField == 'DemandDraft') {
-      this.expensedata.EXChqDate = null;
+      this.expensedata.EXChqDate = '';
       this.expensedata.EXDDDate = formatDate(this.EXDDDate, 'yyyy/MM/dd', 'en');
     }
     console.log('expensedata', this.expensedata);
     this.addexpenseservice.createExpense(this.expensedata)
       .subscribe(
-        () => {
+        (data) => {
+          console.log(data);
           this.viewexpensesservice.currentBlockId = this.expensedata.BLBlockID;
           swal.fire({
             title: "Expense Added Successfully",
@@ -479,7 +497,8 @@ export class AddExpenseComponent implements OnInit {
             }
           )
         },
-        () => {
+        (err) => {
+          console.log(err);
           swal.fire('Error', 'Something went wrong!', 'error')
         }
       );

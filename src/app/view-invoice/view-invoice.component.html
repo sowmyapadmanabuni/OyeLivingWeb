@@ -2,10 +2,10 @@
   <div class="container-fluid">
     <div class="pageTitle">
       <div class="row">
-        <div class="col-sm-4 col-sm-12 col-xs-12">
+        <div class="col-sm-4">
           <h3>View Invoice for {{currentassociationname}} Association</h3>
         </div>
-        <div class="col-sm-4 col-sm-12 col-xs-12">
+        <div class="col-sm-4">
           <div class="form-group">
             <select class="ui dropdown search methodDropdown" name="blBlockID" #allBlocksByAssnIDControl='ngModel'
               [(ngModel)]="blBlockID" (change)="getCurrentBlockDetails(blBlockID)" required>
@@ -16,6 +16,11 @@
             </select>
             <p class="alerts" *ngIf="allBlocksByAssnIDControl.invalid && allBlocksByAssnIDControl.touched"> Please
               select BlockName</p>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <input type="text" name="searchBoxData" [(ngModel)]="searchBoxData" class="form-control" placeholder="Search" />
           </div>
         </div>
         <!-- <div class="col-sm-4 col-sm-12 col-xs-12">
@@ -59,7 +64,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let row of invoiceLists  | orderBy: order:reverse:'case-insensitive' | paginate: { itemsPerPage: 10, currentPage: p };let i=index">
+                <tr *ngFor="let row of invoiceLists | filter: searchBoxData  | orderBy: order:reverse:'case-insensitive' | paginate: { itemsPerPage: 10, currentPage: p };let i=index">
                   <td>
                    <span style="margin-left: 13px;">{{ (10 * (p - 1) + i)+1 }}</span> 
                   </td>
@@ -101,7 +106,7 @@
                     &nbsp;&nbsp;|&nbsp;&nbsp; -->
                     <button title="Mail Invoice" [disabled]='row.ineSent' class="smallBtn" (click)="sendInvoiceInMail(row.inid,row.unUnitID,row.ineSent,row.blBlockID)">
                       <i class="fa fa-paper-plane"></i>
-                    </button>
+                    </button> | <i title="View Invoice" style="cursor: pointer;" class="fa fa-eye" (click)="viewInvoice1($event,template,row.inid,row.inGenDate,row.inNumber,row.inDsCVal,row.unUnitID)"></i> | <i title="View Discount" (click)="discount(discountModal,row.inid,row.inNumber,row.inTotVal)" style="cursor: pointer;" class="fa fa-percent"></i>
                     </span>
                   
                   </td>

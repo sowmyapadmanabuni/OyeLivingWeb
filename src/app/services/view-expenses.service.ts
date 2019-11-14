@@ -25,6 +25,7 @@ export class ViewExpensesService {
   totalItems: number;
 
   currentBlockId: string;
+  togglegenerateinv:boolean;
 
   constructor(private http: HttpClient,private utilsService:UtilsService) {
     this.ipAddress = 'http://apidev.oyespace.com/';
@@ -153,14 +154,43 @@ export class ViewExpensesService {
       }))
   }
 
-  generateInvoice(currentAssociationID) {
-    console.log('currentBlockId', this.currentBlockId);
-    console.log('currentAssociationID', currentAssociationID);
-    let headers = this.getHttpheaders();
-    let ipAddress=this.utilsService.generateInvoice();
-    this.url = `${ipAddress}oyeliving/api/v1/invoice/list/${currentAssociationID}/${this.currentBlockId}`;
-    return this.http.get(this.url, { headers: headers })
-      .pipe(switchMap(data => this.generateInvoice_post(data)))
+  generateInvoice(currentAssociationID, exidList,expenseList) {
+    if (this.togglegenerateinv) {
+      let _exidList=[];
+      expenseList.forEach(item => {
+        let EXID =  {"EXID" : item['exid']};
+        _exidList.push(EXID);
+      });
+      let expenseListforGenInv = {
+        "ASAssnID": currentAssociationID,
+        "BlockID": this.currentBlockId,
+        "expenses": _exidList
+      }
+      console.log(expenseListforGenInv);
+      console.log('currentBlockId', this.currentBlockId);
+      console.log('currentAssociationID', currentAssociationID);
+      console.log('expensesforGenInv', expenseListforGenInv);
+      let headers = this.getHttpheaders();
+      let ipAddress = this.utilsService.generateInvoice();
+      this.url = `${ipAddress}oyeliving/api/v1/invoice/list`;
+      return this.http.post(this.url, JSON.stringify(expenseListforGenInv), { headers: headers });
+    }
+    else {
+      let expensesforGenInv = {
+        "ASAssnID": currentAssociationID,
+        "BlockID": this.currentBlockId,
+        "expenses": exidList
+      }
+      console.log('currentBlockId', this.currentBlockId);
+      console.log('currentAssociationID', currentAssociationID);
+      console.log('expensesforGenInv', expensesforGenInv);
+      let headers = this.getHttpheaders();
+      let ipAddress = this.utilsService.generateInvoice();
+      this.url = `${ipAddress}oyeliving/api/v1/invoice/list`;
+      return this.http.post(this.url, JSON.stringify(expensesforGenInv), { headers: headers });
+    }
+
+    //.pipe(switchMap(data => this.generateInvoice_post(data)))
   }
 
   generateInvoice_post(data: object) {
@@ -244,6 +274,16 @@ export class ViewExpensesService {
     let ipAddress=this.utilsService.updateExpense();
     this.url = `${ipAddress}oyeliving/api/v1/Expense/ExpenseUpdate`;
     return this.http.post(this.url, JSON.stringify(editexpensedata), { headers: headers });
+  }
+  getExpenseListByDatesAndID(expenseList) {
+  console.log(expenseList);
+    let scopeIP=this.utilsService.getExpenseListByDatesAndID();
+    let headers = new HttpHeaders().set('Authorization', 'my-auth-token')
+    .set('Content-Type', 'application/json')
+    .set('X-Champ-APIKey', '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1')
+    .set('Access-Control-Allow-Origin', '*');
+
+    return this.http.post(scopeIP + 'oyeliving/api/v1/Expense/ExpenseListByDatesAndID/', JSON.stringify(expenseList) , {headers:headers});
   }
   getHttpheaders(): HttpHeaders {
     const headers = new HttpHeaders()

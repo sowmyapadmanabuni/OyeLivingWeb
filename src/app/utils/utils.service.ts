@@ -9,7 +9,7 @@ export class UtilsService {
   url: string;
 
   constructor(private http: HttpClient) {
-    this.ipAddress = 'http://api.oyespace.com/';
+    this.ipAddress = 'http://apidev.oyespace.com/';
    }
 
   createBlock(){
@@ -164,6 +164,15 @@ export class UtilsService {
     return this.ipAddress;
   }
   getpaymentdetails(){
+    return this.ipAddress;
+  }
+  updatefamilymember(){
+    return this.ipAddress;
+  }
+  deleteFmailyMember(){
+    return this.ipAddress;
+  }
+  getExpenseListByDatesAndID(){
     return this.ipAddress;
   }
 

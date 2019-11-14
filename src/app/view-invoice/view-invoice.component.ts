@@ -138,6 +138,7 @@ export class ViewInvoiceComponent implements OnInit {
   }
 
   getCurrentBlockDetails(blBlockID) {
+    this.invoiceLists=[];
     this.blockid = blBlockID;
     console.log('blBlockID-' + blBlockID);
     this.viewinvoiceservice.getCurrentBlockDetails(blBlockID, this.currentAssociationID)
@@ -147,6 +148,15 @@ export class ViewInvoiceComponent implements OnInit {
           //
           this.sortedCollection = this.orderpipe.transform(this.invoiceLists, 'unUnitID');
           console.log(this.sortedCollection);
+      },
+      err=>{
+        console.log(err);
+        swal.fire({
+          title: "Error",
+          text: `${err['error']['error']['message']}`,
+          type: "error",
+          confirmButtonColor: "#f69321"
+        });
       })
     this.isChecked = false;
     this.checkAll = false;
@@ -429,7 +439,18 @@ export class ViewInvoiceComponent implements OnInit {
 
     this.viewinvoiceservice.UpdateInvoiceDiscountValueAndInsert(discountData)
       .subscribe(data => {
+        this.modalRef.hide();
         console.log(data);
+      },
+      err=>{
+        this.modalRef.hide();
+        console.log(err);
+        swal.fire({
+          title: "Error",
+          text: `${err['error']['error']['message']}`,
+          type: "error",
+          confirmButtonColor: "#f69321"
+        });
       })
   }
 
@@ -521,16 +542,17 @@ export class ViewInvoiceComponent implements OnInit {
 
   sendEmailToAll() {
     let chkboxs = document.querySelectorAll('.chkBox');
+
+    console.log(chkboxs);
     let inids = [];
-    chkboxs.forEach((item) => {
-      if (item['checked'] == true) {
-        inids.push(item['value'])
-      }
+    this.invoiceLists.forEach((item) => {
+      inids.push(item['inid']);
     })
     //inids=inids.substring(0,inids.length-1);
-
+    console.log(inids);
     this.viewinvoiceservice.GetInvoiceOwnerListByInvoiceId(inids)
-      .subscribe(() => {
+      .subscribe((data) => {
+        console.log(data);
         swal.fire({
           title: "Mail Sent Successful",
           text: "",
@@ -539,8 +561,9 @@ export class ViewInvoiceComponent implements OnInit {
           confirmButtonText: "OK"
         })
       },
-        () => {
-          swal.fire('Error', 'No Email Address to Send!', 'error')
+        (err) => {
+          console.log(err);
+          swal.fire('Error', `${err['error']['error']['message']}`, 'error')
         })
   }
 
