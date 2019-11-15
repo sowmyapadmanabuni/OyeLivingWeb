@@ -1,30 +1,32 @@
 export class ExpenseData {
 
-    //POID:string;
-    //EXRABudg:number;
-    //POEAmnt:number;
-    //BPIden:string;
+    POID:any;
+    EXRABudg:any;
+    POEAmnt:any;
+    BPID: any;
     EXHead:string;
     EXDesc:string;
     EXDate:string;
-    EXPAmnt:number;
+    EXPAmnt:any;
     EXApplTO:string;
     EXRecurr:string;
     EXType:string;
     BABName:string;
-    PMID:string;
+    PMID:any;
     EXPName?:string;
     EXPBName:string;
-    EXChqNo?:number;
+    EXChqNo?:string;
     EXChqDate:string;
-    INNumber:string;
-    EXPyCopy:string;
-    //VNName:string;
+    INNumber:any;
+    EXPyCopy:any;
+    VNName:any;
     INGenDate:Date;
     EXDisType:string;
     UnUniIden:string;
     BLBlockID:string;
     ASAssnID:string;
-    EXDDNo:number;
-    EXDDDate:string;
+    EXDDNo:any;
+    EXDDDate:any;
+    EXVoucherNo:any;
+    EXAddedBy:any;
 }

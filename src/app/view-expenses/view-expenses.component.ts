@@ -19,6 +19,8 @@ import { ViewInvoiceService } from '../services/view-invoice.service';
 import {DashBoardService} from '../dash-board/dash-board.service';
 import * as _ from 'lodash';
 import { OrderPipe } from 'ngx-order-pipe';
+import {UtilsService} from '../utils/utils.service';
+import {ExpenseList} from '../models/expense-list';
 
 @Component({
   selector: 'app-view-expenses',
@@ -89,6 +91,11 @@ export class ViewExpensesComponent implements OnInit {
   invoiced:any[];
   expid:string;
   toggleGenerateInvButton:boolean;
+  ExpSDate:any;
+  ExpEDate:any;
+  expenseList:ExpenseList[];
+  togglegenerateinv:boolean;
+  exidList:any[];
 
   constructor(private viewexpenseservice: ViewExpensesService,
     private modalService: BsModalService,
@@ -98,7 +105,8 @@ export class ViewExpensesComponent implements OnInit {
     private globalservice: GlobalServiceService,
     private viewinvoiceservice: ViewInvoiceService,
     private dashboardservice:DashBoardService,
-    private orderpipe: OrderPipe
+    private orderpipe: OrderPipe,
+    private utilsService:UtilsService
   ) {
     this.currentassociationname=this.globalservice.getCurrentAssociationName();
     this.blockID = '';
@@ -134,7 +142,9 @@ export class ViewExpensesComponent implements OnInit {
     this.p = 1;
     this.dynamic = 0;
     this.expid='';
-    this.toggleGenerateInvButton=false;
+    this.toggleGenerateInvButton=true;
+    this.togglegenerateinv=false;
+    this.exidList=[];
 
     //this.editexpensedata.UnUniIden = '';
     //this.editexpensedata.PMID = '';
@@ -195,6 +205,7 @@ export class ViewExpensesComponent implements OnInit {
       isAnimated: true
     });
     this._viewexpensesByBlockId=[];
+    this.expenseList=[];
   }
 
   ngOnInit() {
@@ -234,6 +245,7 @@ export class ViewExpensesComponent implements OnInit {
   }
 
   GetExpenseListByBlockID(blockID) {
+    this.expenseList=[];
     console.log('GetExpenseListByBlockID',blockID);
     this.viewexpenseservice.currentBlockId=blockID;
     this.viewexpenseservice.GetExpenseListByBlockID(blockID)
@@ -242,10 +254,15 @@ export class ViewExpensesComponent implements OnInit {
         console.log('GetExpenseListByBlockID',data);
         this.viewexpensesByBlockId=data;
         this._viewexpensesByBlockId=this.viewexpensesByBlockId;
-        this.viewexpensesByBlockId = _.sortBy(this.viewexpensesByBlockId, e => e.exDate);
-        console.log('viewexpensesByBlockId',this.viewexpensesByBlockId);
+        this.viewexpensesByBlockId.forEach(item => {
+          this.expenseList.push(new ExpenseList(item['exid'],item['exHead'], item['exApplTO'], item['unUniIden'], item['exIsInvD'], item['exDate'], item['expAmnt'], ''));
+        })
+        console.log(this.expenseList);
+        this._viewexpensesByBlockId=this.expenseList;
+        this.expenseList = _.sortBy(this.expenseList, e => e.exDate);
+        console.log('viewexpensesByBlockId',this.expenseList);
         //
-        this.sortedCollection = this.orderpipe.transform(this.viewexpensesByBlockId, 'exHead');
+        this.sortedCollection = this.orderpipe.transform(this.expenseList, 'exHead');
         console.log(this.sortedCollection);
       }
 
@@ -290,8 +307,9 @@ export class ViewExpensesComponent implements OnInit {
       })
     }
     else{
-          this.viewexpenseservice.generateInvoice(this.currentAssociationID)
-      .subscribe(() => {
+          this.viewexpenseservice.generateInvoice(this.currentAssociationID,this.exidList,this.expenseList)
+      .subscribe((data) => {
+        console.log(data);
         swal.fire({
           title: "Invoice Generated Successfully",
           text: "",
@@ -301,13 +319,22 @@ export class ViewExpensesComponent implements OnInit {
         }).then(
           (result) => {
             if (result.value) {
+              this.exidList=[];
               this.router.navigate(['home/viewinvoice']);
             }
           })
 
         //
       },
-        () => {
+        (err) => {
+          this.exidList=[];
+          console.log(err);
+          swal.fire({
+            title: "Error",
+            text: `${err['error']['exceptionMessage']}`,
+            type: "error",
+            confirmButtonColor: "#f69321"
+          });
          /* this.toastr.error('', 'Invoice has been generated for all expenses', {
             timeOut: 3000
           }); */
@@ -513,7 +540,10 @@ export class ViewExpensesComponent implements OnInit {
   }
   GetexpenseListByInvoiceID(expid) {
     //console.log('expid',typeof expid);
+    //this._viewexpensesByBlockId = this.viewexpensesByBlockId;
+    this.expenseList = this._viewexpensesByBlockId;
     console.log('expid',expid);
+    console.log('expid',typeof expid);
     if (expid == 'true') {
       this.toggleGenerateInvButton = true;
     }
@@ -522,12 +552,53 @@ export class ViewExpensesComponent implements OnInit {
     }
     //this.GetExpenseListByBlockID(this.viewexpenseservice.currentBlockId);
     //console.log(this.viewexpensesByBlockId);
-    this._viewexpensesByBlockId = this.viewexpensesByBlockId.filter(item=>{
-      //console.log('exIsInvD',typeof item['exIsInvD']);
-      //console.log('exIsInvD-string',typeof item['exIsInvD'].toString());
-      return item['exIsInvD'].toString() == expid;
+    this.expenseList = this.expenseList.filter(item=>{
+      console.log('exIsInvD',typeof item['exIsInvD']);
+      console.log('exIsInvD-string',typeof item['exIsInvD'].toString());
+      return item['exIsInvD'].toString().toLowerCase() == expid.toLowerCase();
     })
-    //console.log(this._viewexpensesByBlockId);
+    console.log(this.expenseList);
+  }
+  getExpenseListByDatesAndID() {
+    console.log(this.ExpSDate, this.ExpEDate);
+    let expenseList = {
+      "ASAssnID": this.currentAssociationID.toString(),
+      "BLBlockID": this.viewexpenseservice.currentBlockId,
+      "startdate":formatDate(this.ExpSDate,'yyyy-dd-MM','en') ,
+      "enddate": formatDate(this.ExpEDate,'yyyy-dd-MM','en')
+    }
+    console.log(expenseList);
+    this.viewexpenseservice.getExpenseListByDatesAndID(expenseList)
+    .subscribe(data=>{
+      this.expenseList=[];
+      console.log(data['data']['expense']);
+      this._viewexpensesByBlockId=data['data']['expense'];
+      data['data']['expense'].forEach(item => {
+        this.expenseList.push(new ExpenseList(item['exid'],item['exHead'], item['exApplTO'], item['unUniIden'], item['exIsInvD'], item['exDate'], item['expAmnt'], ''));
+      })
+      console.log(this.expenseList);
+      this._viewexpensesByBlockId=this.expenseList;
+      console.log(this._viewexpensesByBlockId);
+    },
+    err=>{
+      console.log(err);
+    })
+  }
+  toggleGenerateInv() {
+    this.togglegenerateinv = !this.togglegenerateinv;
+    this.viewexpenseservice.togglegenerateinv=this.togglegenerateinv;
+    console.log( this.togglegenerateinv );
+    this.expenseList.forEach(item=>{
+     console.log(typeof item['exIsInvD']); 
+     item['checkedForGenerateInvoice']=this.togglegenerateinv;
+     console.log(item['checkedForGenerateInvoice']); 
+    })
+  }
+  getSelectedInv(exid){
+    let _exid={'EXID':exid}
+    this.exidList.push(_exid);
+    console.log(exid);
+    console.log(this.exidList);
   }
 }
 

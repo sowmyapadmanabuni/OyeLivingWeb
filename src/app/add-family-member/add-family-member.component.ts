@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import {UtilsService} from '../utils/utils.service';
 import {GlobalServiceService} from '../global-service.service';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-family-member',
@@ -35,6 +36,10 @@ export class AddFamilyMemberComponent implements OnInit {
   FirstName: any;
   MobileNumber: any;
   Relation: any;
+  EditFirstName: any;
+  EditMobileNumber: any;
+  EditRelation: any;
+  fmid:any;
 
   constructor(private http: HttpClient, private router: Router,
     private modalService: BsModalService,private utilsService:UtilsService,
@@ -54,6 +59,9 @@ export class AddFamilyMemberComponent implements OnInit {
     this.loadchangedforassociation = false;
     this.unitID=this.globalService.currentUnitId;
     this.AccountID=this.globalService.acAccntID;
+    this.EditFirstName='';
+    this.EditMobileNumber='';
+    this.EditRelation='';
   }
 
   ngOnInit() {
@@ -216,9 +224,111 @@ export class AddFamilyMemberComponent implements OnInit {
     this.MobileNumber='';
     this.Relation='';
   }
-  
+  resetUpdateFamilyMemberModal(){
+    this.EditFirstName='';
+    this.EditMobileNumber='';
+    this.EditRelation='';
+  }
+
   openModal(requestdemo: TemplateRef<any>, asAssnID, unUnitID, blBlockID) {
     this.modalRef = this.modalService.show(requestdemo, Object.assign({}, { class: 'gray modal-lg' }));
+  }
+  OpenEditFamilyMemberModal(EditFamilyMemberModal: TemplateRef<any>,fmName,fmRltn,fmMobile,asAssnID,unUnitID,fmid){
+    console.log(fmName,fmRltn,fmMobile,asAssnID,unUnitID,fmid);
+    this.EditFirstName=fmName;
+    this.EditMobileNumber=fmMobile;
+    this.EditRelation=fmRltn;
+    this.fmid=fmid;
+    this.asAssnID=asAssnID;
+    this.unitID=unUnitID;
+    this.modalRef = this.modalService.show(EditFamilyMemberModal, Object.assign({}, { class: 'gray modal-lg' }));
+  }
+  updatefamilymember() {
+    let updateFmailyMember = {
+      "FMName": this.EditFirstName,
+      "FMMobile": this.EditMobileNumber,
+      "MEMemID": "1",
+      "UNUnitID": this.unitID,
+      "ASAssnID": this.asAssnID,
+      "FMISDCode": "+91",
+      "FMImgName": "1.jpg",
+      "FMRltn": this.EditRelation,
+      "FMLName": "M",
+      "FMMinor": false,
+      "FMGurName": "som",
+      "FMID": this.fmid
+    }
+
+    let headers = new HttpHeaders().append('Content-Type', 'application/json')
+      .append('X-OYE247-APIKey', '7470AD35-D51C-42AC-BC21-F45685805BBE');
+
+    let scopeIP = this.utilsService.updatefamilymember();
+    console.log(updateFmailyMember);
+    this.http.post(scopeIP + `oyesafe/api/v1/FamilyMemberDetails/update`, JSON.stringify(updateFmailyMember), { headers: headers })
+    .subscribe(data=>{
+      console.log(data);
+      if(data['data'] != null){
+              Swal.fire({
+        title: "Error",
+        text: `${data['error']['message']}`,
+        type: "error",
+        confirmButtonColor: "#f69321"
+      })
+      }
+      else{
+        this.modalRef.hide();
+        Swal.fire({
+          title: "Family Member Updated Successfully",
+          text: "",
+          type: "success",
+          confirmButtonColor: "#f69321",
+          confirmButtonText: "OK"
+        }).then(
+          (result) => {
+            if (result.value) {
+              this.loadUnitForAssociation(this.unitID);
+            }
+          }
+        )
+      }
+
+    },
+    err=>{
+      console.log(err);
+    })
+
+  }
+
+  deleteFamilyMember(fmid) {
+    console.log(fmid);
+    let deleteFmailyMember = {
+      "FMID": fmid
+    }
+
+    let headers = new HttpHeaders().append('Content-Type', 'application/json')
+      .append('X-OYE247-APIKey', '7470AD35-D51C-42AC-BC21-F45685805BBE');
+
+    let scopeIP = this.utilsService.deleteFmailyMember();
+    console.log(deleteFmailyMember);
+    this.http.post(scopeIP + `oyesafe/api/v1/FamilyMemberDetailsDelete/update`, JSON.stringify(deleteFmailyMember), { headers: headers })
+      .subscribe(data => {
+        console.log(data);
+        swal.fire({
+          title: "Family Member Deleted Successfully",
+          text: "",
+          type: "success",
+          confirmButtonColor: "#f69321"
+        }).then(
+          (result) => {
+            if (result.value) {
+              this.loadUnitForAssociation(this.unitID);
+            }
+          }
+        )
+      },
+        err => {
+          console.log(err);
+        })
   }
 
 }

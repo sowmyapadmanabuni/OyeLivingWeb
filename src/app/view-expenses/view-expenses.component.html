@@ -26,16 +26,52 @@
       </div>
     </div>    
       <div class="col-sm-2 col-xs-12">
-        <button [hidden]='toggleGenerateInvButton' class="btn btn-primary pull-right" type="button" (click)="generateInvoice()"> Generate Invoice</button>
+        <button [hidden]='toggleGenerateInvButton' style="background-color: orange;" class="btn btn-primary pull-right" type="button" (click)="generateInvoice()"> Generate Invoice</button>
       </div>
     
     <div class="col-sm-2 col-xs-12">
-      <button (click)='gotoAddexpense()' type="button" class="btn btn-primary pull-right"><i class="fa fa-plus"></i>Add
+      <button (click)='gotoAddexpense()' style="background-color: orange;" type="button" class="btn btn-primary pull-right"><i class="fa fa-plus"></i>Add
         Expenses</button>
     </div>
   </div>
 </div>
 <!---->
+
+  <div class="row" style="margin-top: 14px;">
+    <div class="col-sm-4 col-xs-12">
+      <div class="form-group">
+        <label style="float: left;">From <span class="red">*</span></label>
+        <!-- <ejs-datepicker placeholder='Invoice Generation Date' [min]='todayDate' format='dd-MM-yyyy' ></ejs-datepicker> -->
+        <input style="float: left;width: 80%;margin-left: 14px;" type="text" class="form-control" name="ExpSDate"
+          #ExpSDateControl='ngModel' placeholder="Invoice Generation Date" [(ngModel)]="ExpSDate" bsDatepicker required
+          placement="down" />
+        <p class="invalid-feedback">Date required
+        </p>
+      </div>
+    </div>
+    <div class="col-sm-4 col-xs-12">
+      <div class="form-group" style="float: left;width: 80%;">
+        <label style="float: left;">Till <span class="red">*</span></label>
+        <input style="float: left;width: 80%;margin-left: 14px;" type="text" class="form-control"
+          [class.enableBorderColor]="enableduedatevalidation" [class.classForInvalid]="enableduedatevalidation"
+          name="ExpEDate" #ExpEDateControl='ngModel' placeholder="Due Date" [(ngModel)]="ExpEDate" bsDatepicker required
+          placement="down" />
+        <p class="invalid-feedback">Due date required
+        </p>
+        <ng-container *ngIf='enableduedatevalidation'>
+          <p class="invalidFeedback">Due date should be given
+          </p>
+        </ng-container>
+      </div>
+      <button (click)='getExpenseListByDatesAndID()' style="float: left;margin-top: -5px;" class="mdButton1">Get</button>
+    </div>
+    <div class="col-sm-4 col-xs-12">
+      <div class="form-group">
+        <input type="text" name="searchBoxData" [(ngModel)]="searchBoxData" class="form-control" placeholder="Search" />
+      </div>
+    </div>
+  </div>
+    
 
 <div class="col-sm-2 col-sm-12 col-xs-12">
   <table class="table" id="example">
@@ -55,10 +91,12 @@
         <th [class.activee]="order === 'expAmnt'"
         (click)="setOrder('expAmnt')">Amount<span id="spanid" [hidden]="reverse">▼</span><span id="spanid" [hidden]="!reverse">▲</span></th>
         <th>Added By</th>
+        <th>Action</th>
+        <th><input type="checkbox" [(ngModel)]='togglegenerateinv' (click)='toggleGenerateInv()'/></th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let view of _viewexpensesByBlockId | orderBy: order:reverse:'case-insensitive' | paginate: { itemsPerPage: 10, currentPage: p };let i = index">
+      <tr *ngFor="let view of expenseList | filter : searchBoxData | orderBy: order:reverse:'case-insensitive' | paginate: { itemsPerPage: 10, currentPage: p };let i = index">
         <td>{{ (10 * (p - 1) + i)+1 }}</td>
         <td>{{view.exHead}}</td>
         <td>{{view.exApplTO}}</td>
@@ -73,12 +111,13 @@
         <td>
           <button type="button" class="smallBtn"
             (click)="openModal(editexpensetemplate,view.exid,view.exDesc,view.expAmnt,view.exApplTO,view.exHead,view.exType,view.pmid,view.inNumber,view.poid,view.exPyCopy,view.exRecurr,view.exDate,view.blBlockID)">
-            <i class="fa fa-pencil" title="edit"></i>
-          </button>
+            <i title="EditExpense" class="fa fa-eye"></i>
+          </button>|
           <button type="button" class="smallBtn" (click)="deleteExpense(view.unUniIden,view.exApplTO,view.inGenDate)"><i
               class="fa fa-trash" title="delete"></i>
           </button>
         </td>
+        <td><input type="checkbox" [(ngModel)]='view.checkedForGenerateInvoice' (change)="getSelectedInv(view['exid'])"/></td>
       </tr>
     </tbody>
   </table>
@@ -107,7 +146,7 @@
           <form name="editExpense" autocomplete="off">
             <div class="row">
               <div class="col-sm-6">
-                  <p>Association Name : <strong>{{assnName}}</strong></p>
+                  <p style="margin-left: 14px;">Association Name : <strong>{{assnName}}</strong></p>
               </div>
               <div class="col-sm-3" style="text-align:pull-right">
                 <p>Date : <strong>{{todayDate | date: "d/M/y"}}</strong></p>

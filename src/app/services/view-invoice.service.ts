@@ -129,6 +129,7 @@ export class ViewInvoiceService {
   }
 
   UpdateInvoiceDiscountValueAndInsert(discountData) {
+    console.log(discountData);
     let headers = this.getHttpheaders();
     let ipAddress=this.utilsService.UpdateInvoiceDiscountValueAndInsert();
     this.url = `${ipAddress}/oyeliving/api/v1/UpdateInvoiceDiscountValueAndInsert`;

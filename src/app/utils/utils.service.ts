@@ -173,5 +173,14 @@ export class UtilsService {
   getpaymentdetails(){
     return this.ipAddress;
   }
+  updatefamilymember(){
+    return this.ipAddress;
+  }
+  deleteFmailyMember(){
+    return this.ipAddress;
+  }
+  getExpenseListByDatesAndID(){
+    return this.ipAddress;
+  }
 
 }

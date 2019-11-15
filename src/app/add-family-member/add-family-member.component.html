@@ -44,6 +44,18 @@
     </div>
   </div>
 </div> -->
+        <div class="card" style="position: relative;height: 84px;">
+          <div class="col-sm-4" style="position: absolute;right: 300px;">
+            <div class="form-group">
+              <input type="text" style="height: 44px;" name="searchBoxData" [(ngModel)]="searchBoxData" class="form-control" placeholder="Search" />
+            </div>
+          </div>
+          <div class="col-sm-4" style="position: absolute;right: 3px;top: -14px;">
+            <button class="mdButton1" style="margin-top:27px;font-size:18px;float: right;" (click)="openModal(template)" style="margin-top:27px;font-size:18px;float: right;"
+              type="button">Add Family Member</button>
+          </div>
+        </div>
+
 <div class="row">
     <div class="col-sm-12">
           <div class="card" style="padding-left: 68px;">
@@ -55,15 +67,17 @@
                     <td style="font-size: 20px;"><span>Family Member Name</span></td>
                     <td style="font-size: 20px;"><span>Relation</span></td>
                     <td style="font-size: 20px;"><span>MobileNumber</span></td>
+                    <td style="font-size: 20px;"><span>Action</span></td>
                     <td></td>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let unit of familymemberarray;let i=index">
+                  <tr *ngFor="let unit of familymemberarray | filter: searchBoxData ; let i=index">
                     <td>{{ i+1 }}</td>
                     <td>{{unit['fmName']}}</td>
                     <td>{{unit['fmRltn']}}</td>
                     <td>{{unit['fmMobile']}}</td>
+                    <td><i (click)="OpenEditFamilyMemberModal(EditFamilyMemberModal,unit['fmName'],unit['fmRltn'],unit['fmMobile'],unit['asAssnID'],unit['unUnitID'],unit['fmid'])" title="EditFamilyMember" style="cursor: pointer;" aria-hidden="true" class="fa fa-pencil"></i>&nbsp;|&nbsp;<i class="fa fa-trash" (click)="deleteFamilyMember(unit['fmid'])" style="cursor: pointer;" title="DeleteFamilyMember" aria-hidden="true"></i></td>
                     <!-- <td><span *ngIf="unit['uoRoleID'] == ''"><button type="button" class="smallBtn" data-toggle="modal" (click)="openModal(template,unit['asAssnID'],unit['unUnitID'],unit['blBlockID'])"><i style="cursor: pointer" class="fas fa-edit"></i></button></span></td> -->
                   </tr>
                 </tbody>
@@ -86,12 +100,12 @@
   </div>
 </div>
 
-<div class="row">
+<!-- <div class="row">
   <div class="col-sm-12">
     <button class="mdButton1" (click)="openModal(template)" style="margin-top:27px;font-size:18px;float: right;"
       type="button">Add Family Member</button>
   </div>
-</div>
+</div> -->
 
 <!-- <div class="row">
   <div class="col-sm-6"></div>
@@ -129,6 +143,40 @@
           <button type="submit" class="button mdButton1" style="display: inline-block;margin: 0% 0% 0% 36%;"
             (click)='addfamilymember()'>Submit</button>
           <button type="reset" (click)="resetFamilyMemberModal()" class="cancelbtn mdButton1"
+            style="display: inline-block;margin: 1.5% 0% 0% 5%;">Reset</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #EditFamilyMemberModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" style="color: #e59400;font-size: 20px;position: absolute;left: 294px;">Update Family
+      Member</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div>
+        <label><b>Family Member Name</b></label>
+        <input type="text" placeholder="First Name" [(ngModel)]='EditFirstName' maxlength="30" name="EditFirstName"
+          class="form-control" #FirstNameControl="ngModel">
+
+        <label><b>Mobile Number</b></label>
+        <input type="text" placeholder="MobileNumber" [(ngModel)]='EditMobileNumber' maxlength="20" name="EditMobileNumber"
+          class="form-control" #MobileNumberControl="ngModel">
+
+        <label><b>Relation</b></label>
+        <input type="text" placeholder="Relation" [(ngModel)]='EditRelation' maxlength="20" name="EditRelation"
+          class="form-control" #RelationControl="ngModel">
+
+        <div>
+          <button type="submit" class="button mdButton1" style="display: inline-block;margin: 0% 0% 0% 36%;"
+            (click)='updatefamilymember()'>Update</button>
+          <button type="reset" (click)="resetUpdateFamilyMemberModal()" class="cancelbtn mdButton1"
             style="display: inline-block;margin: 1.5% 0% 0% 5%;">Reset</button>
         </div>
       </div>
