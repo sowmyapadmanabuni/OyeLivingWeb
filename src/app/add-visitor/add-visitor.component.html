@@ -1,0 +1,193 @@
+<div class="main-wrapper animateIt">
+  <div class="container-fluid">
+    <div class="pageTitle">
+      <div class="row">
+        <div class="col-md-10 col-sm-12 col-xs-12">
+          <h3 style="margin-top: 8px;">Add Visitor</h3>
+        </div>
+        <div class="col-md-2 col-sm-12 col-xs-12">
+          <a>
+            <button type="button" (click)="goBack()" class="btn btn-danger pull-right"><i class="fa fa-times"></i> Cancel</button>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <form name="crtBlock" class="needs-validation" #frm #ctrateBlockform='ngForm' role="form" autocomplete="off"
+        (ngSubmit)='addVisitor()'>
+
+        <fieldset class="scheduler-border">
+          <legend class="scheduler-border headingOrange">Visitor Details</legend>
+
+
+
+          <div class="row">
+
+            <div class="col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label id=label1>First Name <span class="red">*</span></label>
+                <input type="text" name="INFName" id="input1" autocomplete='firstname' [(ngModel)]="INFName"
+                  #INFNameControl="ngModel" class="form-control" placeholder="First Name" pattern="[a-zA-Z0-9]*"
+                  required />
+                <p class="invalid-feedback">Valid name is required
+                </p>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label id=label1>Last Name <span class="red">*</span></label>
+                <input type="text" name="INLName" id="input1" autocomplete='lastname' [(ngModel)]="INLName"
+                  #INLNameControl="ngModel" class="form-control" placeholder="Last Name" pattern="[a-zA-Z0-9]*"
+                  required />
+                <p class="invalid-feedback">Valid Last name is required
+                </p>
+              </div>
+              </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-3 col-sm-12"></div>
+            <div class="col-sm-3 col-sm-12"></div>
+            <div class="col-sm-3 col-sm-12"></div>
+            <div class="col-sm-3 col-sm-12"></div>
+
+          </div>
+        </fieldset>
+
+        <!--Manager Details Starts-->
+        <fieldset class="scheduler-border">
+          <legend class="scheduler-border headingOrange">Details</legend>
+          <div class="row">
+            <!--  -->
+
+
+            <div class="col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label id=label5>Mobile Number <span class="red">*</span></label>
+                <input type="text" name="INMobile" id="input5" autocomplete='mobile' [(ngModel)]="INMobile"
+                  #INMobileControl="ngModel" class="form-control" placeholder="Mobile Number"
+                  minlength="10" maxlength="10"/>
+                <p class="invalid-feedback">Mobile number is required</p>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label id=label6>Vehicle Number <span class="red">*</span></label>
+                <input type="text" name="INVchlNo" id="input6" autocomplete='vehiclenumber'
+                  [(ngModel)]="INVchlNo" #INVchlNoControl="ngModel" class="form-control"
+                  placeholder="Vehicle Number" />
+                <p class="invalid-feedback">Vehicle Number is required
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label id=label6>Email Id <span class="red">*</span></label>
+                <input type="text" name="INEmail" id="input6" autocomplete='email'
+                  [(ngModel)]="INEmail" #INEmailControl="ngModel" class="form-control"
+                  placeholder="Email Id" />
+                <p class="invalid-feedback">Email-id is required
+                </p>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label id=label4>Purpose of visit <span class="red">*</span></label>
+                <input type="text" name="INPOfInv" id="input4" autocomplete='mngName' [(ngModel)]="INPOfInv"
+                  #INPOfInvControl="ngModel" class="form-control" placeholder="Purpose of visit" pattern="[a-zA-Z]*"
+                  required />
+                <p class="invalid-feedback">Purpose of visit is required</p>
+              </div>
+            </div>
+
+          </div>
+
+
+
+
+
+          
+          <div class="row">
+            <div class="col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label id=label6>Number of Visitors <span class="red">*</span></label>
+                <input type="text" name="INVisCnt" id="input6" autocomplete='email'
+                  [(ngModel)]="INVisCnt" #INVisCntControl="ngModel" class="form-control"
+                  placeholder="Visitor number" />
+                <p class="invalid-feedback">Visitor number is required
+                </p>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+            </div>
+
+          </div>
+          
+
+          <div class="row">
+            <div class="col-sm-3 col-sm-12"></div>
+            <div class="col-sm-3 col-sm-12"></div>
+            <div class="col-sm-3 col-sm-12"></div>
+            <div class="col-sm-3 col-sm-12"></div>
+
+          </div>
+        </fieldset>
+
+        <fieldset class="scheduler-border">
+          <legend class="scheduler-border headingOrange">Invitation Validity</legend>
+
+          <div class="row">
+            <div class="col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>From <span class="red">*</span></label>
+                <!-- <ejs-datepicker placeholder='Invoice Generation Date' [min]='todayDate' format='dd-MM-yyyy' ></ejs-datepicker> -->
+                <input type="text" class="form-control" name="INSDate" #INSDateControl='ngModel'
+                  placeholder="Invoice Generation Date"  [(ngModel)]="INSDate"
+                  bsDatepicker required [minDate]="todayDate" placement="top"/>
+                <p class="invalid-feedback">Date required 
+                </p>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Till <span class="red">*</span></label>
+                <input type="text" class="form-control" [class.enableBorderColor]="enableduedatevalidation" [class.classForInvalid]="enableduedatevalidation" name="INEDate" #INEDateControl='ngModel' placeholder="Due Date"
+                   [(ngModel)]="INEDate" bsDatepicker required 
+                   placement="top"/>
+                <p class="invalid-feedback">Due date required
+                </p>
+                <ng-container *ngIf='enableduedatevalidation'>
+                  <p class="invalidFeedback">Due date should be given 
+                  </p>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="row">
+          <div class="col-sm-3 col-sm-12"></div>
+          <div class="col-sm-3 col-sm-12"></div>
+          <div class="col-sm-3 col-sm-12"></div>
+          <div class="col-sm-3 col-sm-12">
+            <div class="btn-group pull-right">
+
+              <button type="reset" (click)='removeValidationClass(frm)' class="mdButton1">Reset</button>
+              &nbsp; &nbsp;
+              <button type="submit" class="btn btn-primary pull-right">
+                  <i class="fa fa-plus"></i> Add Guest
+                </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!---->
+

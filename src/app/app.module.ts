@@ -1,8 +1,9 @@
 import { BrowserModule ,Title} from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
 import { AppComponent } from './app.component';
+import { NgxQRCodeModule } from 'ngx-qrcode2';
+
 import {AlertsModule} from 'angular-alert-module';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
@@ -62,6 +63,10 @@ import { GuestComponent } from './guest/guest.component';
 import { DeliveriesComponent } from './deliveries/deliveries.component';
 import { StaffComponent } from './staff/staff.component';
 import { AddFamilyMemberComponent } from './add-family-member/add-family-member.component';
+import { AddVisitorComponent } from './add-visitor/add-visitor.component';
+import { ViewVisitorComponent } from './view-visitor/view-visitor.component';
+import { AddVehiclesComponent } from './add-vehicles/add-vehicles.component';
+import { ViewVehiclesComponent } from './view-vehicles/view-vehicles.component';
 
 
 @NgModule({
@@ -105,10 +110,15 @@ import { AddFamilyMemberComponent } from './add-family-member/add-family-member.
     GuestComponent,
     DeliveriesComponent,
     StaffComponent,
-    AddFamilyMemberComponent
+    AddFamilyMemberComponent,
+    AddVisitorComponent,
+    ViewVisitorComponent,
+    AddVehiclesComponent,
+    ViewVehiclesComponent
   ],
   imports: [
     BrowserModule,
+    NgxQRCodeModule,
     FormsModule,
     HttpClientModule,
     AlertsModule,

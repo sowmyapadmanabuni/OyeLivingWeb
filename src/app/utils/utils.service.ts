@@ -16,6 +16,10 @@ export class UtilsService {
     return this.ipAddress;
   }
 
+  getIPaddress(){
+    return this.ipAddress;
+  }
+
   createUnit(){
     return this.ipAddress;
   }
@@ -125,6 +129,9 @@ export class UtilsService {
     return this.ipAddress;
   }
   getBlockDetails(){
+    return this.ipAddress;
+  }
+  getVehileDetailsByIPaddress(){
     return this.ipAddress;
   }
   UpdateBlock(){
