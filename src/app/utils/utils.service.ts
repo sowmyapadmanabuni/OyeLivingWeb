@@ -9,10 +9,14 @@ export class UtilsService {
   url: string;
 
   constructor(private http: HttpClient) {
-    this.ipAddress = 'http://apidev.oyespace.com/';
+    this.ipAddress = 'http://api.oyespace.com/';
    }
 
   createBlock(){
+    return this.ipAddress;
+  }
+
+  getIPaddress(){
     return this.ipAddress;
   }
 
@@ -125,6 +129,9 @@ export class UtilsService {
     return this.ipAddress;
   }
   getBlockDetails(){
+    return this.ipAddress;
+  }
+  getVehileDetailsByIPaddress(){
     return this.ipAddress;
   }
   UpdateBlock(){

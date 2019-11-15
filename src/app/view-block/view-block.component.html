@@ -35,13 +35,8 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-<<<<<<< HEAD
-                        <tbody>
-                            <tr *ngFor="let item of allBlocksLists | filter: searchBoxData | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
-=======
                         <tbody id="myInputallBlocksLists">
                             <tr *ngFor="let item of allBlocksLists | filter: searchBoxData | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
->>>>>>> 915141cb818db85056b13f41a6309813be43ce47
                                 <td data-toggle="modal" data-target="#viewBlockDetailsTemplate"
                                     (click)="viewBlockDetails(item.blBlkName,item.blBlkType,item.blNofUnit)">{{item['blBlkName']}}
                                 </td>

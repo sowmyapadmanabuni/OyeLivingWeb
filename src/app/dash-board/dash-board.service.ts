@@ -40,14 +40,9 @@ export class DashBoardService {
    }//Constructor Ends
 
    getAssociation(accountID){
-<<<<<<< HEAD
-    // return this.http.get(this.scopeIP + 'oyeliving/api/v1/GetAssociationListByAccountID/' +accountID ,  {headers:this.headers});
-    return this.http.get(this.scopeIP + 'oyeliving/api/v1/Member/GetMemberListByAccountID/' +accountID ,  {headers:this.headers});
-=======
      let scopeIP=this.utilsService.getAssociation();
     // return this.http.get(this.scopeIP + 'oyeliving/api/v1/GetAssociationListByAccountID/' +accountID ,  {headers:this.headers});
     return this.http.get(scopeIP + 'oyeliving/api/v1/Member/GetMemberListByAccountID/' +accountID ,  {headers:this.headers});
->>>>>>> 915141cb818db85056b13f41a6309813be43ce47
   }
   getAmount(associationID:string){
     let headers= new HttpHeaders().append('Content-Type',  'application/json')

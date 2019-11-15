@@ -2,7 +2,7 @@
   <div class="container-fluid">
       <div class="pageTitle" style="padding: 10px;">
           <div class="row">
-              <div class="col-sm-5 col-xs-12">
+              <div class="col-sm-4 col-xs-12">
                   <h3 style="margin-top: 3px; margin-bottom: 0;">Visitor List</h3>
               </div>
               <div class="col-sm-4 col-xs-12">
@@ -11,9 +11,13 @@
                           placeholder="Search" />
                   </div>
               </div>
-              <div class="col-sm-3 col-xs-12">
-                  <button type="button" class="btn btn-primary pull-right" (click)="addBlocksValidation()"><i
+              <div class="col-sm-2 col-xs-12">
+                  <button type="button" class="btn btn-primary pull-right" (click)="gotoAddVisitor()"><i
                           class="fa fa-plus"></i> Add Visitor</button>
+              </div>
+              <div class="col-sm-2 col-xs-12">
+                  <button type="button" class="btn btn-primary pull-right" (click)="gotoViewVisitor()"><i
+                          class="fa fa-eye"></i> View Visited</button>
               </div>
           </div>
       </div>
@@ -22,36 +26,85 @@
             </div>
           <!-- <div *ngIf='allBlocksLists' class="card"> -->
   
-      <div class="card" *ngIf='allBlocksLists'>
+      <div class="card" *ngIf='invitationListLength'>
+
+
+
+            <div class="row">
+                    <div class="col-sm-5 col-xs-12">
+                      <div class="form-group">
+                        <label>From <span class="red">*</span></label>
+                        <!-- <ejs-datepicker placeholder='Invoice Generation Date' [min]='todayDate' format='dd-MM-yyyy' ></ejs-datepicker> -->
+                        <input type="text" class="form-control" name="StartDate" #StartDateControl='ngModel'
+                          placeholder="Start Date"  [(ngModel)]="StartDate"
+                          bsDatepicker required [minDate]="todayDate" placement="side"/>
+                        <p class="invalid-feedback">Date required 
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-sm-5 col-xs-12">
+                      <div class="form-group">
+                        <label>Till <span class="red">*</span></label>
+                        <input type="text" class="form-control" [class.enableBorderColor]="enableduedatevalidation" [class.classForInvalid]="enableduedatevalidation" name="ToDate" #ToDateControl='ngModel' placeholder="Due Date"
+                           [(ngModel)]="ToDate" bsDatepicker required 
+                           placement="bottom"/>
+                        <p class="invalid-feedback">Due date required
+                        </p>
+                        <ng-container *ngIf='enableduedatevalidation'>
+                          <p class="invalidFeedback">Due date should be given 
+                          </p>
+                        </ng-container>
+                      </div>
+                    </div>
+                    <div class="col-sm-2 col-xs-12">
+                            <button (click)='getVisitorList()' style="float: left;margin-top: 21px;" class="mdButton1">Get</button>
+                    </div>
+                  </div>
+
+
+
           <div class="row">
               <!---->
               <div class="table-responsive hidden-xs" style="margin-top: 40px;">
                   <table class="table">
                       <thead>
                           <tr style="color:#e59400;">
-                              <th>Block Name</th>
-                              <th>Block Type</th>
-                              <th>No Of Units</th>
-                              <th>Action</th>
+                              <th>Visitor Name</th>
+                              <th>Purpose of Visit</th>
+                              <th>Valid from</th>
+                              <th>Valid till</th>
+                              <th>Guests expected</th>
+                              <th>Mobile number</th>
                           </tr>
                       </thead>
                       <tbody>
-                          <tr *ngFor="let item of allBlocksLists | filter: searchBoxData | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                          <tr *ngFor="let item of invitationList | filter: searchBoxData | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
                               <td data-toggle="modal" data-target="#viewBlockDetailsTemplate"
-                                  (click)="viewBlockDetails(item.blBlkName,item.blBlkType,item.blNofUnit)">{{item['blBlkName']}}
+                                  (click)="viewBlockDetails(item.blBlkName,item.blBlkType,item.blNofUnit)">{{item['infName']}}
                               </td>
-                              <td data-toggle="modal" data-target="#viewBlockDetailsTemplate"
-                                  (click)="viewBlockDetails(item['blBlkName'],item['blBlkType'],item['blNofUnit'])">{{item['blBlkType']}}
+                              <td data-toggle="modal" data-target="#viewBlockDetailsTemplate">{{item['inpOfInv']}}
+                                  
                               </td>
-                              <td data-toggle="modal" data-target="#viewBlockDetailsTemplate"
-                                  (click)="viewBlockDetails(item['blBlkName'],item['blBlkType'],item['blNofUnit'])">{{item['blNofUnit']}}
+                              <td data-toggle="modal" data-target="#viewBlockDetailsTemplate">{{item['insDate']| date: 'dd/MM/yyyy'}}
+                              </td>
+                              <td data-toggle="modal" data-target="#viewBlockDetailsTemplate">{{item['ineDate']| date: 'dd/MM/yyyy'}}
+                              </td>
+                              <td data-toggle="modal" data-target="#viewBlockDetailsTemplate">{{item['inVisCnt']}}
+                              </td>
+                              <td data-toggle="modal" data-target="#viewBlockDetailsTemplate">{{item['inMobile']}}
                               </td>
                               <td>
                                   <i data-toggle="modal" data-target="#viewBlockDetailsTemplate"
-                                      (click)="viewBlockDetails(item['blBlkName'],item['blBlkType'],item['blNofUnit'])" class="fa fa-eye"></i>&nbsp;|&nbsp;<i
-                                      data-toggle="modal" data-target="#editBlockDetails"
-                                      (click)="OpenModal(editBlocktemplate,item.blBlkName,item.blBlkType,item.blNofUnit,item.blMgrName,item.blMgrMobile,item.blMgrEmail,item.asMtType,item.asMtFRate,item.asMtDimBs,item.asUniMsmt,item.asbGnDate,item.asdPyDate,item.bldUpdated,item.aslpcType,item.aslpChrg,item.blBlockID,item.asiCrFreq,item.aslpsDate)"
-                                      class="fa fa-pencil"></i>
+                                      (click)="OpenModalForQRcode(QRtemplate,   
+                                      item['infName'],
+                                      item['inMobile'], 
+                                      item['inInvtID'],    
+                                      item['unUnitID'],
+                                      item['insDate'],
+                                      item['ineDate'],
+                                      item['inVisCnt'],
+                                      item['asAssnID'],
+                                      item['inIsActive'] )" class="fa fa-qrcode" aria-hidden="true"></i>
 
                               </td>
                           </tr>
@@ -66,6 +119,25 @@
 </div>
 
 <!------------------>
+<ng-template #QRtemplate>
+  <div class="modal-header">
+  <h4 class="modal-title pull-left" style="color: #e59400;font-size: 20px;position: absolute;left: 269px;">Download Guest QR Code</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+  <span aria-hidden="true">&times;</span>
+  </button>
+  </div>
+  <div class="modal-body">
+  
+    <div style="text-align:center">
+      <!-- <input type="text" placeholder="Enter name to generate QR Code" [(ngModel)]="qrcodename"><br> -->
+      <!-- <button (click)="generateQRCode()">Generate QR Code</button> -->
+      <ngx-qrcode id="qrCodeImage" [qrc-element-type]="elementType" [qrc-value] = "value">
+      </ngx-qrcode><br>
+      <a [href]="href" (click)="downloadImage()" download>Download Image</a>
+    </div>
 
+
+  </div>
+ </ng-template>
 
 

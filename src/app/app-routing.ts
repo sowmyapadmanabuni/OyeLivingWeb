@@ -19,12 +19,16 @@ import { LoginComponent } from './login/login.component';
 import {HomeComponent} from './home/home.component';
 import {AuthGuard} from './guards/auth.guard';
 import {DeliveriesComponent} from './deliveries/deliveries.component';
+import {AddVisitorComponent} from './add-visitor/add-visitor.component'
 import {StaffComponent} from './staff/staff.component';
+import {ViewVisitorComponent} from './view-visitor/view-visitor.component'
 import {RegisterComponent} from './register/register.component';
 import {NewInvoiceComponent} from './new-invoice/new-invoice.component';
 import {AddexpensexlsxComponent} from './addexpensexlsx/addexpensexlsx.component';
 import {ExpensegridComponent} from './expensegrid/expensegrid.component';
 import {GuestComponent} from './guest/guest.component';
+import {AddVehiclesComponent} from './add-vehicles/add-vehicles.component'
+import {ViewVehiclesComponent} from './view-vehicles/view-vehicles.component'
 import {ReadBlockAndUnitxlsxComponent} from './read-block-and-unitxlsx/read-block-and-unitxlsx.component';
 
 const routes: Routes = [
@@ -41,7 +45,11 @@ const routes: Routes = [
             { path: 'viewunit', component: ViewUnitComponent },
             { path: 'guest', component: GuestComponent },
             { path: 'deliveries', component: DeliveriesComponent },
+            { path: 'viewvisitor', component: ViewVisitorComponent },
             { path: 'staff', component: StaffComponent },
+            { path: 'addguest', component: AddVisitorComponent },
+            { path: 'addvehicles', component: AddVehiclesComponent },
+            { path: 'viewvehicles', component: ViewVehiclesComponent },
             { path: 'viewexpense', component: ViewExpensesComponent },
             { path: 'viewinvoice', component: ViewInvoiceComponent },
             { path: 'viewreceipt', component: ViewreceiptComponent },

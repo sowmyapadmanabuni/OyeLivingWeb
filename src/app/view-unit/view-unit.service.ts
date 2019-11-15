@@ -17,13 +17,8 @@ export class ViewUnitService {
     })
   };
 
-<<<<<<< HEAD
-constructor(private http:HttpClient) { 
-      this.scopeIP="https://apiuat.oyespace.com/";
-=======
 constructor(private http:HttpClient,private utilsService:UtilsService) { 
       this.scopeIP="https://apidev.oyespace.com/";
->>>>>>> 915141cb818db85056b13f41a6309813be43ce47
       this.scriptIP="1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1";
       this.headers= new HttpHeaders().append('Content-Type',  'application/json')
                                      .append('X-Champ-APIKey', this.scriptIP,)
