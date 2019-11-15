@@ -222,7 +222,6 @@ export class DashBoardComponent implements OnInit {
         console.log(association);
         this.unitForAssociation.push(association);
         console.log(this.unitForAssociation);
-        if (association['unUnitID'] != 0) {
           const found = this.unitlistForAssociation.some(el => el['unUnitID'] === association['unUnitID'] && el['unUniName'] === association['unUniName']);
           if (!found) {
             this.unitlistForAssociation.push(new UnitlistForAssociation(association['unUniName'], association['unUnitID']));
@@ -232,7 +231,6 @@ export class DashBoardComponent implements OnInit {
           this.globalService.setCurrentAssociationName(associationName);
           this.associationID = this.globalService.getCurrentAssociationId();
           console.log("Selected AssociationId: " + this.globalService.getCurrentAssociationId());
-        }
       }
 
     });
