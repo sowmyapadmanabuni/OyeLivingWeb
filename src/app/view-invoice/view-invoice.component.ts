@@ -300,6 +300,9 @@ export class ViewInvoiceComponent implements OnInit {
       .subscribe(data => {
         console.log('associationDetails', data);
         this.associationDetails = data
+      },
+      err=>{
+        console.log(err);
       })
 
   } 
@@ -490,11 +493,11 @@ export class ViewInvoiceComponent implements OnInit {
                      this.getCurrentBlockDetails(blBlockID);
                    }
                  })
-               console.log(res);
+              //  console.log(res);
              },
                (res) => {
                  console.log(res);
-                 swal.fire('Error', 'No Email Address to Send!', 'error')
+                 swal.fire('Error', `${res['error']['exceptionMessage']}`, 'error')
                }) 
          }
          //
@@ -573,6 +576,9 @@ export class ViewInvoiceComponent implements OnInit {
       .subscribe(data => {
         this.allblocksbyassnid = data['data'].blocksByAssoc;
         console.log('allBlocksByAssnID', this.allblocksbyassnid);
+      },
+      err=>{
+        console.log(err);
       });
     //
     this.modalRefForGenerateRecipt = this.modalService.show(generatereceiptmodal,
