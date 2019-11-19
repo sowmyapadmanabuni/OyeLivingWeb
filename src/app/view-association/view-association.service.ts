@@ -123,5 +123,9 @@ sendRequestmethod(senddata:Sendrequest)
     return this.http.post('http://apidev.oyespace.com/oyeliving/api/v1/SendMsging', senddata, {headers:this.headers});
 
   }
+  joinAssociation(senddataForJoinOwner){
+    let scopeIP=this.utilsService.joinAssociation();
+    return this.http.post(scopeIP + 'oyeliving/api/v1/association/join', senddataForJoinOwner, {headers:this.headers});
+  }
 
 }

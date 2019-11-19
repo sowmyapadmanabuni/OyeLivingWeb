@@ -491,7 +491,7 @@
                             <td>{{item.unOcStat}}</td>
                             <td>
                               <!-- (click)="OpenModal(template,view.asAsnName,view.asCountry,view.asAddress,view.asCity,view.asState,view.asPinCode,view.asPrpType,view.asPrpName,view.asNofBlks,view.asNofUnit,view.amType,view.noofAmenities,view.baBName,view.baIFSC,view.baActNo,view.baActType,view.asAssnID)"> -->
-                              <button type="button" class="smallBtn" (click)="OpenModals(jointemplate)">Register Me</button>
+                              <button type="button" class="smallBtn" (click)="OpenModals(jointemplate,item['unUnitID'])">Register Me</button>
                             </td>
                           </tr>
                         </tbody>
@@ -532,7 +532,7 @@
                                                               [ngClass]="{'has-error' : occupancydateControl.invalid && occupancydateControl.touched}">
                                                               <label>Select Date Of Occupancy<span class="red">*</span></label>
                                                               <input type="text" class="form-control" name="UNOcSDate" #occupancydateControl='ngModel'
-                                                                placeholder="Occupancy Date" required [(ngModel)]="UNOcSDate" #dp="bsDatepicker"
+                                                                placeholder="Occupancy Date" required [bsConfig]='bsConfig' [(ngModel)]="UNOcSDate" #dp="bsDatepicker"
                                                                 bsDatepicker [(bsValue)]="UNOcSDate" [minDate]="minDate" />
                                                               <p class="alerts" *ngIf="occupancydateControl.invalid && occupancydateControl.touched"> Please Select
                                                                  Date</p>
@@ -546,7 +546,8 @@
                                         <div class="col-sm-2 col-xs-12">
                                         </div>
                                         <div class="col-sm-4 col-xs-12">
-                                                <button type="button" class="btn btn-warning" style="margin-left: 25%;"  (click)="OpenModalOwner(joinowner,acfName,aclName,acMobile,acEmail,acAccntID)">Join As Owner</button>
+                                                <!-- <button type="button" class="btn btn-warning" style="margin-left: 25%;"  (click)="OpenModalOwner(joinowner,acfName,aclName,acMobile,acEmail,acAccntID)">Join As Owner</button> -->
+                                                <button type="button" class="btn btn-warning" style="margin-left: 25%;"  (click)="OnSendButton('joinowner')">Join As Owner</button>
                                             </div>
                                                 <div class="col-sm-4 col-xs-12">
                                                         <button type="button" class="btn btn-warning"  (click)="OpenModalTenant(jointenant,acfName,aclName,acMobile,acEmail,acAccntID)">Join As Tenant</button>
@@ -664,7 +665,7 @@
                                   <div class="col-sm-6 col-xs-12">
                                     <div class="form-group" [ngClass]="{'has-error' : firstnameControl.invalid && firstnameControl.touched}">
                                       <label>First Name <span class="red">*</span></label>
-                                      <input type="text" class="form-control" name="acfName" [(ngModel)]="joinownername"
+                                      <input type="text" class="form-control" name="joinownername" [(ngModel)]="joinownername"
                                         #firstnameControl='ngModel' pattern="[a-zA-Z0-9-]*" required />
                                       <p class="alerts" *ngIf="firstnameControl.invalid && firstnameControl.touched">First Name is required</p>
                                     </div>
@@ -673,7 +674,7 @@
                                   <div class="col-sm-6 col-xs-12">
                                     <div class="form-group" [ngClass]="{'has-error' : lastnameControl.invalid && lastnameControl.touched}">
                                       <label>Last Name <span class="red">*</span></label>
-                                      <input type="text" class="form-control" name="aclName" [(ngModel)]="joinownerlastname"
+                                      <input type="text" class="form-control" name="joinownerlastname" [(ngModel)]="joinownerlastname"
                                         #lastnameControl='ngModel' pattern="[a-zA-Z0-9-]*" required />
                                       <p class="alerts" *ngIf="lastnameControl.invalid && lastnameControl.touched">Last Name is required</p>
                                     </div>
@@ -684,25 +685,25 @@
                                   <div class="col-sm-6 col-xs-12">
                                     <div class="form-group" [ngClass]="{'has-error' : mobileControl.invalid && mobileControl.touched}">
                                       <label>Mobile<span class="red">*</span></label>
-                                      <input type="text" class="form-control" name="acMobile" [(ngModel)]="joinownermobile"
+                                      <input type="text" class="form-control" name="joinownermobile" [(ngModel)]="joinownermobile"
                                         #mobileControl='ngModel' pattern="[a-zA-Z0-9-]*" required />
                                       <p class="alerts" *ngIf="mobileControl.invalid && mobileControl.touched">Mobile is required</p>
                                     </div>
                                   </div>
                         
                                   <div class="col-sm-6 col-xs-12">
-                                    <div class="form-group" [ngClass]="{'has-error' : emailControl.invalid && emailControl.touched}">
+                                    <div class="form-group" [ngClass]="{'has-error' : joinowneremailControl.invalid && joinowneremailControl.touched}">
                                       <label>Email Id<span class="red">*</span></label>
-                                      <input type="text" class="form-control" name="acEmail" [(ngModel)]="joinowneremail"
-                                        #emailControl='ngModel' pattern="[a-zA-Z0-9-]*" required />
-                                      <p class="alerts" *ngIf="emailControl.invalid && emailControl.touched">Email is required</p>
+                                      <input type="text" class="form-control" name="joinowneremail" [(ngModel)]="joinowneremail"
+                                        #joinowneremailControl='ngModel' />
+                                      <p class="alerts" *ngIf="joinowneremailControl.invalid && joinowneremailControl.touched">Email is required</p>
                                     </div>
                                   </div>
                                 </div>
                                 <div class="row">
                                   <div class="col-sm-12 col-xs-12">
                                     <!-- <input type="submit" class="mdButton1" value="Add Unit"/> -->
-                                    <button type="button" class="btn btn-warning" (click)="OnSendButton()">Send Request</button>
+                                    <button type="button" class="btn btn-warning" (click)="OnSendButton('joinowner')">Send Request</button>
                                   </div>
                                 </div>
                               </div>
@@ -761,11 +762,11 @@
                                                                                   
                                                                                                   <div class="col-sm-6 col-xs-12">
                                                                                                     <div class="form-group"
-                                                                                                      [ngClass]="{'has-error' : emailControl.invalid && emailControl.touched}">
+                                                                                                      [ngClass]="{'has-error' : temailControl.invalid && temailControl.touched}">
                                                                                                       <label>Email Id<span class="red">*</span></label>
-                                                                                                      <input type="text" class="form-control" name="acEmail" [(ngModel)]="temail"
-                                                                                                        #emailControl='ngModel' pattern="[a-zA-Z0-9-]*" required />
-                                                                                                        <p class="alerts" *ngIf="emailControl.invalid && emailControl.touched">Email is required</p>
+                                                                                                      <input type="text" class="form-control" name="temail" [(ngModel)]="temail"
+                                                                                                        #temailControl='ngModel' />
+                                                                                                        <p class="alerts" *ngIf="temailControl.invalid && temailControl.touched">Email is required</p>
                                                                                                     </div>
                                                                                                   </div>          
                                                                                                 </div>

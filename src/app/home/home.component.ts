@@ -117,7 +117,7 @@ this.getAccountFirstName();
   getMembers() {
     //alert('inside getmembers');
     this.dashboardservice.getMembers(this.accountID).subscribe(res => {
-      this.dashboardservice.mrmRoleID = res['data'].memberListByAccount[0]['mrmRoleID'];
+      //this.dashboardservice.mrmRoleID = res['data'].memberListByAccount[0]['mrmRoleID'];
       console.log(this.dashboardservice.mrmRoleID);
     },
       res => {

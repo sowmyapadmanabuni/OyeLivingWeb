@@ -38,6 +38,7 @@ export class EditprofileComponent implements OnInit {
   currentaccountid: any;
 
 
+
   constructor(private editprofileservice:EditprofileService,
     private globalservice:GlobalServiceService,
     private router:Router,

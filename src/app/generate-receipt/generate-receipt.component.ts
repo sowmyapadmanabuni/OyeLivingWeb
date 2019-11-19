@@ -29,8 +29,8 @@ export class GenerateReceiptComponent implements OnInit {
   curAssociationID: number;
 
   amountPaid: number;
-  invoice: number;
-  amountDue: number;
+  invoice: any;
+  amountDue: any;
   unitID: number;
   bankname: string;
   bankList: string[];
@@ -40,6 +40,8 @@ export class GenerateReceiptComponent implements OnInit {
   PMID: string;
 
   pyid: string;
+  IsReceiptGenerating:boolean;
+  imgSrc:any;
 
   constructor(private generatereceiptservice: GenerateReceiptService,
     private globalservice: GlobalServiceService,
@@ -53,6 +55,8 @@ export class GenerateReceiptComponent implements OnInit {
     this.pyid = '';
     this.bankname = '';
     this.paymentDescription = 'PaymentMade';
+    this.IsReceiptGenerating=false;
+    this.imgSrc='';
 
 
     this.methodArray = [{ 'name': 'Cash', 'displayName': 'Cash', 'id': 1 },
@@ -116,6 +120,16 @@ export class GenerateReceiptComponent implements OnInit {
       .subscribe(data => {
         this.unpaidUnits = data['data']['paymentsUnpaid'];
         console.log('unpaidUnits', this.unpaidUnits);
+      },
+      err=>{
+        console.log(err);
+        swal.fire({
+          title:`${err['error']['error']['message']}`,
+          text: "",
+          type: "error",
+          confirmButtonColor: "#f69321",
+          confirmButtonText: "OK"
+        })
       })
   }
 
@@ -144,6 +158,8 @@ export class GenerateReceiptComponent implements OnInit {
   }
 
   generateReceipt() {
+    this.IsReceiptGenerating=true;
+    this.imgSrc='data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==';
 
     if (this.voucherNo != '' || this.voucherNo != undefined) {
       this.PymtRefNo = this.voucherNo;
@@ -170,6 +186,7 @@ export class GenerateReceiptComponent implements OnInit {
 
     this.generatereceiptservice.addPayment(newReceipt)
       .subscribe(data => {
+        this.IsReceiptGenerating=false;
         console.log(data);
         swal.fire({
           title: "Receipt Generated Successfully",
@@ -180,9 +197,11 @@ export class GenerateReceiptComponent implements OnInit {
         })
 
       },
-      ()=>{
+      (err)=>{
+        console.log(err);
+        this.IsReceiptGenerating=false;
         swal.fire({
-          title: "Error in Receipt Creation",
+          title: `${err['error']['error']['message']}`,
           text: "",
           type: "error",
           confirmButtonColor: "#f69321",
@@ -190,6 +209,12 @@ export class GenerateReceiptComponent implements OnInit {
         })
       })
 
+  }
+  resetForm(){
+    this.pyid = '';
+    this.invoice='';
+    this.amountDue='';
+    this.paymentDescription = '';
   }
 
 }

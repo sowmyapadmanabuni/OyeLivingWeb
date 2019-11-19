@@ -417,7 +417,7 @@
 
         <div class="row" style="display: flex">
           <strong style="padding-left:42px;">Powered by </strong>
-          <p style="position: absolute;margin-top:3%"><a href="https://oyespace.com" target="_blank"> <img src="../../assets/images/newLogo.png"
+          <p style="position: absolute;margin-top:3%"><a href="https://oyespace.com" target="_blank"> <img src="../../assets/images/OyeSociety.png"
             style="width:135px;height:50px;padding-left: 39px;" /></a></p>
           <p id="makePaymentButton">
             <button type="button" (click)="onButtonClick(totalAmountPaid($event))" class="btn btn-success">Pay Now</button>
@@ -436,7 +436,7 @@
         
           <div class="row">
             <div class="col-sm-4 col-xs-4">
-              <a href="" (click)="iciciBank($event,iciciModal,invValFinal)">
+              <a (click)="iciciPay($event)">
                 <img src="assets/images/icici.jpg" alt="ICICI Bank" class="img-responsive" />
                 <h6><b>₹ {{totalAmountPaid()}} + Service Fee & GST = ₹ {{invValFinal}}</b></h6>
               </a>
@@ -497,26 +497,23 @@
     </div>
 
     <div class="modal-body">
-      <form method="post" action="https://www4.ipg-online.com/connect/gateway/processing">
-        <!-- Above url is for Testing purpose please use Production URL which is shared by PGhelpdesk team -->
-        <input type="hidden" name="timezone" value="IST" />
-        <input type="hidden" name="authenticateTransaction" value="true" />
-        <input type="hidden" name="txntype" value="{{strTxntype}}" />
-        <input type="hidden" name="txndatetime" value="{{timezone}}" />
-        <input type="hidden" name="hash" value="{{calculatedIPGUtilHash}}" />
-        <input type="hidden" name="currency" value="{{currency}}" />
-        <input type="hidden" name="mode" value="{{strPayOnly}}" />
-        <input type="hidden" name="storename" value="{{storeId}}" />
-        <input type="hidden" name="chargetotal" value="{{charge}}" />
-        <input type="hidden" name="sharedsecret" value="{{sharedSecret}}" />
-        <input type="hidden" name="language" value="{{strLanguage}}" />
-        <input type="hidden" id="merchantTransactionId" name="merchantTransactionId"
-          value="{{strMerchantTransactionId}}" />
-        <input type="hidden" name="responseSuccessURL" value="{{responseSuccessURL}}" />
-        <input type="hidden" name="responseFailURL" value="{{responseFailURL}}" />
-        <input type="submit" class="mdButton1" name="submitBtn" value="Rs {{charge}} Paynow" />
-        <input type="hidden" name="hash_algorithm" value="SHA1" />
-      </form>
+        <form #iciciform ngNoForm action="https://test.ipg-online.com/connect/gateway/processing" method="POST"
+        name="iciciPayForm">
+        <input type="hidden" name="chargetotal" [ngModel]="iciciPayForm.chargetotal" />
+        <input type="hidden" name="txntype" [ngModel]="iciciPayForm.txntype">
+        <input type="hidden" name="timezone" [ngModel]="iciciPayForm.timezone" />
+        <input type="hidden" name="txndatetime" [ngModel]="iciciPayForm.txndatetime" />
+        <input type="hidden" name="hash_algorithm" [ngModel]="iciciPayForm.hash_algorithm" />
+        <input type="hidden" name="hash" [ngModel]="iciciPayForm.hash" />
+        <input type="hidden" name="storename" [ngModel]="iciciPayForm.storename" />
+        <input type="hidden" name="mode" [ngModel]="iciciPayForm.mode" />
+        <!-- <input type="hidden" name="paymentMethod" [ngModel]="iciciPayForm.paymentMethod" /> -->
+        <input type="hidden" name="currency" [ngModel]="iciciPayForm.currency" />
+        <input type="hidden" name="responseSuccessURL" [ngModel]="iciciPayForm.responseSuccessURL" />
+        <input type="hidden" name="responseFailURL" [ngModel]="iciciPayForm.responseFailURL" />
+        <input type="hidden" name="language" [ngModel]="iciciPayForm.language" />
+        <!-- <input type="submit" value="Submit"> -->
+        </form>
     </div>
 
     <div class="modal-footer" style="background-color:orange">
@@ -772,3 +769,22 @@
   </div>
 </ng-template>
 <!-------------------Generate Invoice Modal End--------------------->
+    <div class="modal-body">
+        <form #iciciform ngNoForm action="https://test.ipg-online.com/connect/gateway/processing" method="POST"
+        name="iciciPayForm">
+        <input type="hidden" name="chargetotal" [ngModel]="iciciPayForm.chargetotal" />
+        <input type="hidden" name="txntype" [ngModel]="iciciPayForm.txntype">
+        <input type="hidden" name="timezone" [ngModel]="iciciPayForm.timezone" />
+        <input type="hidden" name="txndatetime" [ngModel]="iciciPayForm.txndatetime" />
+        <input type="hidden" name="hash_algorithm" [ngModel]="iciciPayForm.hash_algorithm" />
+        <input type="hidden" name="hash" [ngModel]="iciciPayForm.hash" />
+        <input type="hidden" name="storename" [ngModel]="iciciPayForm.storename" />
+        <input type="hidden" name="mode" [ngModel]="iciciPayForm.mode" />
+        <input type="hidden" name="paymentMethod" [ngModel]="iciciPayForm.paymentMethod" />
+        <input type="hidden" name="currency" [ngModel]="iciciPayForm.currency" />
+        <input type="hidden" name="responseSuccessURL" [ngModel]="iciciPayForm.responseSuccessURL" />
+        <input type="hidden" name="responseFailURL" [ngModel]="iciciPayForm.responseFailURL" />
+        <input type="hidden" name="language" [ngModel]="iciciPayForm.language" />
+        <!-- <input type="submit" value="Submit"> -->
+        </form>
+    </div>

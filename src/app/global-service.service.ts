@@ -9,6 +9,8 @@ export class GlobalServiceService {
    currentUnitId:string;
    currentAssociationName:string;
    acAccntID:number;
+   mobileNumber:number;
+   
    
   constructor() { 
     this.currentAssociationName='';

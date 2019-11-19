@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { ViewInvoiceService } from '../services/view-invoice.service';
 import { BlocksByAssoc } from '../models/blocks-by-assoc';
 import { AssociationDetails } from '../models/association-details';
@@ -6,10 +6,11 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import swal from 'sweetalert2';
 import { GlobalServiceService } from '../global-service.service';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { NgxPrinterService } from 'ngx-printer';
 import { OrderPipe } from 'ngx-order-pipe';
-import {GenerateReceiptService} from '../services/generate-receipt.service';
+import { GenerateReceiptService } from '../services/generate-receipt.service';
+import { PaymentService } from '../services/payment.service';
 
 
 @Component({
@@ -19,7 +20,7 @@ import {GenerateReceiptService} from '../services/generate-receipt.service';
 })
 export class ViewInvoiceComponent implements OnInit {
   allBlocksByAssnID: BlocksByAssoc[];
-  allblocksbyassnid:BlocksByAssoc[];
+  allblocksbyassnid: BlocksByAssoc[];
   currentPage: number;
   pageSize: number;
   invoiceLists: any[];
@@ -81,20 +82,22 @@ export class ViewInvoiceComponent implements OnInit {
   fixedmaintenancefee: number;
   watermeterfee: number;
   unsoldrentalfees: number;
-  onetimemembershipfee:number;
-  onetimeoccupancyfees:number;
-  rentingfees:number;
-  OneTimeOnBoardingFees:number;
-  InvoiceValue:number;
+  onetimemembershipfee: number;
+  onetimeoccupancyfees: number;
+  rentingfees: number;
+  OneTimeOnBoardingFees: number;
+  InvoiceValue: number;
+  iciciPayForm: any = {}
 
-  invoiceDetails:object[];
+  invoiceDetails: object[];
 
-  currentassociationname:string;
+  currentassociationname: string;
   @ViewChild('template') private template: TemplateRef<any>;
   @ViewChild('generateinvoicemodal') private generateinvoicemodal: TemplateRef<any>;
+  @ViewChild('iciciform', {read:ElementRef}) iciciform: ElementRef;
 
-  _unOcStat:string;
-  _ineSent:boolean;
+  _unOcStat: string;
+  _ineSent: boolean;
 
   order: string = 'unUnitID';
   reverse: boolean = false;
@@ -106,10 +109,11 @@ export class ViewInvoiceComponent implements OnInit {
     private modalService: BsModalService,
     private toastr: ToastrService,
     private globalservice: GlobalServiceService,
-    private router:Router,
+    private router: Router,
     private printerService: NgxPrinterService,
     private orderpipe: OrderPipe,
-    private generatereceiptservice:GenerateReceiptService) {
+    private generatereceiptservice: GenerateReceiptService,
+    private paymentService: PaymentService) {
     this.currentPage = 1;
     this.pageSize = 10;
     this.previousDue = 0.00;
@@ -117,13 +121,13 @@ export class ViewInvoiceComponent implements OnInit {
     this.hasnumber = false;
     this.showGateWay = false;
     this.currentAssociationID = this.globalservice.getCurrentAssociationId();
-    this.currentassociationname=this.globalservice.getCurrentAssociationName();
+    this.currentassociationname = this.globalservice.getCurrentAssociationName();
     this.blBlockID = '';
     this.validationResult = true;
     this.p = 1;
     this.isChecked = false;
-    this._unOcStat='';
-    this._ineSent=false;
+    this._unOcStat = '';
+    this._ineSent = false;
   }
 
   ngOnInit() {
@@ -138,26 +142,26 @@ export class ViewInvoiceComponent implements OnInit {
   }
 
   getCurrentBlockDetails(blBlockID) {
-    this.invoiceLists=[];
+    this.invoiceLists = [];
     this.blockid = blBlockID;
     console.log('blBlockID-' + blBlockID);
     this.viewinvoiceservice.getCurrentBlockDetails(blBlockID, this.currentAssociationID)
       .subscribe(data => {
         this.invoiceLists = data['data'].invoices;
         console.log('invoiceLists?', this.invoiceLists);
-          //
-          this.sortedCollection = this.orderpipe.transform(this.invoiceLists, 'unUnitID');
-          console.log(this.sortedCollection);
+        //
+        this.sortedCollection = this.orderpipe.transform(this.invoiceLists, 'unUnitID');
+        console.log(this.sortedCollection);
       },
-      err=>{
-        console.log(err);
-        swal.fire({
-          title: "Error",
-          text: `${err['error']['error']['message']}`,
-          type: "error",
-          confirmButtonColor: "#f69321"
-        });
-      })
+        err => {
+          console.log(err);
+          swal.fire({
+            title: "Error",
+            text: `${err['error']['error']['message']}`,
+            type: "error",
+            confirmButtonColor: "#f69321"
+          });
+        })
     this.isChecked = false;
     this.checkAll = false;
   }
@@ -169,13 +173,13 @@ export class ViewInvoiceComponent implements OnInit {
     this.order = value;
   }
 
- /* viewInvoice1(inid, inGenDate, inNumber, inDsCVal, unUnitID) {
-    console.log(inid, inGenDate, inNumber, inDsCVal, unUnitID);
-    this.router.navigate(['home/newinvoice',inid, inGenDate, inNumber, inDsCVal, unUnitID]);
-  } */
+  /* viewInvoice1(inid, inGenDate, inNumber, inDsCVal, unUnitID) {
+     console.log(inid, inGenDate, inNumber, inDsCVal, unUnitID);
+     this.router.navigate(['home/newinvoice',inid, inGenDate, inNumber, inDsCVal, unUnitID]);
+   } */
 
- viewInvoice1(event,template: TemplateRef<any>, inid, inGenDate, inNumber, inDsCVal, unUnitID) {
-  event.preventDefault();
+  viewInvoice1(event, template: TemplateRef<any>, inid, inGenDate, inNumber, inDsCVal, unUnitID) {
+    event.preventDefault();
     //alert('inside viewinvoice');
     console.log('inGenDate', inGenDate);
     console.log('inNumber', inNumber);
@@ -191,10 +195,10 @@ export class ViewInvoiceComponent implements OnInit {
     this.fixedmaintenancefee = 0;
     this.watermeterfee = 0; ////
     this.unsoldrentalfees = 0;
-    this.onetimemembershipfee=0;
-    this.onetimeoccupancyfees=0;
-    this.rentingfees=0;
-    this.OneTimeOnBoardingFees=0;
+    this.onetimemembershipfee = 0;
+    this.onetimeoccupancyfees = 0;
+    this.rentingfees = 0;
+    this.OneTimeOnBoardingFees = 0;
 
 
     this.invoiceID = inid;
@@ -238,90 +242,90 @@ export class ViewInvoiceComponent implements OnInit {
           //previousDue=parseFloat(0.00);
         })
 
-        this.viewinvoiceservice.invoiceDetails(inid, unUnitID)
-        .subscribe(data => {
-          this.InvoiceValue=0;
-          console.log('invoiceDetails--', data['data']['invoiceDetails']);
-          this.invoiceDetails = data['data']['invoiceDetails'];
-          data['data']['invoiceDetails'].forEach(item => {
-  
-            if (item['idDesc'] == "common area electric bill") {
-              this.commonareafee = item['idValue'];
-              this.InvoiceValue += item['idValue'];
-            }
-            else if (item['idDesc'] == "Fixed Maintenance") {
-              this.fixedmaintenancefee = item['idValue'];
-              this.InvoiceValue += item['idValue'];
-            }
-            else if (item['idDesc'] == "generator bill") {
-              this.generatorfee = item['idValue'];
-              this.InvoiceValue += item['idValue'];
-            }
-            else if (item['idDesc'] == "security fees") {
-              this.securityfee = item['idValue'];
-              this.InvoiceValue += item['idValue'];
-            }
-            else if (item['idDesc'] == "unsold rental fees") {
-              this.unsoldrentalfees = item['idValue'];
-              this.InvoiceValue += item['idValue'];
-            }
-            else if (item['idDesc'] == "corpus") {
-              this.corpusfee = item['idValue'];
-              this.InvoiceValue += item['idValue'];
-            }
-            else if (item['idDesc'] == "housekeeping") {
-              this.housekeepingfee = item['idValue'];
-              this.InvoiceValue += item['idValue'];
-            }
-            else if (item['idDesc'] == "water meter") {
-              this.watermeterfee = item['idValue'];
-              this.InvoiceValue += item['idValue'];
-            }
-            else if (item['idDesc'] == "one time membership fee") {
-              this.onetimemembershipfee = item['idValue'];
-              this.InvoiceValue += item['idValue'];
-            }
-            else if (item['idDesc'] == "one time onboarding fee") {
-              this.OneTimeOnBoardingFees = item['idValue'];
-              this.InvoiceValue += item['idValue'];
-            }
-            else if (item['idDesc'] == "one time occupancy fee") {
-              this.onetimeoccupancyfees = item['idValue'];
-              this.InvoiceValue += item['idValue'];
-            }
-            else if (item['idDesc'] == "renting fees") {
-              this.rentingfees = item['idValue'];
-              this.InvoiceValue += item['idValue'];
-            }
-          })
+    this.viewinvoiceservice.invoiceDetails(inid, unUnitID)
+      .subscribe(data => {
+        this.InvoiceValue = 0;
+        console.log('invoiceDetails--', data['data']['invoiceDetails']);
+        this.invoiceDetails = data['data']['invoiceDetails'];
+        data['data']['invoiceDetails'].forEach(item => {
+
+          if (item['idDesc'] == "common area electric bill") {
+            this.commonareafee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "Fixed Maintenance") {
+            this.fixedmaintenancefee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "generator bill") {
+            this.generatorfee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "security fees") {
+            this.securityfee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "unsold rental fees") {
+            this.unsoldrentalfees = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "corpus") {
+            this.corpusfee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "housekeeping") {
+            this.housekeepingfee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "water meter") {
+            this.watermeterfee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "one time membership fee") {
+            this.onetimemembershipfee = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "one time onboarding fee") {
+            this.OneTimeOnBoardingFees = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "one time occupancy fee") {
+            this.onetimeoccupancyfees = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
+          else if (item['idDesc'] == "renting fees") {
+            this.rentingfees = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
         })
-        
+      })
+
     this.viewinvoiceservice.getassociationlist(this.asdPyDate, this.blMgrMobile, this.currentAssociationID)
       .subscribe(data => {
         console.log('associationDetails', data);
         this.associationDetails = data
       },
-      err=>{
-        console.log(err);
-      })
+        err => {
+          console.log(err);
+        })
 
-  } 
-  raiseAlert(){
+  }
+  raiseAlert() {
     //alert('test');
   }
   printTemplate() {
     //this.printerService.printAngular(this.template);
     window.print();
   }
-  printDiv(){
+  printDiv() {
     var printContents = document.getElementById("printableArea").innerHTML;
-     var originalContents = document.body.innerHTML;
+    var originalContents = document.body.innerHTML;
 
-     document.body.innerHTML = printContents;
+    document.body.innerHTML = printContents;
 
-     window.print();
+    window.print();
 
-     document.body.innerHTML = originalContents;
+    document.body.innerHTML = originalContents;
   }
   totalAmountPaid(e?) {
 
@@ -386,6 +390,7 @@ export class ViewInvoiceComponent implements OnInit {
       "responseFailURL": "http://demo.oyespace.com/response_fail.jsp"
     }
 
+
     this.viewinvoiceservice.springAppConfigPostAmount(iciciData)
       .subscribe(data => {
         // success
@@ -405,7 +410,38 @@ export class ViewInvoiceComponent implements OnInit {
       });
 
   }
+  iciciPay(e) {
 
+    //let InvoiceValue = { chargetotal: this.InvoiceValue+'.00' }
+    let InvoiceValue = { chargetotal: '1.00' }
+    console.log(InvoiceValue);
+    
+    e.preventDefault();
+    this.paymentService.postICICIPaymentDetails(InvoiceValue)
+    .subscribe(res => {
+      console.log(res);
+      this.iciciPayForm = res;
+      // this.paymentService.processGateway(this.iciciPayForm)
+      // .subscribe(sucess=>{
+      //   console.log(sucess);
+      // },
+      // err=>{
+      //   console.log(err);
+      // })
+      setTimeout(_ => this.iciciform.nativeElement.submit(), 100)
+    }, error => {
+      console.log("Error=>", error)
+    })
+  }
+  addZeroes(num) {
+    console.log(num);
+    // let value = Number(num);
+    // let res = num.split(".");
+    // if (res.length == 1 || (res[1].length < 3)) {
+    //   return value.toFixed(2);
+    // }
+    // return value.toString(10)
+  }
   discount(discount: TemplateRef<any>, inid, inNumber, inTotVal) {
     this.modalRef = this.modalService.show(discount,
       Object.assign({}, { class: 'gray modal-lg' }));
@@ -445,19 +481,19 @@ export class ViewInvoiceComponent implements OnInit {
         this.modalRef.hide();
         console.log(data);
       },
-      err=>{
-        this.modalRef.hide();
-        console.log(err);
-        swal.fire({
-          title: "Error",
-          text: `${err['error']['error']['message']}`,
-          type: "error",
-          confirmButtonColor: "#f69321"
-        });
-      })
+        err => {
+          this.modalRef.hide();
+          console.log(err);
+          swal.fire({
+            title: "Error",
+            text: `${err['error']['error']['message']}`,
+            type: "error",
+            confirmButtonColor: "#f69321"
+          });
+        })
   }
 
-  sendInvoiceInMail(inid,unUnitID,ineSent,blBlockID) {
+  sendInvoiceInMail(inid, unUnitID, ineSent, blBlockID) {
     console.log('inid', inid);
     console.log('unUnitID', unUnitID);
     console.log('ineSent', ineSent);
@@ -476,39 +512,39 @@ export class ViewInvoiceComponent implements OnInit {
             confirmButtonColor: "#f69321",
             confirmButtonText: "OK"
           })
-        }    
+        }
         else {
-           this.viewinvoiceservice.GetInvoiceOwnerListByInvoiceId(inid)
-             .subscribe((res) => {
-               console.log(res);
-               swal.fire({
-                 title: "Mail Sent Successful",
-                 text: "",
-                 type: "success",
-                 confirmButtonColor: "#f69321",
-                 confirmButtonText: "OK"
-               }).then(
-                 (result) => {
-                   if (result.value) {
-                     this.getCurrentBlockDetails(blBlockID);
-                   }
-                 })
+          this.viewinvoiceservice.GetInvoiceOwnerListByInvoiceId(inid)
+            .subscribe((res) => {
+              console.log(res);
+              swal.fire({
+                title: "Mail Sent Successful",
+                text: "",
+                type: "success",
+                confirmButtonColor: "#f69321",
+                confirmButtonText: "OK"
+              }).then(
+                (result) => {
+                  if (result.value) {
+                    this.getCurrentBlockDetails(blBlockID);
+                  }
+                })
               //  console.log(res);
-             },
-               (res) => {
-                 console.log(res);
-                 swal.fire('Error', `${res['error']['exceptionMessage']}`, 'error')
-               }) 
-         }
-         //
-         //http://localhost:54400/oyeliving/api/v1/Invoice/InvoiceListByInvoiceID/%7BInvoiceID%7D
-         /*this.viewinvoiceservice.InvoiceListByInvoiceID(inid)
-         .subscribe(data=>{
-           console.log(data);
-          this._ineSent= data['data']['invoices']['ineSent'];
-          console.log(this._ineSent);
-         })*/
-         //
+            },
+              (res) => {
+                console.log(res);
+                swal.fire('Error', `${res['error']['exceptionMessage']}`, 'error')
+              })
+        }
+        //
+        //http://localhost:54400/oyeliving/api/v1/Invoice/InvoiceListByInvoiceID/%7BInvoiceID%7D
+        /*this.viewinvoiceservice.InvoiceListByInvoiceID(inid)
+        .subscribe(data=>{
+          console.log(data);
+         this._ineSent= data['data']['invoices']['ineSent'];
+         console.log(this._ineSent);
+        })*/
+        //
 
       })
     //
@@ -536,7 +572,7 @@ export class ViewInvoiceComponent implements OnInit {
     if (event.target.checked) {
       this.isChecked = true;
       this.checkAll = true;
-    }else{
+    } else {
       //alert('toggleunAllCheck')
       this.isChecked = false;
       this.checkAll = false;
@@ -570,27 +606,27 @@ export class ViewInvoiceComponent implements OnInit {
         })
   }
 
-  generateReceipt(generatereceiptmodal: TemplateRef<any>){
+  generateReceipt(generatereceiptmodal: TemplateRef<any>) {
 
     this.generatereceiptservice.GetBlockListByAssocID(this.currentAssociationID)
       .subscribe(data => {
         this.allblocksbyassnid = data['data'].blocksByAssoc;
         console.log('allBlocksByAssnID', this.allblocksbyassnid);
       },
-      err=>{
-        console.log(err);
-      });
+        err => {
+          console.log(err);
+        });
     //
     this.modalRefForGenerateRecipt = this.modalService.show(generatereceiptmodal,
       Object.assign({}, { class: 'gray modal-xl' }));
   }
 
-  getcurrentblockdetails(blkBlockID){
-    this.generatereceiptservice.getCurrentBlockDetails(blkBlockID,this.currentAssociationID)
-    .subscribe(data => {
-      console.log('unpaidUnits', data['data']['paymentsUnpaid']);
-      this.unpaidUnits = data['data']['paymentsUnpaid'];
-    })
+  getcurrentblockdetails(blkBlockID) {
+    this.generatereceiptservice.getCurrentBlockDetails(blkBlockID, this.currentAssociationID)
+      .subscribe(data => {
+        console.log('unpaidUnits', data['data']['paymentsUnpaid']);
+        this.unpaidUnits = data['data']['paymentsUnpaid'];
+      })
   }
 
 }

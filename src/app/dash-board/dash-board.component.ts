@@ -55,6 +55,8 @@ export class DashBoardComponent implements OnInit {
   unit:any;
   unitForAssociation:any[];
   unitlistForAssociation:UnitlistForAssociation[];
+  acMobile: any;
+  uniqueAssociations :any[];
  
   constructor(private dashBrdService: DashBoardService, private appComponent:AppComponent,
      private globalService:GlobalServiceService,
@@ -66,6 +68,7 @@ export class DashBoardComponent implements OnInit {
        this.unit='';
        this.unitForAssociation=[];
        this.unitlistForAssociation=[];
+       this.uniqueAssociations=[];
      }
   ngOnInit() {
     this.getAssociation();
@@ -88,6 +91,16 @@ export class DashBoardComponent implements OnInit {
       this.associations = data.data.memberListByAccount;
       this.associations = _.sortBy(this.associations, e => e.asAsnName);
       console.log('associations',this.associations);
+      for (let i = 0; i < this.associations.length; i++) {
+        this.uniqueAssociations.push(this.associations[i]);
+        console.log( this.uniqueAssociations);
+        console.log( this.associations[i]['asAsnName']);
+        if (this.uniqueAssociations.indexOf(this.associations[i]['asAsnName']) !== -1) {
+          console.log(this.associations[i]);
+          console.log(this.associations[i]['asAsnName'] === -1);
+        }
+      }
+      console.log(this.uniqueAssociations);
       },
       res=>{
         console.log('Error in getting Associations',res);
@@ -131,8 +144,8 @@ export class DashBoardComponent implements OnInit {
       var data: any = res;
       this.allMemberByAccount = data.data.memberListByAccount;
       console.log('allMemberByAccount', this.allMemberByAccount);
-      this.mrmRoleID = this.allMemberByAccount[0]['mrmRoleID'];
-      this.dashBrdService.mrmRoleID = this.mrmRoleID;
+      //this.mrmRoleID = this.allMemberByAccount[0]['mrmRoleID'];
+      //this.dashBrdService.mrmRoleID = this.mrmRoleID;
       this.totalMember = data.data.memberListByAccount.length;
     },
       (res) => {
@@ -174,8 +187,10 @@ export class DashBoardComponent implements OnInit {
       console.log('account',this.account);
      this.acfName= this.account[0]['acfName'];
      this.aclName= this.account[0]['aclName'];
+     this.acMobile= this.account[0]['acMobile'];
      this.dashBrdService.acfName=this.acfName;
      this.dashBrdService.aclName=this.aclName;
+     this.dashBrdService.acMobile=this.acMobile;
       });
 }
   getVehicle(){
@@ -220,6 +235,8 @@ export class DashBoardComponent implements OnInit {
     this.associations.forEach(association => {
       if (association.asAsnName == associationName) {
         console.log(association);
+        this.dashBrdService.mrmRoleID= association['mrmRoleID'];
+        console.log( this.dashBrdService.mrmRoleID);
         this.unitForAssociation.push(association);
         console.log(this.unitForAssociation);
           const found = this.unitlistForAssociation.some(el => el['unUnitID'] === association['unUnitID'] && el['unUniName'] === association['unUniName']);

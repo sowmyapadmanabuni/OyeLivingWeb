@@ -140,8 +140,8 @@ export class LoginComponent implements OnInit {
         this.dashboardservice.getMembers(this.globalserviceservice.acAccntID).subscribe(res => {
           //alert('assigning mrmRoleID...');
           console.log('memberListByAccount',res['data'].memberListByAccount);
-          this.dashboardservice.mrmRoleID = res['data'].memberListByAccount[0]['mrmRoleID'];
-          console.log(this.dashboardservice.mrmRoleID);
+          //this.dashboardservice.mrmRoleID = res['data'].memberListByAccount[0]['mrmRoleID'];
+          //console.log(this.dashboardservice.mrmRoleID);
           //alert('displaying dashboardservice.mrmRoleID..'+this.dashboardservice.mrmRoleID);
           this.router.navigate(['home']);
         },
@@ -168,7 +168,7 @@ export class LoginComponent implements OnInit {
   }
 
   verifyOtp1() {
-    this.globalserviceservice.acAccntID = 51474; // 51474
+    this.globalserviceservice.acAccntID = 9539; 
     console.log(this.globalserviceservice.acAccntID);
     this.dashboardservice.getMembers(this.globalserviceservice.acAccntID).subscribe(res => {
       console.log('memberListByAccount', res['data'].memberListByAccount);

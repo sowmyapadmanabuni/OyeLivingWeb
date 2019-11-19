@@ -32,13 +32,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let view of viewPayments">
+                                <tr *ngFor="let view of viewPayments | filter : searchBoxData">
                                     <td>{{view['unUnitID']}}</td>
                                     <td>{{view['inNumber']}}</td>
-                                    <td>{{view['pyDate'] | date : "M-d-y"}}</td>
+                                    <td>{{view['pyDate'] | date : "d-M-y"}}</td>
                                     <td><i class="fa fa-inr"></i> {{view['pyAmtPaid']}}</td>
-                                    <td> <i style="cursor: pointer"
-                                            (click)="viewReceipt(viewreceiptmodal,view['unUnitID'],view['inNumber'],view['pyDate'],view['pyAmtPaid'])"
+                                    <td> <i data-toggle="modal" data-target="#ViewReceiptTemplate" style="cursor: pointer"
+                                            (click)="viewReceipt(view['unUnitID'],view['inNumber'],view['pyDate'],view['pyAmtPaid'])"
                                             class="fa fa-eye"></i> </td>
                                 </tr>
                             </tbody>
@@ -50,6 +50,52 @@
     </div>
 </div>
 
+<!---->
+<div class="modal fade" id="ViewReceiptTemplate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="padding-top:20px; background-color: #e1e1e1;">
+                <h4 class="modal-title" style="margin-left: 300px;" id="myModalLabel"><u>View Receipt</u></h4>
+                <button type="button" class="close" data-dismiss="modal" style="left:100%" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
 
+                <fieldset class="scheduler-border">
+                    <div class="row" style="text-align:center;">
+                        <br>
+                        <div class="col-sm-3">
+                            <p></p>
+                            <h4>UnitIdentifier: </h4><span>{{unitIdentifier}}</span>
+                            <p></p>
+                            <br>
+                        </div>
+                        <div class="col-sm-3">
+                            <p></p>
+                            <h4>InvoiceNumber: </h4><span>{{invoiceNumber}}</span>
+                            <p></p>
+                            <br>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <p></p>
+                            <h4>PaymentDate: </h4><span>{{pymtDate | date : "d-M-y"}}</span>
+                            <p></p>
+                            <br>
+                        </div>
+                        <div class="col-sm-3">
+                            <p></p>
+                            <h4>AmountPaid: </h4><span>{{amountPaid}}</span>
+                            <p></p>
+                            <br>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 

@@ -13,6 +13,10 @@ export class ViewreceiptComponent implements OnInit {
   viewPayments: object[];
   modalRef: BsModalRef;
   currentAssociationID: string;
+  unitIdentifier:any;
+  invoiceNumber:any;
+  pymtDate:any;
+  amountPaid:any;
 
   constructor( private modalService: BsModalService,
     private globalservice:GlobalServiceService,
@@ -20,7 +24,10 @@ export class ViewreceiptComponent implements OnInit {
     private router:Router) {
 
     this.currentAssociationID=this.globalservice.getCurrentAssociationId();
-
+    this.unitIdentifier='';
+    this.invoiceNumber='';
+    this.pymtDate='';
+    this.amountPaid='';
     //this.viewPayments = this.viewreceiptservice.getpaymentlist(this.currentAssociationID)
   }
 
@@ -36,9 +43,12 @@ export class ViewreceiptComponent implements OnInit {
     this.router.navigate(['home/generatereceipt']);
   }
 
-  viewReceipt(viewreceiptmodal: TemplateRef<any>,unitIdentifier,invoiceNumber,pymtDate,amountPaid){
-    this.modalRef = this.modalService.show(viewreceiptmodal,
-      Object.assign({}, { class: 'gray modal-lg' }));
+  viewReceipt(unitIdentifier, invoiceNumber, pymtDate, amountPaid) {
+    console.log(unitIdentifier, invoiceNumber, pymtDate, amountPaid);
+    this.unitIdentifier = unitIdentifier;
+    this.invoiceNumber = invoiceNumber;
+    this.pymtDate = pymtDate;
+    this.amountPaid = amountPaid;
   }
 
 }

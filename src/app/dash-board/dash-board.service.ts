@@ -20,6 +20,7 @@ export class DashBoardService {
   };
   acfName: any;
   aclName: any;
+  acMobile: any;
 
   memberdoesnotexist:boolean;
   toggleViewAssociationTable:boolean;

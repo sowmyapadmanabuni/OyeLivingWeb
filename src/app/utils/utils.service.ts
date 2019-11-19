@@ -182,5 +182,8 @@ export class UtilsService {
   getExpenseListByDatesAndID(){
     return this.ipAddress;
   }
+  joinAssociation(){
+    return this.ipAddress;
+  }
 
 }

@@ -16,6 +16,7 @@ import {DashBoardService} from '../dash-board/dash-board.service';
 import {HomeService} from '../home/home.service';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import { mergeMapTo } from 'rxjs/operators';
+import { formatDate } from '@angular/common';
 
 
 
@@ -26,6 +27,7 @@ import { mergeMapTo } from 'rxjs/operators';
 })
 export class ViewAssociationComponent implements OnInit {
 
+  assnID:any;
   modalRef: BsModalRef;
   @Input() amenityType: string;
   @Input() amenityNo: string;
@@ -100,6 +102,7 @@ export class ViewAssociationComponent implements OnInit {
   fifthLetter: string;
   editassndata: object;
   BankId:number;
+  unUnitID:any;
  
   
   //  firstLetter = crtAssn.name.charAt(0).toUpperCase();
@@ -179,6 +182,8 @@ export class ViewAssociationComponent implements OnInit {
   reverse: boolean = false;
   sortedCollection: any[];
   _associations: any;
+  UNOcSDate:any;
+  bsConfig:any;
 
   constructor(
     private viewAssnService: ViewAssociationService,
@@ -276,6 +281,12 @@ export class ViewAssociationComponent implements OnInit {
     this.defaultThumbnail='../../assets/images/default_thumbnail.png';
     this.defaultPanThumbnail='../../assets/images/default_panthumbnail copy.png';
     this.ASAsnName='';
+    this.assnID=this.globalService.currentAssociationId;
+    this.UNOcSDate='';
+    this.bsConfig = Object.assign({}, { containerClass: 'theme-orange',
+    dateInputFormat: 'DD-MM-YYYY',
+    showWeekNumbers:false,
+    isAnimated: true});
 }
 
 
@@ -514,6 +525,7 @@ this.crtAssn.newBAActType='';
   
   loadAssociation(asAssnID){
     console.log('asAssnID',asAssnID);
+    this.assnID=asAssnID;
     this.viewAssnService.getBlockDetailsByAssociationID(asAssnID)
     .subscribe(response=>{
       console.log(response);
@@ -920,7 +932,7 @@ this.crtAssn.newBAActType='';
 
 
 
-  OnSendButton(){
+  OnSendButton(OwnerType){
     // this.afMessaging.requestPermission
     // .subscribe(
     //   () => { console.log('Permission granted!'); },
@@ -934,11 +946,11 @@ this.crtAssn.newBAActType='';
     //     (error) => { console.error(error); },
     //   );
 
-    this.afMessaging.tokenChanges
+    /* this.afMessaging.tokenChanges
       .subscribe(
         (token) => { console.log('Permission granted! Save to the server!', token); },
         (error) => { console.error(error); },
-      );
+      ); */
 
    /* this.senddata={
       "ISDCode":"+91",
@@ -957,7 +969,43 @@ this.crtAssn.newBAActType='';
     
           })
           console.log(data);
-        }) */
+        }) */ 
+      let senddataForJoinOwner={
+          "ASAssnID"     :Number(this.assnID),
+          "BLBlockID"       : Number(this.blockID),
+          "UNUnitID"     : Number(this.unUnitID),
+          "MRMRoleID"    : (OwnerType=='joinowner'?1:2),
+          "FirstName"    : this.dashboardservice.acfName,
+          "MobileNumber" : this.dashboardservice.acMobile,
+          "ISDCode"      : "+91",
+          "LastName"     : this.dashboardservice.aclName,
+          "Email"        : "",
+          "SoldDate"     : "2019-03-02",
+          "OccupancyDate": formatDate(this.UNOcSDate, 'yyyy-MM-dd', 'en')
+      }
+      console.log(senddataForJoinOwner);
+        this.viewAssnService.joinAssociation(senddataForJoinOwner)
+          .subscribe(
+            (data) => {
+              // swal.fire({
+              //   title: "Sent Successfully",
+              //   text: "",
+              //   type: "success",
+              //   showCancelButton: true,
+              //   confirmButtonColor: "#f69321",
+        
+              // })
+              console.log(data);
+            },
+            err=>{
+              console.log(err);
+              swal.fire({
+                title: "Error",
+                text: `${err['error']['error']['message']}`,
+                type: "error",
+                confirmButtonColor: "#f69321"
+              });
+            })
         
   }
 
@@ -1101,7 +1149,9 @@ this.crtAssn.newBAActType='';
 
 
 
-   OpenModals(jointemplate: TemplateRef<any>) {
+   OpenModals(jointemplate: TemplateRef<any>,unUnitID) {
+     console.log(unUnitID);
+     this.unUnitID=unUnitID;
     this.modalRef = this.modalService.show(jointemplate,
      Object.assign({}, { class: 'gray modal-lg' }));}
   //   this.nameS = uofName;
