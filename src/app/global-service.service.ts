@@ -39,10 +39,15 @@ public setCurrentUnitId(unitId)
 
 public setAccountID(acAccntID){
   this.acAccntID=acAccntID;
+  localStorage.setItem("login-status", acAccntID);
 }
 
-public getacAccntID(){
-  return this.acAccntID;
+public getacAccntID() :number{
+  // return this.acAccntID;
+  return Number(localStorage.getItem("login-status"));
+}
+public clear(){
+  localStorage.clear();
 }
 
 public getCurrentAssociationName(){

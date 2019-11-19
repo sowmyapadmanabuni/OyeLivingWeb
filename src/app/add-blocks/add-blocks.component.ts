@@ -70,7 +70,7 @@ check1:any;
     private viewUniService: ViewUnitService) {
     this.currentAssociationID = this.globalservice.getCurrentAssociationId();
     this.currentAssociationName = this.globalservice.getCurrentAssociationName();
-    this.currentaccountID=this.globalservice.acAccntID;
+    this.currentaccountID=this.globalservice.getacAccntID();
     this.assnName = this.currentAssociationName;
     this.bsConfig = Object.assign({}, { containerClass: 'theme-orange', 
                                         dateInputFormat: 'DD-MM-YYYY' ,

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router, CanActivate, CanActivateChild } from '@angular/router';
 import {GlobalServiceService} from '../global-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate, CanActivateChild {
   accountID:number;
 
   constructor(
@@ -14,9 +14,12 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
-    this.accountID = this.globalService.acAccntID;
+    //this.accountID = this.globalService.getacAccntID();
+    this.accountID = Number(this.globalService.getacAccntID());
+    console.log("this.accid", this.accountID)
     //alert('in authGaurd,accountID-'+this.accountID);
-    if (this.accountID != undefined) {
+    //if (this.accountID != undefined) {
+    if (this.accountID) {
       //alert('accountID != undefined'+this.accountID);
       return true;
     }
@@ -25,5 +28,9 @@ export class AuthGuard implements CanActivate {
       // not logged in so redirect to login page with the return url
       this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }});
       return false;
+  }
+
+  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
+    return this.canActivate(route, state)
   }
 }

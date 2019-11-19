@@ -58,7 +58,7 @@ export class AddFamilyMemberComponent implements OnInit {
     this.Relation = '';
     this.loadchangedforassociation = false;
     this.unitID=this.globalService.currentUnitId;
-    this.AccountID=this.globalService.acAccntID;
+    this.AccountID=this.globalService.getacAccntID();
     this.EditFirstName='';
     this.EditMobileNumber='';
     this.EditRelation='';

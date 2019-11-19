@@ -108,7 +108,7 @@ export class ViewBlockComponent implements OnInit {
       'name': 'Residential and Commercial', 'displayName': 'Residential and Commercial'
     }]
 
-    this.ACAccntID=this.globalService.getacAccntID();
+    this.ACAccntID=Number(this.globalService.getacAccntID());
     this.p = 1;
     this.todayDate=new Date();
     this.enableduedatevalidation = false;

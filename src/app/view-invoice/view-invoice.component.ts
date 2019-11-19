@@ -11,6 +11,7 @@ import { NgxPrinterService } from 'ngx-printer';
 import { OrderPipe } from 'ngx-order-pipe';
 import { GenerateReceiptService } from '../services/generate-receipt.service';
 import { PaymentService } from '../services/payment.service';
+import { HttpHeaders } from '@angular/common/http';
 
 
 @Component({
@@ -206,8 +207,7 @@ export class ViewInvoiceComponent implements OnInit {
     this.invoiceNumber = inNumber;
     this.discountedValue = inDsCVal;
     this.unitID = unUnitID;
-    this.modalRef = this.modalService.show(template,
-      Object.assign({}, { class: 'gray modal-lg' }));
+
 
     this.viewinvoiceservice.GetUnitListByUnitID(this.unitID)
       .subscribe(data => {
@@ -244,6 +244,8 @@ export class ViewInvoiceComponent implements OnInit {
 
     this.viewinvoiceservice.invoiceDetails(inid, unUnitID)
       .subscribe(data => {
+        this.modalRef = this.modalService.show(template,
+          Object.assign({}, { class: 'gray modal-lg' }));
         this.InvoiceValue = 0;
         console.log('invoiceDetails--', data['data']['invoiceDetails']);
         this.invoiceDetails = data['data']['invoiceDetails'];
@@ -297,7 +299,20 @@ export class ViewInvoiceComponent implements OnInit {
             this.rentingfees = item['idValue'];
             this.InvoiceValue += item['idValue'];
           }
+          else if (item['idDesc'] == "bill") {
+            //this.rentingfees = item['idValue'];
+            this.InvoiceValue += item['idValue'];
+          }
         })
+      },
+      err=>{
+        console.log(err);
+        swal.fire({
+          title: "Error",
+          text: `${err['error']['error']['message']}`,
+          type: "error",
+          confirmButtonColor: "#f69321"
+        });
       })
 
     this.viewinvoiceservice.getassociationlist(this.asdPyDate, this.blMgrMobile, this.currentAssociationID)
@@ -412,8 +427,8 @@ export class ViewInvoiceComponent implements OnInit {
   }
   iciciPay(e) {
 
-    //let InvoiceValue = { chargetotal: this.InvoiceValue+'.00' }
-    let InvoiceValue = { chargetotal: '1.00' }
+    let InvoiceValue = { chargetotal: this.InvoiceValue+'.00' }
+    //let InvoiceValue = { chargetotal: '1.00' }
     console.log(InvoiceValue);
     
     e.preventDefault();
@@ -433,6 +448,7 @@ export class ViewInvoiceComponent implements OnInit {
       console.log("Error=>", error)
     })
   }
+  
   addZeroes(num) {
     console.log(num);
     // let value = Number(num);

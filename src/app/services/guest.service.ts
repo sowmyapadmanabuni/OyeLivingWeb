@@ -21,7 +21,7 @@ export class GuestService {
       "ASAssnID": this.globalService.currentAssociationId,
       "INInvVis": VisitorType,
       "UNUnitID": this.globalService.currentUnitId,
-      "ACAccntID": this.globalService.acAccntID,
+      "ACAccntID": this.globalService.getacAccntID(),
       "StartDate":(date['StartDate']=='')? "2019-08-11" : date['StartDate'],
       "ToDate": (date['Todate']=='')? formatDate(new Date(),'yyyy-MM-dd','en') : date['Todate']
     }

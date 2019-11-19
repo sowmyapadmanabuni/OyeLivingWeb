@@ -328,6 +328,15 @@
                   <td class="clsBorder"><span style="margin-left: 44%">-</span></td>
                   <td class="clsBorder" style="text-align: right;"><span style="margin-left: 15%;" class="clsspaceright">₹ {{item['idValue']}}.00</span></td>
                 </tr>
+                <tr *ngIf="item['idDesc'] == 'bill' && item['idValue'] > 0">
+                  <td class="clsAlignCenter clsBorder">{{i+1}}</td>
+                  <td class="clsBorder" style="text-align: left;"><span class="clsspacelft">Bill</span></td>
+                  <td class="clsBorder"><span style="margin-left: 44%">-</span></td>
+                  <td class="clsBorder"><span style="margin-left: 44%">-</span></td>
+                  <td class="clsBorder"><span style="margin-left: 44%">-</span></td>
+                  <td class="clsBorder"><span style="margin-left: 44%">-</span></td>
+                  <td class="clsBorder" style="text-align: right;"><span style="margin-left: 15%;" class="clsspaceright">₹ {{item['idValue']}}.00</span></td>
+                </tr>
                 <tr *ngIf="item['idDesc'] == 'one time onboarding fee' && item['idValue'] > 0">
                   <td class="clsAlignCenter clsBorder">{{i+1}}</td>
                   <td class="clsBorder" style="text-align: left;"><span class="clsspacelft">One Time OnBoarding Fees</span></td>

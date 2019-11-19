@@ -133,7 +133,8 @@ export class LoginComponent implements OnInit {
         }
        else if (data['data'] != null){
         console.log('acAccntID',data['data']['account']['acAccntID']);
-        this.globalserviceservice.acAccntID=data['data']['account']['acAccntID'];
+        // this.globalserviceservice.acAccntID=data['data']['account']['acAccntID'];
+        this.globalserviceservice.setAccountID(data['data']['account']['acAccntID']);
         console.log(this.globalserviceservice.acAccntID);
         //alert('assigned accountid to globalserviceservice.acAccntID');
         //alert('displaying globalserviceservice.acAccntID'+this.globalserviceservice.acAccntID);

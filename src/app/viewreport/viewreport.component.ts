@@ -13,6 +13,7 @@ export class ViewreportComponent implements OnInit {
   reportID:string;
   currentAssociationID: string;
   frequencys:any[];
+  currentAssociationName:any;
 
   constructor(private viewreportservice:ViewreportService,
     private globalservice:GlobalServiceService) {
@@ -20,6 +21,8 @@ export class ViewreportComponent implements OnInit {
         { "name": "Paid", "displayName": "Paid" },
         { "name": "UnPaid", "displayName": "UnPaid" }
       ];
+     this.currentAssociationName=this.globalservice.getCurrentAssociationName(); 
+     this.reportID='';
      }
 
   ngOnInit() {

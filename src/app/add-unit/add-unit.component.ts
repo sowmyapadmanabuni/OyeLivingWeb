@@ -53,7 +53,7 @@ export class AddUnitComponent implements OnInit {
     private http:HttpClient) {
       this.scopeIP="https://apidev.oyespace.com/";
       this.currentAssociationName=this.globalservice.getCurrentAssociationName();
-      this.accountID=this.globalservice.acAccntID;
+      this.accountID=this.globalservice.getacAccntID();
       this.toggleunitvehicleinformation=true;
 
     this.blBlockID = '';

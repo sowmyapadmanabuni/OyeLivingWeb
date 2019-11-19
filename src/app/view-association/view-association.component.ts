@@ -276,7 +276,7 @@ export class ViewAssociationComponent implements OnInit {
 
     this.currentPage=1;
 
-    this.accountID = this.globalService.acAccntID;
+    this.accountID = this.globalService.getacAccntID();
     this.newamenities=[];
     this.defaultThumbnail='../../assets/images/default_thumbnail.png';
     this.defaultPanThumbnail='../../assets/images/default_panthumbnail copy.png';

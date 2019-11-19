@@ -75,7 +75,7 @@ export class ViewUnitComponent implements OnInit {
      private globalService: GlobalServiceService,
      private router:Router,
      private orderpipe: OrderPipe) {
-    this.ACAccntID=this.globalService.acAccntID;
+    this.ACAccntID=this.globalService.getacAccntID();
     this.currentAssociationID=this.globalService.getCurrentAssociationId();
     //pagination
     this.config = {

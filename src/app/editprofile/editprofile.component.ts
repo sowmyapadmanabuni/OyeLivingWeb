@@ -45,12 +45,12 @@ export class EditprofileComponent implements OnInit {
     private modalService: BsModalService,
     ) {       
       
-    this.accountID=this.globalservice.acAccntID;
+    this.accountID=this.globalservice.getacAccntID();
     }
 
   ngOnInit() {
     this.currentAssociationID = this.globalservice.getCurrentAssociationId();
-    //this.accountID= this.globalservice.acAccntID;
+    //this.accountID= this.globalService.getacAccntID();
     console.log(this.accountID);
     this.getProfileDetails();
     //this.updateEditProfile();

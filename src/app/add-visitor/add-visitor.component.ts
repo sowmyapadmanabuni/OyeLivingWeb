@@ -66,7 +66,7 @@ private dashBoardservice: DashBoardService, private router: Router) {
       "INMultiEy": "true",
       "ASAssnID": this.globalService.currentAssociationId,
       "INQRCode": "True",
-      "ACAccntID": this.globalService.acAccntID
+      "ACAccntID": this.globalService.getacAccntID()
     };
     this.addvisitorservice.addVisitor(visitorData)
     .subscribe(data=>{

@@ -63,7 +63,8 @@ export class DashBoardComponent implements OnInit {
      private loginandregisterservice:LoginAndregisterService,
      private router: Router,
      private viewassosiationservice:ViewAssociationService) { 
-      this.accountID=this.globalService.acAccntID;
+      // this.accountID=this.globalService.getacAccntID();
+      this.accountID=this.globalService.getacAccntID();
        this.association='';
        this.unit='';
        this.unitForAssociation=[];

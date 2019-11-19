@@ -15,10 +15,10 @@ import * as $ from 'jquery';
 })
 export class HomeComponent implements OnInit {
 
-  @HostListener('window:beforeunload', ['$event'])
-  beforeUnloadHander(event) {
-    return false;
-  }
+  // @HostListener('window:beforeunload', ['$event'])
+  // beforeUnloadHander(event) {
+  //   return false;
+  // }
 
   isvalidaccountId:boolean;
   acAccntID:number;
@@ -36,9 +36,9 @@ export class HomeComponent implements OnInit {
     private avroute: ActivatedRoute,
     private homeservice:HomeService) {
 
-    this.acAccntID = this.globalService.acAccntID;
+    this.acAccntID = this.globalService.getacAccntID();
     //alert('in home component');
-    //alert('this.globalService.acAccntID'+this.globalService.acAccntID);
+    //alert('this.globalService.getacAccntID()'+this.globalService.getacAccntID());
 
     if (this.acAccntID == undefined) {
       //alert('acAccntID undefined');
@@ -104,7 +104,8 @@ this.getAccountFirstName();
 }
 
   gotoLoginPage() {
-    this.globalService.acAccntID=undefined;
+    this.globalService.setAccountID(undefined);
+    this.globalService.clear();
     this.router.navigate(['login']);
   }
 

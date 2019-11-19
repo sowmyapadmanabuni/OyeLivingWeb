@@ -67,6 +67,7 @@ import { AddVisitorComponent } from './add-visitor/add-visitor.component';
 import { ViewVisitorComponent } from './view-visitor/view-visitor.component';
 import { AddVehiclesComponent } from './add-vehicles/add-vehicles.component';
 import { ViewVehiclesComponent } from './view-vehicles/view-vehicles.component';
+import { PaymentStatusComponent } from './payment-status/payment-status.component';
 
 
 @NgModule({
@@ -114,7 +115,8 @@ import { ViewVehiclesComponent } from './view-vehicles/view-vehicles.component';
     AddVisitorComponent,
     ViewVisitorComponent,
     AddVehiclesComponent,
-    ViewVehiclesComponent
+    ViewVehiclesComponent,
+    PaymentStatusComponent
   ],
   imports: [
     BrowserModule,

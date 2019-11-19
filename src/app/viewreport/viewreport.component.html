@@ -6,16 +6,23 @@
           <h3 style="margin-top: 8px;">Reports for {{currentAssociationName}} Association</h3>
         </div>
         <div class="col-md-4 col-sm-4 col-xs-4">
-          <div class="form-group" [ngClass]="{'has-error' : reportDetailControl.invalid && reportDetailControl.touched}">
-            <input class="form-control" list="report" name="reportID" [(ngModel)]="reportID" placeholder="Select report"
+          <div class="form-group" [ngClass]="{'has-error' : reportIDControl.invalid && reportIDControl.touched}">
+            <!-- <input class="form-control" list="report" name="reportID" [(ngModel)]="reportID" placeholder="Select report"
               (change)="getPaidUnpaidDetail(reportID)" required #reportDetailControl='ngModel'>
               <datalist id="report">
               <option disabled="true" value="">Select values</option>
               <option *ngFor='let blck of frequencys' [value]="blck.displayName">
                 {{blck.displayName}}
               </option>
-            </datalist>
-            <p class="alerts" *ngIf="reportDetailControl.invalid && reportDetailControl.touched"> Please select Values
+            </datalist> -->
+            <select class="form-control" name="reportID" [(ngModel)]="reportID" placeholder="Select report"
+            (change)="getPaidUnpaidDetail(reportID)" #reportIDControl='ngModel'>
+              <option disabled="true" value="">Select report</option>
+              <option *ngFor='let blck of frequencys' [value]="blck.displayName">
+                {{blck.displayName}}
+              </option>
+            </select>
+            <p class="alerts" *ngIf="reportIDControl.invalid && reportIDControl.touched"> Please select Values
             </p>
           </div>
         </div>
