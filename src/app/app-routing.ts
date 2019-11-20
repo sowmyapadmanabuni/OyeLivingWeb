@@ -31,6 +31,8 @@ import { AddVehiclesComponent } from './add-vehicles/add-vehicles.component'
 import { ViewVehiclesComponent } from './view-vehicles/view-vehicles.component'
 import { ReadBlockAndUnitxlsxComponent } from './read-block-and-unitxlsx/read-block-and-unitxlsx.component';
 import { PaymentStatusComponent } from './payment-status/payment-status.component';
+import {OyeSocietyDashboardComponent} from './oye-society-dashboard/oye-society-dashboard.component';
+import {OyeSocietyAssociationManagementComponent} from './oye-society-association-management/oye-society-association-management.component';
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -41,7 +43,9 @@ const routes: Routes = [
         path: 'home', component: HomeComponent, canActivate: [AuthGuard],
                 children: [
 
-                    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+                    { path: '', redirectTo: 'OyeSocietydashboard', pathMatch: 'full' },
+                    { path: 'OyeSocietydashboard', component: OyeSocietyDashboardComponent },
+                    { path: 'OyeSocietyassociationmanagement', component: OyeSocietyAssociationManagementComponent },
                     { path: 'dashboard', component: DashBoardComponent },
                     { path: 'association', component: ViewAssociationComponent },
                     { path: 'viewBlocks', component: ViewBlockComponent },

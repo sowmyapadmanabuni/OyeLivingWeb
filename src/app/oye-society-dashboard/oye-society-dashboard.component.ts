@@ -1,5 +1,5 @@
 import { Component, OnInit , ElementRef, ViewChild} from '@angular/core';
-import {DashBoardService} from './dash-board.service';
+import {DashBoardService} from '../dash-board/dash-board.service';
 import {GlobalServiceService} from '../global-service.service';
 import { AppComponent } from '../app.component';
 import {LoginAndregisterService} from '../services/login-andregister.service';
@@ -8,12 +8,14 @@ import { ViewAssociationService } from '../view-association/view-association.ser
 import {UnitlistForAssociation} from '../models/unitlist-for-association';
 import * as _ from 'lodash';
 
+
 @Component({
-  selector: 'app-dash-board',
-  templateUrl: './dash-board.component.html',
-  styleUrls: ['./dash-board.component.css']
+  selector: 'app-oye-society-dashboard',
+  templateUrl: './oye-society-dashboard.component.html',
+  styleUrls: ['./oye-society-dashboard.component.css']
 })
-export class DashBoardComponent implements OnInit {
+export class OyeSocietyDashboardComponent implements OnInit {
+
   associations:any= [];
   allMemberByAccount=[];
   allTicketByAssociation=[];
@@ -329,4 +331,8 @@ export class DashBoardComponent implements OnInit {
     this.globalService.setCurrentUnitId(unit);
     console.log(this.globalService.currentUnitId);
   }
+  goToOyesocietyAssociation(){
+    this.router.navigate(['home/OyeSocietyassociationmanagement']);
+  }
+
 }

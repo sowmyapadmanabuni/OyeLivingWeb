@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { HttpClient, HttpHeaders, HttpEventType } from '@angular/common/http';
-import { ViewAssociationService } from './view-association.service';
+import { ViewAssociationService } from '../view-association/view-association.service';
 import { GlobalServiceService } from '../global-service.service';
 import { Router,ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
@@ -18,14 +18,12 @@ import { AngularFireMessaging } from '@angular/fire/messaging';
 import { mergeMapTo } from 'rxjs/operators';
 import { formatDate } from '@angular/common';
 
-
-
 @Component({
-  selector: 'app-view-association',
-  templateUrl: './view-association.component.html',
-  styleUrls: ['./view-association.component.css']
+  selector: 'app-oye-society-association-management',
+  templateUrl: './oye-society-association-management.component.html',
+  styleUrls: ['./oye-society-association-management.component.css']
 })
-export class ViewAssociationComponent implements OnInit {
+export class OyeSocietyAssociationManagementComponent implements OnInit {
 
   assnID:any;
   modalRef: BsModalRef;
@@ -1154,57 +1152,5 @@ this.crtAssn.newBAActType='';
      this.unUnitID=unUnitID;
     this.modalRef = this.modalService.show(jointemplate,
      Object.assign({}, { class: 'gray modal-lg' }));}
-  //   this.nameS = uofName;
-  //   this.lastnameS = uolName;
-  //   this.mobileS = uoMobile;
-  //   this.emailS = uoEmail;
-  //   this.nameS=utfName;
-  //   this.lastnameS=utlName;
-  //   this.mobileS=utMobile;
-  //   this.emailS=utEmail;
 
-
-  //   this.viewAssnService.GetUnitListByUnitID(unUnitID).subscribe(res => {
-
-  //     var data: any = res;
-  //     if(res['data']['unit']['owner'].length!=0)
-  //     {
-  //     console.log(res['data']['unit']['owner'][0].uofName);
-  //     console.log(res['data']['unit']['owner'][0].uolName);
-  //     console.log(res['data']['unit']['owner'][0].uoMobile);
-  //     console.log(res['data']['unit']['owner'][0].uoEmail);
-
-  //     this.nameS = res['data']['unit']['owner'][0].uofName;
-  //     this.lastnameS= res['data']['unit']['owner'][0].uolName;
-  //     this.mobileS = res['data']['unit']['owner'][0].uoMobile;
-  //     this.emailS = res['data']['unit']['owner'][0].uoEmail;
-  //     }
-  //     if(res['data']['unit']['tenant'].length!=0)
-  //     {
-  //     console.log(res['data']['unit']['tenant'][0].utfName);
-  //     console.log(res['data']['unit']['tenant'][0].utlName);
-  //     console.log(res['data']['unit']['tenant'][0].utMobile);
-  //     console.log(res['data']['unit']['tenant'][0].utEmail);
-
-  //     this.nameS = res['data']['unit']['tenant'][0].utfName;
-  //     this.lastnameS = res['data']['unit']['tenant'][0].utlName;
-  //     this.mobileS = res['data']['unit']['tenant'][0].utMobile;
-  //     this.emailS = res['data']['unit']['tenant'][0].utEmail;
-
-      //}
-
-
-
-      
-
-  //   });
-
-
-      
-   }
-  
-
-
-    //}
-  
-
+}

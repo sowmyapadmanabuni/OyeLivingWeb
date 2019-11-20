@@ -1,0 +1,492 @@
+<div class="row np mtb bg">
+
+  <div class="col-sm-9">
+
+          <!--Profile section-->
+
+          <div class="col-xs-12 col-sm-12 col-md-1 profile">
+
+                  <div><img src="../../assets/images/dash_icons/staff.png"></div>
+
+                  <div>{{acfName|titlecase}}</div>
+
+                  <div><a (click)='gotoEditProfile()'><i class="fa fa-user-o" aria-hidden="true"></i></a></div>
+
+                  <div><i class="fa fa-cog" aria-hidden="true"></i></div>
+
+                  <div><a (click)='gotoLoginPage()'><i class="fa fa-power-off" aria-hidden="true"></i></a></div>
+
+          </div>
+
+          <!--Profile section-->
+
+
+
+          <div class="col-xs-12 col-sm-12 col-md-11 b-l">
+
+                  <div class="purple">{{acfName|titlecase}}  {{aclName|titlecase}}
+
+                          {{(dashBrdService.mrmRoleID == 1)?'(Admin)':'(Resident)'}}</div>
+
+
+
+                  <!--Search Drop Down start -->
+
+                  <div class="col-sm-12 search">
+
+                          <div class="dropdown search-dropd">
+
+                                  <button class="btn btn-primary dropdown-toggle sdm br" type="button"
+
+                                          data-toggle="dropdown"
+
+                                          style="font-size: 12px;">{{(currentAssociationName == "" ? "Please select Association":currentAssociationName)}}
+
+                                          <span class="caret"></span></button>
+
+                                  <ul class="dropdown-menu fullw">
+
+                                          <a>
+
+                                                  <li (click)="loadAssociation(association['asAsnName'])"
+
+                                                          *ngFor="let association of uniqueAssociations"
+
+                                                          [value]="association['asAsnName']">
+
+                                                          {{association['asAsnName']}}</li>
+
+                                          </a>
+
+                                  </ul>
+
+                          </div>
+
+                          <div class="dropdown search-dropd">
+
+                                  <button class="btn btn-primary dropdown-toggle sdm" type="button"
+
+                                          data-toggle="dropdown"
+
+                                          style="font-size: 12px;">{{(unitName =="" ? "Please select Unit" :unitName)}}
+
+                                          <span class="caret"></span></button>
+
+                                  <ul class="dropdown-menu fullw1">
+
+                                          <a>
+
+                                                  <li (click)="LoadUnit(unt['unUniName'])"
+
+                                                          *ngFor="let unt of unitlistForAssociation"
+
+                                                          [value]="unt['unUniName']">
+
+                                                          {{unt['unUniName']}}</li>
+
+                                          </a>
+
+                                  </ul>
+
+                          </div>
+
+                  </div>
+
+                  <!--Search Drop Down End -->
+
+                  <!--choice heading row start-->
+
+
+
+                  <div class="col-sm-12 make">
+
+                          <h3 *ngIf="currentAssociationName" class="purple"><i class="fa fa-building"
+
+                                          aria-hidden="true"></i> Welcome to currentAssociationName</h3>
+
+                          <h3 *ngIf="!currentAssociationName" class="purple"><i class="fa fa-building"
+
+                                          aria-hidden="true"></i> Please Select Association</h3>
+
+
+
+                  </div>
+
+                  <!--choice heading row end-->
+
+                  <!--Dashboard icons start-->
+
+                  <div class="col-md-12 m-t-30 dash">
+
+                          <div class="dash-row">
+
+                                  <div>
+
+                                          <div><img class="dash-icon"
+
+                                                          src="../../assets/images/dash_icons/asso_amount_due.png">
+
+                                          </div>
+
+                                          <div>
+
+                                                  <div *ngIf="amount" class="number">amount</div>
+
+                                                  <div *ngIf="!amount" class="number">0</div>
+
+                                                  <div>Association <br>Amount Due</div>
+
+                                          </div>
+
+                                  </div>
+
+                                  <div>
+
+                                          <div><img class="dash-icon"
+
+                                                          src="../../assets/images/dash_icons/amount_due_self.png">
+
+                                          </div>
+
+                                          <div>
+
+
+
+                                                  <div class="number">0</div>
+
+                                                  <div>Amount Due</div>
+
+                                          </div>
+
+                                  </div>
+
+                                  <div>
+
+                                          <div><img class="dash-icon"
+
+                                                          src="../../assets/images/dash_icons/vehicles.png"></div>
+
+                                          <div>
+
+                                                  <div *ngIf="totalVehicles" class="number">totalVehicles
+
+                                                  </div>
+
+                                                  <div *ngIf="!totalVehicles" class="number">0</div>
+
+                                                  <div>Vehicles</div>
+
+                                          </div>
+
+                                  </div>
+
+                                  <div>
+
+                                          <div><img class="dash-icon"
+
+                                                          src="../../assets/images/dash_icons/Group 1750.png">
+
+                                          </div>
+
+                                          <div>
+
+                                                  <div class="number">0</div>
+
+                                                  <div>Documents</div>
+
+                                          </div>
+
+                                  </div>
+
+
+
+                          </div>
+
+                          <div class="dash-row">
+
+                                  <div>
+
+                                          <div><img class="dash-icon"
+
+                                                          src="../../assets/images/dash_icons/members.png"></div>
+
+                                          <div>
+
+                                                  <div *ngIf="totalMember" class="number">totalMember</div>
+
+                                                  <div *ngIf="!totalMember" class="number">0</div>
+
+                                                  <div>Members</div>
+
+                                          </div>
+
+                                  </div>
+
+                                  <div>
+
+                                          <div><img class="dash-icon"
+
+                                                          src="../../assets/images/dash_icons/vicitors.png"></div>
+
+                                          <div>
+
+                                                  <div *ngIf="totalVisitors" class="number">totalVisitors
+
+                                                  </div>
+
+                                                  <div *ngIf="!totalVisitors" class="number">0</div>
+
+                                                  <div>Visitors</div>
+
+                                          </div>
+
+                                  </div>
+
+                                  <div>
+
+                                          <div><img class="dash-icon"
+
+                                                          src="../../assets/images/dash_icons/staff.png"></div>
+
+                                          <div>
+
+                                                  <div *ngIf="totalStaffs" class="number">totalStaffs</div>
+
+                                                  <div *ngIf="!totalStaffs" class="number">0</div>
+
+                                                  <div>Staff</div>
+
+                                          </div>
+
+                                  </div>
+
+                                  <div>
+
+                                          <div><img class="dash-icon"
+
+                                                          src="../../assets/images/dash_icons/ticket.png"></div>
+
+                                          <div>
+
+                                                  <div *ngIf="totalTickets" class="number">totalTickets</div>
+
+                                                  <div *ngIf="!totalTickets" class="number">0</div>
+
+                                                  <div>Tickets</div>
+
+                                          </div>
+
+                                  </div>
+
+
+
+                          </div>
+
+                  </div>
+
+                  <!--Dashboard icons end-->
+
+
+
+          </div>
+
+
+
+  </div>
+
+  <div class="col-sm-3">
+
+          <!--Right Menu-->
+
+          <div class="col-xs-12 col-sm-12 np search-results">
+
+                  <!--Row1-->
+
+                  <div>
+
+                          <div class="col-sm-12 np flat-list-row">
+
+                                  <div class="search-res-row">
+
+                                          <div><img class="icon"
+
+                                                          src="../../assets/images/icons/association _management.png">
+
+                                          </div>
+
+                                          <a (click)='goToOyesocietyAssociation()'>
+
+                                                  <div style="flex-basis: 200px" class="f-des">Association
+
+                                                          Management</div>
+
+                                          </a>
+
+                                  </div>
+
+
+
+                          </div>
+
+                  </div>
+
+                  <!--Row1-->
+
+                  <!--Row1-->
+
+                  <div>
+
+                          <div class="col-sm-12 np flat-list-row">
+
+                                  <div class="search-res-row">
+
+                                          <div><img class="icon" src="../../assets/images/icons/units_blocks.png">
+
+                                          </div>
+
+                                          <div style="flex-basis: 200px" class="f-des">Units And Blocks</div>
+
+                                  </div>
+
+
+
+                          </div>
+
+                  </div>
+
+                  <!--Row1-->
+
+
+
+
+
+                  <!--Row1-->
+
+                  <div>
+
+                          <div class="col-sm-12 np flat-list-row">
+
+                                  <div class="search-res-row">
+
+                                          <div><img class="icon" src="../../assets/images/icons/Group 1778.png">
+
+                                          </div>
+
+                                          <div style="flex-basis: 200px" class="f-des">Expense Management</div>
+
+                                  </div>
+
+
+
+                          </div>
+
+                  </div>
+
+                  <!--Row1-->
+
+                  <!--Row1-->
+
+                  <div>
+
+                          <div class="col-sm-12 np flat-list-row">
+
+                                  <div class="search-res-row">
+
+                                          <div><img class="icon" src="../../assets/images/icons/Group 1777.png">
+
+                                          </div>
+
+                                          <div style="flex-basis: 200px" class="f-des">Subscription Management
+
+                                          </div>
+
+                                  </div>
+
+
+
+                          </div>
+
+                  </div>
+
+                  <!--Row1-->
+
+                  <div class="search-res-row2 p-t-45">
+
+                          <a (click)='gotoEditProfile()' style="color:#000 !important">
+
+                                  <div class="icons-row">
+
+                                          <img class="icon" src="../../assets/images/icons/family_members.png">
+
+                                          <span>Family</span>
+
+                                          <span>Members</span>
+
+                                  </div>
+
+                          </a>
+
+                          <div class="icons-row">
+
+                                  <img class="icon" src="../../assets/images/icons/visitors.png">
+
+                                  <span>Visitors</span>
+
+                          </div>
+
+                          <div class="icons-row">
+
+                                  <img class="icon" src="../../assets/images/icons/family_members.png">
+
+                                  <span>Patrolling</span>
+
+                          </div>
+
+                  </div>
+
+                  <!--Row1-->
+
+                  <!--Row1-->
+
+                  <div class="search-res-row2">
+
+                          <div class="icons-row">
+
+                                  <img class="icon" src="../../assets/images/icons/invoices.png">
+
+                                  <span>Invoices</span>
+
+                          </div>
+
+                          <div class="icons-row">
+
+                                  <img class="icon" src="../../assets/images/icons/reports.png">
+
+                                  <span>Reports</span>
+
+                          </div>
+
+                          <div class="icons-row">
+
+                                  <img class="icon" src="../../assets/images/icons/tickets.png">
+
+                                  <span>Tickets</span>
+
+                          </div>
+
+                  </div>
+
+                  <!--Row1-->
+
+                  <!--Right Menu-->
+
+
+
+          </div>
+
+  </div>
+
+  </div>
+
+
+

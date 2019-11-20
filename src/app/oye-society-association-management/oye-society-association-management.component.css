@@ -1,0 +1,13 @@
+
+.ico{color:#FFB81A;}
+.table-bordered{margin-top: 30px;}
+.btn-primary1{
+    border-right: 2px solid #d0cccc !important;
+    color: #ffffff !important;
+    background-color: #4d32af !important;
+    border: none !important;
+    padding: 7px 23px;
+    box-shadow: none !important;
+    font-weight: 700 !important;
+    font-size: 12px;
+  }
