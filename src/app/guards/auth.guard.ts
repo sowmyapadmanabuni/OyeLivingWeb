@@ -5,7 +5,7 @@ import {GlobalServiceService} from '../global-service.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate/*, CanActivateChild*/ {
+export class AuthGuard implements CanActivate, CanActivateChild {
   accountID:number;
 
   constructor(
@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate/*, CanActivateChild*/ {
       return false;
   }
 
-  /*canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
+  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
     return this.canActivate(route, state)
-  }*/
+  }
 }
