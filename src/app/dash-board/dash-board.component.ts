@@ -93,12 +93,11 @@ export class DashBoardComponent implements OnInit {
       this.associations = _.sortBy(this.associations, e => e.asAsnName);
       console.log('associations',this.associations);
       for (let i = 0; i < this.associations.length; i++) {
-        this.uniqueAssociations.push(this.associations[i]);
         console.log( this.uniqueAssociations);
         console.log( this.associations[i]['asAsnName']);
-        if (this.uniqueAssociations.indexOf(this.associations[i]['asAsnName']) !== -1) {
-          console.log(this.associations[i]);
-          console.log(this.associations[i]['asAsnName'] === -1);
+        const found = this.uniqueAssociations.some(el => el['asAsnName'] === this.associations[i]['asAsnName']);
+        if (!found) {
+          this.uniqueAssociations.push(this.associations[i]);
         }
       }
       console.log(this.uniqueAssociations);
@@ -245,6 +244,13 @@ export class DashBoardComponent implements OnInit {
             this.unitlistForAssociation.push(new UnitlistForAssociation(association['unUniName'], association['unUnitID']));
           }
           console.log(this.unitlistForAssociation);
+          if(this.unitlistForAssociation.length == 1){
+            if(this.unitlistForAssociation[0]['unUniName']==''){
+              this.unitlistForAssociation=[];
+              this.unitlistForAssociation.push(new UnitlistForAssociation('No Unit Found',0));
+              console.log(this.unitlistForAssociation);
+            }
+          }
           this.globalService.setCurrentAssociationId(association.asAssnID);
           this.globalService.setCurrentAssociationName(associationName);
           this.associationID = this.globalService.getCurrentAssociationId();

@@ -39,10 +39,6 @@ const routes: Routes = [
     { path: 'payment-status', component: PaymentStatusComponent },
     {
         path: 'home', component: HomeComponent, canActivate: [AuthGuard],
-        children: [
-            {
-                path: '',
-                canActivateChild: [AuthGuard],
                 children: [
 
                     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -72,9 +68,7 @@ const routes: Routes = [
                     { path: 'newinvoice', component: NewInvoiceComponent },
                     { path: 'addexpensexlsx', component: AddexpensexlsxComponent },
                     { path: 'expensegrid', component: ExpensegridComponent },
-                    { path: 'addblockunitxlsx', component: ReadBlockAndUnitxlsxComponent }],
-            }]
-
+                    { path: 'addblockunitxlsx', component: ReadBlockAndUnitxlsxComponent }]
     }
 ]
 
