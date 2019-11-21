@@ -35,19 +35,23 @@ import {OyeSocietyDashboardComponent} from './oye-society-dashboard/oye-society-
 import {OyeSocietyAssociationManagementComponent} from './oye-society-association-management/oye-society-association-management.component';
 
 const routes: Routes = [
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'association', component: ViewAssociationComponent },
     { path: 'payment-status', component: PaymentStatusComponent },
+    { path: 'OyeSocietydashboard', component: OyeSocietyDashboardComponent },
+    { path: 'OyeSocietyassociationmanagement', component: OyeSocietyAssociationManagementComponent },
     {
         path: 'home', component: HomeComponent, canActivate: [AuthGuard],
+        children: [
+            {
+                path: '',
+                canActivateChild: [AuthGuard],
                 children: [
-
-                    { path: '', redirectTo: 'OyeSocietydashboard', pathMatch: 'full' },
-                    { path: 'OyeSocietydashboard', component: OyeSocietyDashboardComponent },
-                    { path: 'OyeSocietyassociationmanagement', component: OyeSocietyAssociationManagementComponent },
-                    { path: 'dashboard', component: DashBoardComponent },
+                    { path: 'dashboard', component: DashBoardComponent },                    
                     { path: 'association', component: ViewAssociationComponent },
+                    { path: 'dashboard', component: DashBoardComponent },
                     { path: 'viewBlocks', component: ViewBlockComponent },
                     { path: 'viewunit', component: ViewUnitComponent },
                     { path: 'guest', component: GuestComponent },
@@ -72,7 +76,11 @@ const routes: Routes = [
                     { path: 'newinvoice', component: NewInvoiceComponent },
                     { path: 'addexpensexlsx', component: AddexpensexlsxComponent },
                     { path: 'expensegrid', component: ExpensegridComponent },
-                    { path: 'addblockunitxlsx', component: ReadBlockAndUnitxlsxComponent }]
+                    { path: 'addblockunitxlsx', component: ReadBlockAndUnitxlsxComponent },
+                    { path: '', redirectTo: 'OyeSocietydashboard', pathMatch: 'full' }
+                    ]
+            }
+        ]
     }
 ]
 

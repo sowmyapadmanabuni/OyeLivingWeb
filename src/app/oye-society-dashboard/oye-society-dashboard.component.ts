@@ -332,7 +332,7 @@ export class OyeSocietyDashboardComponent implements OnInit {
     console.log(this.globalService.currentUnitId);
   }
   goToOyesocietyAssociation(){
-    this.router.navigate(['home/OyeSocietyassociationmanagement']);
+    this.router.navigate(['OyeSocietyassociationmanagement']);
   }
 
 }
