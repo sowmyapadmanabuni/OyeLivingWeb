@@ -1,0 +1,9 @@
+
+<img *ngFor='let url of urls'  [src]="url" height="200"> <br/>
+
+<input type='file' (change)="onSelectFile($event)" multiple>
+
+<button (click)='clickRecordAudio()' id="record">Record</button>
+<button (click)='clickToPlayAudio()' id="stop">Stop</button>
+<button (click)='clickToPlayAudio()' id="play">Play</button>
+<button id="save">Save</button>

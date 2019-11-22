@@ -56,7 +56,7 @@
           <button type="button" class="btn btn-danger pull-right"><i class="fa fa-times"></i> Cancel</button>
         </a>
       </div> -->
-        <form class="form-horizontal" name="crtAss" enctype="multipart/form-data" #f="ngForm">
+        <form #viewassociationForm='ngForm' class="form-horizontal" name="crtAss" enctype="multipart/form-data" #f="ngForm">
             <div class="row" style="border:1px solid #eb9316; border-radius: 10px;">
                 <div class="col-sm-12">
                     <br>
@@ -78,7 +78,7 @@
                     <div class="form-group">
                         <img id="assosnlogoimgthumbnail" style="position: absolute;top: 39%;left: 74%;" src="../../assets/images/default_thumbnail.png" width="50px" height="34px" alt="">
                         <button style="position: absolute;top: 39%;left: 84%;" class="btn btn-danger"
-                            (click)='removeSelectedfile()'><i class="fa fa-trash"></i> </button>
+                            (click)='removeSelectedfile()'><i title="Delete File" class="fa fa-trash"></i> </button>
                         <label id=label2>Association Logo</label>
                         <input type="file"  name="ASAsnLogo" [(ngModel)]="crtAssn.logo" #logoControl="ngModel"
                             class="form-control" style="font-family: Quicksand" (change)='onFileSelected($event)'
@@ -89,7 +89,7 @@
 
                         <button class="btn btn-primary" (click)='onUpLoad()'
                             style="position:absolute;left:91%;top:39%" [disabled]='disableButton'>
-                            <i class="fa fa-cloud-upload"></i>
+                            <i title="Upload File" class="fa fa-cloud-upload"></i>
                         </button>
                         <div *ngIf='dynamic > 0' class="row mb-2">
                             <progressbar [animate]="false" [value]="dynamic" type="success"><b>{{dynamic}}%</b>
@@ -150,18 +150,17 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                        <div class="form-group">
-                            <label id=label7>Property Type <span class="red">*</span></label>
-                            <input class="form-control" list="countries" name="ASPropType" [(ngModel)]="crtAssn.propertyType"
-                            placeholder="SEARCH PROPERTY TYPE" #propertytypeControl='ngModel' required>
-                            <datalist id="countries">
-                                <option value="">Select Property Type</option>
-                                <option *ngFor="let propertyType of propertyTypes" [value]="propertyType['name']">
-                                    {{propertyType['name']}}
-                                </option>
-                              </datalist>
-                            <p class="alerts" *ngIf="propertytypeControl.invalid && propertytypeControl.touched"> Please Select
-                                property type</p>
+                  <div class="form-group">
+                    <label id=label7>Property Type <span class="red">*</span></label>
+                    <select class="form-control" name="asproptype" [(ngModel)]="crtAssn.propertyType"
+                      placeholder="SEARCH PROPERTY TYPE" #propertytypeControl='ngModel' required>
+                      <option disabled="true" value="">Select Property Type</option>
+                      <option *ngFor="let propertyType of propertyTypes" [value]="propertyType['name']">
+                        {{propertyType['name']}}
+                      </option>
+                    </select>
+                    <p class="alerts" *ngIf="propertytypeControl.invalid && propertytypeControl.touched"> Please Select
+                      property type</p>
                         </div>
                     </div>
     
@@ -270,7 +269,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <button style="position: absolute;top: 31%;left: 77%;" class="btn btn-danger"
-                                    (click)='removePanfile()'><i class="fa fa-trash"></i> </button>
+                                    (click)='removePanfile()'><i title="Delete File" class="fa fa-trash"></i> </button>
                                 <label id=label14>Upload scanned PAN </label>
                                 <!-- <img id="uploadPANthumbnail" style="position: absolute;margin-top:23px" src="../../assets/images/default_thumbnail.png" width="50px" height="50px" alt=""> -->
                                 <img id="assosnpanimgthumbnail"  src="../../assets/images/default_panthumbnail copy.png" width="50px" height="34px" alt="" style="position:absolute;top: 29%;
@@ -285,7 +284,7 @@
                                     128x128px</p>
                                 <p class="pull-right" style="margin-right:36px;"><button
                                         class="btn btn-primary upload" (click)='onUpLoad()' style="position:absolute; 
-        top:31%"><i class="fa fa-cloud-upload"></i></button></p>
+        top:31%"><i title="Upload File" class="fa fa-cloud-upload"></i></button></p>
                                 <div *ngIf='dynamic > 0' class="row mb-2">
                                     <progressbar [animate]="false" [value]="dynamic" type="success">
                                         <b>{{dynamic}}%</b></progressbar>
@@ -367,7 +366,7 @@
 
                         <div class="col-sm-9"></div>
 
-                        <button type="reset" class="btn btn-primary col-sm-1">Reset</button>
+                        <button (click)='resetForm()' type="reset" class="btn btn-primary col-sm-1">Reset</button>
    
                          &nbsp;&nbsp;
    

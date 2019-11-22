@@ -93,8 +93,9 @@ getBlockDetailsByAssociationID(currentAssociationID)
 {
   //this.currentAssociationID=4217;
   console.log(currentAssociationID);
+  let scopeIP=this.utilsService.getIPaddress();
   //http://localhost:54400/oyeliving/api/v1/Block/GetBlockListByAssocID/{AssociationID}
-  return this.http.get('http://apidev.oyespace.com/oyeliving/api/v1/Block/GetBlockListByAssocID/' +currentAssociationID ,  {headers:this.headers});
+  return this.http.get(scopeIP+'oyeliving/api/v1/Block/GetBlockListByAssocID/' +currentAssociationID ,  {headers:this.headers});
 }
 GetUnitListByBlockID(blockId:string){
   //this.blockId=4206;
@@ -105,8 +106,10 @@ GetUnitListByBlockID(blockId:string){
 // http://localhost:54400/oyeliving/api/v1/Unit/GetUnitListByUnitID/{UnitID}
 GetUnitListByUnitID(unUnitID:string){
   //this.blockId=4206;
+  let scopeIP=this.utilsService.getIPaddress();
+
   console.log('unitId',unUnitID);
-  return this.http.get('http://apidev.oyespace.com/oyeliving/api/v1/Unit/GetUnitListByUnitID/'+ unUnitID , {headers:this.headers});
+  return this.http.get(scopeIP+ 'oyeliving/api/v1/Unit/GetUnitListByUnitID/'+ unUnitID , {headers:this.headers});
 }
 
 GetAccountListByAccountID(acAccntID){
@@ -120,7 +123,8 @@ GetAccountListByAccountID(acAccntID){
 sendRequestmethod(senddata:Sendrequest)
   {
     console.log('senddata',senddata);
-    return this.http.post('http://apidev.oyespace.com/oyeliving/api/v1/SendMsging', senddata, {headers:this.headers});
+    let scopeIP=this.utilsService.getIPaddress();
+    return this.http.post(scopeIP+ 'oyeliving/api/v1/SendMsging', senddata, {headers:this.headers});
 
   }
   joinAssociation(senddataForJoinOwner){

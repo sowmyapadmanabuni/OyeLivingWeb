@@ -28,7 +28,7 @@
               <div class="form-group">
                 <label id=label1>Block Name <span class="red">*</span></label>
                 <input type="text" name="blockname" id="input1" autocomplete='blockname' [(ngModel)]="blockname"
-                  #blocknameControl="ngModel" class="form-control" placeholder="Block Name" pattern="[a-zA-Z0-9]*"
+                  #blocknameControl="ngModel" class="form-control" placeholder="Block Name" pattern="[a-zA-Z0-9 _]*"
                   required />
                 <p class="invalid-feedback">Valid name is required
                 </p>
@@ -37,16 +37,13 @@
             <div class="col-sm-4 col-xs-12">
                 <div class="form-group">
                   <label>Block Type <span class="red">*</span></label>
-                  <input class="form-control" list="browsers" name="blocktype" [(ngModel)]="blocktype" placeholder="Select Block" #blocktypeControl='ngModel' required multiple>
-                  <datalist id="browsers">
-                   <option value="">Select Block</option>
-                   <option value="Residential"></option>
-                   <option value="Commercial"></option>
-                   <option value="Residential and Commercial"></option>
-                    <!-- <option *ngFor="let blktype of blocktypes" [value]="blktype['name']">
-                        {{blktype['displayName']}}
-                    </option>  -->
-                  </datalist>
+                  <select class="form-control" name="blocktype" [(ngModel)]="blocktype" placeholder="Select Block"
+                    #blocktypeControl='ngModel' required>
+                    <option disabled="true" value="">Select Block</option>
+                    <option value="Residential">Residential</option>
+                    <option value="Commercial">Commercial</option>
+                    <option value="Residential and Commercial">Residential and Commercial</option>
+                  </select>
                   <p class="invalid-feedback">Valid block type is required
                   </p>
                 </div>
@@ -250,14 +247,13 @@
                 <div class="form-group">
               
                   <label>Late Payment Charge Type <span class="red">*</span></label>
-                  <input class="form-control" list="email" name="latePymtChargeType" [(ngModel)]="latePymtChargeType"
+                  <select class="form-control" name="latePymtChargeType" [(ngModel)]="latePymtChargeType"
                     placeholder="Search or Select Charge Type" #latePymtChargeTypeControl='ngModel' required>
-                  <datalist id="email">
                     <option disabled="true" value="">Select Charge Type</option>
                     <option *ngFor='let lpct of latePymtChrgTypes' [value]="lpct['name']">
                       {{lpct['name']}}
                     </option>
-                  </datalist>
+                  </select>
                   <p class="invalid-feedback">Select Late Payment Charge Type
                   </p>
               

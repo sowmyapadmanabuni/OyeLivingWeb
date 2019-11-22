@@ -452,7 +452,7 @@
             </div>
         
             <div class="col-sm-4 col-xs-4">
-              <a href="" (click)="razorpay(totalAmountPaid($event))">
+              <a href="" (click)="kotakPay($event)">
                 <img src="assets/images/razorpay.jpg" alt="Razorpay" class="img-responsive" />
                 <h6><b>₹ {{totalAmountPaid()}} + Service Fee & GST = ₹ {{ravValFinal}} </b></h6>
               </a>
@@ -797,3 +797,11 @@
         <!-- <input type="submit" value="Submit"> -->
         </form>
     </div>
+    <!---->
+    
+    <form #kotakform ngNoForm action="https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction"
+      method="POST" name="kotakPayForm" id="nonseamless">
+      <input type="hidden" id="encRequest" name="encRequest" [ngModel]="kotakPayForm.encRequest">
+      <input type="hidden" name="access_code" id="access_code" [ngModel]="kotakPayForm.accessCode">
+    </form>
+

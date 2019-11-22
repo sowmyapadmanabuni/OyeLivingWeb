@@ -3,7 +3,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { HttpClient, HttpHeaders, HttpEventType } from '@angular/common/http';
 import { ViewAssociationService } from './view-association.service';
 import { GlobalServiceService } from '../global-service.service';
-import { Router,ActivatedRoute } from '@angular/router';
+import { Router,ActivatedRoute,ParamMap } from '@angular/router';
 import swal from 'sweetalert2';
 import { Amenity } from '../models/amenity';
 import { ViewChild } from '@angular/core';
@@ -38,7 +38,7 @@ export class ViewAssociationComponent implements OnInit {
 
   //crtAssn:CreateAssn;
   selectedFile: File;
-  @ViewChild('view-association') form: any;
+  @ViewChild('viewassociationForm') viewassociationForm: any;
   accountID: number;
   currentAssociationID: string;
   associations: any = [];
@@ -208,20 +208,24 @@ export class ViewAssociationComponent implements OnInit {
     this.enrollAssociation = false;
     this.joinAssociation = false;
     if (this.dashboardservice.toggleViewAssociationTable) {
+      console.log('test1');
       this.enrollAssociation = true;
       this.viewAssociation_Table = true;
       if(this.dashboardservice.enrollassociationforresident){
         this.viewAssociation_Table = false;
+        console.log('test2');
       }
       this.joinAssociation = false;
       this.homeservice.toggleviewassociationtable=false;
     }
     if (!this.dashboardservice.toggleViewAssociationTable) {
+      console.log('test3');
       this.enrollAssociation = false;
       this.viewAssociation_Table = false;
       this.joinAssociation = true;
     }
     if (this.homeservice.toggleviewassociationtable) {
+      console.log('test4');
       this.viewAssociation_Table = true;
       this.joinAssociation = false;
       this.enrollAssociation = false;
@@ -288,7 +292,6 @@ export class ViewAssociationComponent implements OnInit {
     showWeekNumbers:false,
     isAnimated: true});
 }
-
 
   pageChanged(event: any): void {
     this.page = event.page;
@@ -494,6 +497,8 @@ export class ViewAssociationComponent implements OnInit {
   }
 
   ngOnInit() {
+    let id = this.route.snapshot.paramMap.get('id');
+    console.log(id);
     //this.accountID="2";
     this.currentAssociationID = this.globalService.getCurrentAssociationId();
     this.currentAssociationName = this.globalService.getCurrentAssociationName();
@@ -930,7 +935,12 @@ this.crtAssn.newBAActType='';
       Object.assign({}, { class: 'gray modal-lg' }));
   }
 
-
+  resetForm(){
+    console.log('teSt');
+    console.log(this.crtAssn.propertyType);
+    console.log(this.ASPrpType);
+    this.viewassociationForm.reset();
+  }
 
   OnSendButton(OwnerType){
     // this.afMessaging.requestPermission
@@ -987,14 +997,15 @@ this.crtAssn.newBAActType='';
         this.viewAssnService.joinAssociation(senddataForJoinOwner)
           .subscribe(
             (data) => {
-              // swal.fire({
-              //   title: "Sent Successfully",
-              //   text: "",
-              //   type: "success",
-              //   showCancelButton: true,
-              //   confirmButtonColor: "#f69321",
-        
-              // })
+              this.modalRef.hide();
+              swal.fire({
+                title: "Joined Successfully",
+                text: "",
+                type: "success",
+                showCancelButton: true,
+                confirmButtonColor: "#f69321",
+                
+              })
               console.log(data);
             },
             err=>{

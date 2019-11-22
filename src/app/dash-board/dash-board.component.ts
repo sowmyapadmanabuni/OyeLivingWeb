@@ -66,7 +66,7 @@ export class DashBoardComponent implements OnInit {
       // this.accountID=this.globalService.getacAccntID();
       this.accountID=this.globalService.getacAccntID();
        this.association='';
-       this.unit='';
+       //this.unit='';
        this.unitForAssociation=[];
        this.unitlistForAssociation=[];
        this.uniqueAssociations=[];
@@ -101,6 +101,10 @@ export class DashBoardComponent implements OnInit {
         }
       }
       console.log(this.uniqueAssociations);
+      if(this.globalService.currentAssociationName != ''){
+        console.log(this.globalService.currentAssociationName);
+        this.loadAssociation(this.globalService.currentAssociationName);
+      }
       },
       res=>{
         console.log('Error in getting Associations',res);

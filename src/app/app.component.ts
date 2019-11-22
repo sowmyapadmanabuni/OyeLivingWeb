@@ -13,7 +13,7 @@ export class AppComponent {
   constructor(private router: Router,private titleService: Title) {
     setTheme('bs4'); // or 'bs4'
     this.titleService.setTitle( 'OyeSociety' );
-    this.router.navigate(['login']);
+    //this.router.navigate(['login']);
   }
 
 }

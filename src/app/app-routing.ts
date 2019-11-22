@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AddExpenseComponent } from './add-expense/add-expense.component';
 import { ViewExpensesComponent } from './view-expenses/view-expenses.component';
 import { ViewInvoiceComponent } from './view-invoice/view-invoice.component';
+import {AnnouncementComponent} from './announcement/announcement.component'
 import { ViewreceiptComponent } from './viewreceipt/viewreceipt.component';
 import { GenerateReceiptComponent } from './generate-receipt/generate-receipt.component';
 import { AddUnitComponent } from './add-unit/add-unit.component';
@@ -51,6 +52,7 @@ const routes: Routes = [
                 children: [
                     { path: 'dashboard', component: DashBoardComponent },                    
                     { path: 'association', component: ViewAssociationComponent },
+                    { path: 'association/:id', component: ViewAssociationComponent },
                     { path: 'dashboard', component: DashBoardComponent },
                     { path: 'viewBlocks', component: ViewBlockComponent },
                     { path: 'viewunit', component: ViewUnitComponent },
@@ -58,6 +60,7 @@ const routes: Routes = [
                     { path: 'deliveries', component: DeliveriesComponent },
                     { path: 'viewvisitor', component: ViewVisitorComponent },
                     { path: 'staff', component: StaffComponent },
+                    { path: 'announcement', component: AnnouncementComponent },
                     { path: 'addguest', component: AddVisitorComponent },
                     { path: 'addvehicles', component: AddVehiclesComponent },
                     { path: 'viewvehicles', component: ViewVehiclesComponent },
@@ -77,7 +80,7 @@ const routes: Routes = [
                     { path: 'addexpensexlsx', component: AddexpensexlsxComponent },
                     { path: 'expensegrid', component: ExpensegridComponent },
                     { path: 'addblockunitxlsx', component: ReadBlockAndUnitxlsxComponent },
-                    { path: '', redirectTo: 'OyeSocietydashboard', pathMatch: 'full' }
+                    { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
                     ]
             }
         ]

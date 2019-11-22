@@ -70,6 +70,7 @@ import { ViewVehiclesComponent } from './view-vehicles/view-vehicles.component';
 import { PaymentStatusComponent } from './payment-status/payment-status.component';
 import { OyeSocietyDashboardComponent } from './oye-society-dashboard/oye-society-dashboard.component';
 import { OyeSocietyAssociationManagementComponent } from './oye-society-association-management/oye-society-association-management.component';
+import { AnnouncementComponent } from './announcement/announcement.component';
 
 
 @NgModule({
@@ -120,7 +121,8 @@ import { OyeSocietyAssociationManagementComponent } from './oye-society-associat
     ViewVehiclesComponent,
     PaymentStatusComponent,
     OyeSocietyDashboardComponent,
-    OyeSocietyAssociationManagementComponent
+    OyeSocietyAssociationManagementComponent,
+    AnnouncementComponent
   ],
   imports: [
     BrowserModule,

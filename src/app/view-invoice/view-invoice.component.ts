@@ -88,7 +88,8 @@ export class ViewInvoiceComponent implements OnInit {
   rentingfees: number;
   OneTimeOnBoardingFees: number;
   InvoiceValue: number;
-  iciciPayForm: any = {}
+  iciciPayForm: any = {};
+  kotakPayForm: any = {};
 
   invoiceDetails: object[];
 
@@ -96,6 +97,7 @@ export class ViewInvoiceComponent implements OnInit {
   @ViewChild('template') private template: TemplateRef<any>;
   @ViewChild('generateinvoicemodal') private generateinvoicemodal: TemplateRef<any>;
   @ViewChild('iciciform', {read:ElementRef}) iciciform: ElementRef;
+  @ViewChild('kotakform',  {read:ElementRef}) kotakform: ElementRef;
 
   _unOcStat: string;
   _ineSent: boolean;
@@ -432,7 +434,7 @@ export class ViewInvoiceComponent implements OnInit {
     console.log(InvoiceValue);
     
     e.preventDefault();
-    this.paymentService.postICICIPaymentDetails(InvoiceValue)
+    this.paymentService.postToICICIPaymentGateway(InvoiceValue)
     .subscribe(res => {
       console.log(res);
       this.iciciPayForm = res;
@@ -447,6 +449,21 @@ export class ViewInvoiceComponent implements OnInit {
     }, error => {
       console.log("Error=>", error)
     })
+  }
+  kotakPay(e) {
+    e.preventDefault();
+    let InvoiceValue = { chargetotal: this.InvoiceValue+'.00' };
+    console.log(InvoiceValue);
+    this.paymentService.postToKotakPaymenGateway( InvoiceValue ).subscribe(res => {
+      if (res) {
+        this.kotakPayForm = res;
+        console.log("this.kotakPayForm ", this.kotakPayForm);
+        setTimeout(_ => this.kotakform.nativeElement.submit(), 100)
+      }
+    }, error => {
+      console.log(error);
+     }
+    )
   }
   
   addZeroes(num) {

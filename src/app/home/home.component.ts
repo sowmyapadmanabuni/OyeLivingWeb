@@ -135,7 +135,8 @@ this.getAccountFirstName();
     //alert('gotoViewassociation 130');
     //alert('goToAssociation');
     this.homeservice.toggleviewassociationtable=true;
-    this.router.navigate(['home/association']);
+    //this.router.navigate(['home/association']);
+    this.router.navigate(['home/association',{ id: this.homeservice.toggleviewassociationtable}]);
   }
 
   enableViewAssociationTable(){

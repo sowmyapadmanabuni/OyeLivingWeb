@@ -7,12 +7,6 @@ a, button{outline: none !important; text-decoration: none; cursor: pointer;}
 a, p, h1, h2, h3, h4, h5, h6, span{font-family: Quicksand; }
 button{border:0;}
 .has-error .form-control{box-shadow: none !important;}
-.activee #spanid {
-  color: #4d32af !important;
-  visibility: visible;
-  font-size: 11px;
-  padding-left: 12px;
-    }
     .btn-primary{
       border-right: 2px solid #d0cccc !important;
       color: #000 !important;

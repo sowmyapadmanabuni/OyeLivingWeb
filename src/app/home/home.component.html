@@ -13,6 +13,13 @@
                 <a routerLink="dashboard" class="nav-item nav-link active" routerLinkaActive="active"
                     id="dashboard"><span class="fa fa-tasks"></span> Dashboard</a>
             </li>
+
+            <li class="dropdown-divider"></li>
+            <li class="nav-item">
+                <a routerLink="announcement" class="nav-item nav-link" id="unit"><span class="fa fa-volume-up"></span>
+                    Announcement</a>
+            </li>
+
             <li class="dropdown-divider"></li>
             <li class="nav-item dropdown-btn"><a class="nav-item nav-link" id="association">Association
                     Management</a></li>
@@ -51,6 +58,7 @@
                 <li class="nav-item" style="margin-left:40px"><a routerLink="staff" id="staff"><span
                             class="fa fa-home"></span>Staff</a></li>
             </ul>
+          
 
             <!---->
             <li class="dropdown-divider"></li>
@@ -63,6 +71,9 @@
                 <a routerLink="report" class="nav-item nav-link" id="unit"><span class="fa fa-copy"></span>
                     Reports</a>
             </li>
+
+
+           
         </ul>
         <ul class="nav flex-column" *ngIf='dashboardservice.mrmRoleID == 2 || 3 || 6 || 7'>
             <li class="nav-item">

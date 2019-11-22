@@ -32,8 +32,8 @@
   <div class="col-sm-4">
       <div class="form-group">
         <label>Unit</label>
-        <select class="ui dropdown search methodDropdown"  name="unit" [(ngModel)]="unit"
-        (change)='loadUnit(unit)' autocomplete="off" placeholder="Search Unit" #unitControl='ngModel' required>
+        <select class="ui dropdown search methodDropdown"  name="currentUnitId" [(ngModel)]="globalService.currentUnitId"
+        (change)='loadUnit(globalService.currentUnitId)' autocomplete="off" placeholder="Search Unit" #unitControl='ngModel' required>
          <option value="">Select Unit</option>
          <option *ngFor="let unt of unitlistForAssociation" [value]="unt['unUnitID']">
            {{unt['unUniName']}}
