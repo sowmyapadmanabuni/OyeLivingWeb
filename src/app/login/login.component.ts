@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   mobile: number;
   mobilenumber: number;
   otp: number;
-  ipAddress = 'http://apidev.oyespace.com';
+  ipAddress = 'http://api.oyespace.com';
   inpt: any;
   public countrydata: object;
   @ViewChild('myButton1') myButton1: any;
@@ -170,7 +170,7 @@ export class LoginComponent implements OnInit {
 
   verifyOtp1() {
     //this.globalserviceservice.acAccntID = 9539; 
-    this.globalserviceservice.setAccountID(9539);
+    this.globalserviceservice.setAccountID(11511);
     console.log(this.globalserviceservice.acAccntID);
     this.dashboardservice.getMembers(this.globalserviceservice.acAccntID).subscribe(res => {
       console.log('memberListByAccount', res['data'].memberListByAccount);

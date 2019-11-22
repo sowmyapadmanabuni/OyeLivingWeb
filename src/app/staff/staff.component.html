@@ -1,3 +1,145 @@
-<p>
-  staff works!
-</p>
+<div class="main-wrapper animateIt">
+  <div class="container-fluid">
+      <div class="pageTitle" style="padding: 10px;">
+          <div class="row">
+              <div class="col-sm-4 col-xs-12">
+                  <h3 style="margin-top: 3px; margin-bottom: 0;">Staff List</h3>
+              </div>
+              <div class="col-sm-4 col-xs-12">
+                  <div class="form-group">
+                      <input type="text" name="searchBoxData" [(ngModel)]="searchBoxData" class="form-control"
+                          placeholder="Search" />
+                  </div>
+              </div>
+              <div class="col-sm-2 col-xs-12">
+                  <!-- <button type="button" class="btn btn-primary pull-right" (click)="gotoAddVisitor()"><i
+                          class="fa fa-plus"></i> Add Visitor</button> -->
+              </div>
+              <div class="col-sm-2 col-xs-12">
+                  <!-- <button type="button" class="btn btn-primary pull-right" (click)="gotoViewVisitor()"><i
+                          class="fa fa-eye"></i> View Visited</button> -->
+              </div>
+          </div>
+      </div>
+      <div *ngIf="allBlocksLists == ''" class="card">
+        <h1 style="text-align :center">No Data Available</h1>
+      </div>
+          <!-- <div *ngIf='allBlocksLists' class="card"> -->
+  
+      <div class="card">
+            <div class="row">
+              <div class="col-sm-5 col-xs-12">
+                <div class="form-group">
+                  <label>From <span class="red">*</span></label>
+                  <!-- <ejs-datepicker placeholder='Invoice Generation Date' [min]='todayDate' format='dd-MM-yyyy' ></ejs-datepicker> -->
+                  <input type="text" class="form-control" name="StartDate" #StartDateControl='ngModel' placeholder="Start Date"
+                    [(ngModel)]="StartDate" bsDatepicker required [minDate]="todayDate" placement="side" />
+                  <p class="invalid-feedback">Date required
+                  </p>
+                </div>
+              </div>
+              <div class="col-sm-5 col-xs-12">
+                <div class="form-group">
+                  <label>Till <span class="red">*</span></label>
+                  <input type="text" class="form-control" [class.enableBorderColor]="enableduedatevalidation"
+                    [class.classForInvalid]="enableduedatevalidation" name="ToDate" #ToDateControl='ngModel' placeholder="Due Date"
+                    [(ngModel)]="ToDate" bsDatepicker required placement="bottom" />
+                  <p class="invalid-feedback">Due date required
+                  </p>
+                  <ng-container *ngIf='enableduedatevalidation'>
+                    <p class="invalidFeedback">Due date should be given
+                    </p>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="col-sm-2 col-xs-12">
+                <!-- <button (click)='getVisitorList()' style="float: left;margin-top: 21px;" class="mdButton1">Get</button> -->
+              </div>
+            </div>
+
+
+
+          <div class="row">
+              <!---->
+              <div class="table-responsive hidden-xs" style="margin-top: 40px;">
+                  <table class="table">
+                      <thead>
+                          <tr style="color:#e59400;">
+                              <th>Image</th>
+                              <th>Worker Name</th>
+                              <th>Worker Designation</th>
+                              <th>Mobile number</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let item of WorkerNameList | filter: searchBoxData | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                              <!-- <td data-toggle="modal" data-target="#viewBlockDetailsTemplate"
+                                  (click)="viewBlockDetails(item.blBlkName,item.blBlkType,item.blNofUnit)">{{item['infName']}}
+                              </td> -->
+                              <td><img src="http://mediaupload.oyespace.com/Images/{{item['wkEntryImg']}}" width="50px" height="50px"/></td>
+                             
+                              <td data-toggle="modal">{{item['wkfName']}}
+                              </td>
+                              <td data-toggle="modal">{{item['wkDesgn']}}
+                              </td>
+                              <td data-toggle="modal">{{item['wkMobile']}}
+                              </td>
+                              <td>
+                                  <i data-toggle="modal"
+                                      (click)="OpenModalForReport(Reporttemplate,   
+                                      item['wkWorkID'] )" class="fas fa-flag-checkered" aria-hidden="true"></i>
+
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  <p class="text-center float-right"><pagination-controls (pageChange)="p = $event"></pagination-controls></p>
+              </div>
+          </div>
+          <!---->
+      </div>
+  </div>
+</div>
+
+<!------------------>
+<ng-template #Reporttemplate>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left" style="color: #e59400;font-size: 20px;position: absolute;left: 269px;">Staff Report</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+      </button>
+      </div>
+      <div class="modal-body">
+      
+          <div class="row">
+              <!---->
+              <div class="table-responsive hidden-xs" style="margin-top: 40px;">
+                  <table class="table">
+                      <thead>
+                          <tr style="color:#e59400;">
+                              <th>Date</th>
+                              <th>Entry Point</th>
+                              <th>Entry Time</th>
+                              <th>Exit Point</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let item of reportlists">
+                      
+                              <td data-toggle="modal">{{item['vlsActTm']}}
+                              </td>
+                              <td data-toggle="modal">{{item['vlengName']}}
+                              </td>
+                              <td data-toggle="modal">{{item['vldUpdated'] | date:'shortTime'}} 
+                              </td>
+                              <td data-toggle="modal">{{item['vlexgName']}}
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+    
+    
+      </div>
+ </ng-template>
