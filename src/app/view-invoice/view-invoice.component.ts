@@ -428,12 +428,11 @@ export class ViewInvoiceComponent implements OnInit {
 
   }
   iciciPay(e) {
-
-    let InvoiceValue = { chargetotal: this.InvoiceValue+'.00' }
+    e.preventDefault();
+     let InvoiceValue = { chargetotal: this.InvoiceValue+'.00' }
     //let InvoiceValue = { chargetotal: '1.00' }
     console.log(InvoiceValue);
     
-    e.preventDefault();
     this.paymentService.postToICICIPaymentGateway(InvoiceValue)
     .subscribe(res => {
       console.log(res);
@@ -449,6 +448,14 @@ export class ViewInvoiceComponent implements OnInit {
     }, error => {
       console.log("Error=>", error)
     })
+    
+  /* this.paymentService.CreatePayment()
+    .subscribe(res => {
+      console.log(res);
+      },
+      err=>{
+        console.log(err);
+      }) */
   }
   kotakPay(e) {
     e.preventDefault();
@@ -465,7 +472,35 @@ export class ViewInvoiceComponent implements OnInit {
      }
     )
   }
-  
+  axisPay(e) {
+    e.preventDefault();
+    let InvoiceValue = { chargetotal: this.InvoiceValue+'.00' };
+    console.log(InvoiceValue);
+    this.paymentService.postToAxisPaymentGateway(InvoiceValue).subscribe((res: any) => {
+      //console.log(res, typeof (res))
+      if (res && res.payment_links) {
+        window.location.href = res.payment_links.web;
+      }
+    }, error => {
+      console.log(error);
+     }
+    )
+  }
+  hdfcPay(e) {
+    e.preventDefault();
+    let InvoiceValue = { chargetotal: this.InvoiceValue+'.00' };
+    console.log(InvoiceValue);
+    this.paymentService.postToHDFCPaymentGateway(InvoiceValue).subscribe(res => {
+      if (res) {
+        this.kotakPayForm = res;
+        console.log("this.kotakPayForm ", this.kotakPayForm);
+        setTimeout(_ => this.kotakform.nativeElement.submit(), 100)
+      }
+    }, error => {
+      console.log(error);
+     }
+    )
+  }
   addZeroes(num) {
     console.log(num);
     // let value = Number(num);

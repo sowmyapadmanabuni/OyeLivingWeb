@@ -297,14 +297,22 @@ export class ViewExpensesComponent implements OnInit {
       .subscribe(data => console.log(data));
   }
   generateInvoice() {
+    console.log(this.blockID);
+    console.log(this.expid);
+    console.log(this.exidList.length);
+    console.log(this.togglegenerateinv);
     if(this.blockID == '' || this.expid == ''){
-      swal.fire({
-        title: "Please Select Block/Invoiced",
-        text: "",
-        type: "success",
-        confirmButtonColor: "#f69321",
-        confirmButtonText: "OK"
-      })
+      if (!this.togglegenerateinv) {
+        if(this.exidList.length == 0){
+          swal.fire({
+            title: "Please Select One or More Checkbox for GenerateInvoice",
+            text: "",
+            type: "error",
+            confirmButtonColor: "#f69321",
+            confirmButtonText: "OK"
+          })
+        }
+      }
     }
     else{
           this.viewexpenseservice.generateInvoice(this.currentAssociationID,this.exidList,this.expenseList)
@@ -551,7 +559,7 @@ export class ViewExpensesComponent implements OnInit {
       this.toggleGenerateInvButton = false;
     }
     //this.GetExpenseListByBlockID(this.viewexpenseservice.currentBlockId);
-    //console.log(this.viewexpensesByBlockId);
+    console.log(this.viewexpensesByBlockId);
     this.expenseList = this.expenseList.filter(item=>{
       console.log('exIsInvD',typeof item['exIsInvD']);
       console.log('exIsInvD-string',typeof item['exIsInvD'].toString());
@@ -594,11 +602,17 @@ export class ViewExpensesComponent implements OnInit {
      console.log(item['checkedForGenerateInvoice']); 
     })
   }
-  getSelectedInv(exid){
-    let _exid={'EXID':exid}
-    this.exidList.push(_exid);
-    console.log(exid);
-    console.log(this.exidList);
+  getSelectedInv(exid,e){
+    console.log(e);
+    if (e) {
+      const found = this.exidList.some(el => el['EXID'] === exid);
+      if (!found) {
+      let _exid = { 'EXID': exid }
+      this.exidList.push(_exid);
+      console.log(exid);
+      console.log(this.exidList);
+      }
+    }
   }
 }
 

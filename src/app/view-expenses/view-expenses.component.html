@@ -117,7 +117,7 @@
               class="fa fa-trash" title="delete"></i>
           </button>
         </td>
-        <td><input type="checkbox" [(ngModel)]='view.checkedForGenerateInvoice' (change)="getSelectedInv(view['exid'])"/></td>
+        <td><input type="checkbox" [(ngModel)]='view.checkedForGenerateInvoice' (change)="getSelectedInv(view['exid'],view.checkedForGenerateInvoice)"/></td>
       </tr>
     </tbody>
   </table>
