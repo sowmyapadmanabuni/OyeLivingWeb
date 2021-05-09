@@ -35,7 +35,7 @@
     "intl-tel-input": "^15.1.2",
     "jquery": "^3.4.1",
     "jspdf": "^1.5.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "ng2-search-filter": "^0.4.7",
     "ng2-tel-input": "^2.0.1",
